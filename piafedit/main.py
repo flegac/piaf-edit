@@ -1,28 +1,30 @@
 from pathlib import Path
 
+import numpy as np
 import pyqtgraph as pg
 from PyQt5.QtWidgets import *
 
-from piafedit.config.config import WinConfig, Win
+from piafedit.config.config import WinConfig
 from piafedit.data_source.fast_data_source import FastDataSource
-from piafedit.gui.image.image_manager import ImageManager
-from piafedit.gui.main_window import MainWindow
+from piafedit.editor_api import P
+from piafedit.gui.editor_window import EditorWindow
+
+IMAGE_SIZE = 4_000
 
 
 def main():
     pg.setConfigOptions(imageAxisOrder='row-major')
     app = QApplication([])
 
-    data = FastDataSource(Path('../resources/test.tif'))
+    P.main_window = EditorWindow(WinConfig())
+    P.main_window.show()
 
-    manager = ImageManager(data)
-
-    win = MainWindow(WinConfig())
-    win.set_content(win.widgets[Win.view], manager.view)
-    win.set_content(win.widgets[Win.overview], manager.overview)
-    win.set_content(win.widgets[Win.infos], manager.panel)
-
-    win.show()
+    source = FastDataSource(Path('../resources/test.tif'))
+    if not source.path.exists():
+        shape = (IMAGE_SIZE, IMAGE_SIZE, 3)
+        buffer = np.random.random(shape)
+        source.create(buffer)
+    P.select_source(source)
     app.exec_()
 
 

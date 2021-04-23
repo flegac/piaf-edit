@@ -2,34 +2,11 @@ from pathlib import Path
 from unittest import TestCase
 
 import numpy as np
-import rasterio
-from rasterio.profiles import DefaultGTiffProfile
 
 from piafedit.data_source.fast_data_source import FastDataSource
 from piafedit.geometry.point import Point
 from piafedit.geometry.rect import Rect
 from piafedit.geometry.size import SizeAbs, Size
-
-
-def create_image(name: Path, size: SizeAbs):
-    shape = size.raw()
-    image = np.random.random((*shape, 3)) * 255
-    image = image.astype('uint8')
-    count = image.shape[2]
-
-    with rasterio.open(name, 'w',
-                       **DefaultGTiffProfile(
-                           tiled=True,
-                           width=size.width,
-                           height=size.height,
-                           count=count,
-                           dtype=image.dtype,
-                           driver='GTiff'
-                       )) as dst:
-        for i in range(count):
-            data = image[..., i]
-            dst.write(data, i + 1)
-
 
 path = Path('../resources/test.tif')
 source = FastDataSource(path)
@@ -38,6 +15,8 @@ area = Rect(
     size=Size(.1, .1)
 )
 
+SIZE = 8_000
+
 
 class TestFastDataSource(TestCase):
     # configure tests --------------------------------------------------
@@ -45,7 +24,10 @@ class TestFastDataSource(TestCase):
     def setUpClass(cls) -> None:
         super().setUpClass()
         if not path.exists():
-            create_image(path, SizeAbs(10_000, 10_000))
+            size = SizeAbs(SIZE, SIZE)
+            image = np.random.random((*size.raw(), 3)) * 255
+            image = image.astype('uint8')
+            source.create(image)
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -55,7 +37,10 @@ class TestFastDataSource(TestCase):
     # actual tests -----------------------------------------------------
 
     def test_overview(self):
+        print(f'creating overview...')
+
         source.create_overview()
+        print(f'overview created!')
 
     def test_size(self):
         print('read size:', source.size())

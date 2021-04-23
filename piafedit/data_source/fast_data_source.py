@@ -6,6 +6,7 @@ from typing import Union, Tuple
 import numpy as np
 import rasterio
 from rasterio.enums import Resampling
+from rasterio.profiles import DefaultGTiffProfile
 from rasterio.windows import Window
 
 from piafedit.data_source.data_source import DataSource
@@ -14,13 +15,34 @@ from piafedit.geometry.size import SizeAbs, Size
 
 warnings.filterwarnings("ignore", category=rasterio.errors.NotGeoreferencedWarning)
 
-
 log = logging.getLogger()
+
 
 class FastDataSource(DataSource):
     def __init__(self, path: Path):
         super().__init__(path.stem)
         self.path = path
+
+    def create(self, buffer: np.ndarray):
+        h, w = buffer.shape[:2]
+        count = 1
+        if len(buffer.shape) >= 2:
+            count = buffer.shape[2]
+        size = SizeAbs(w, h)
+        with rasterio.open(self.path, 'w',
+                           **DefaultGTiffProfile(
+                               tiled=True,
+                               width=size.width,
+                               height=size.height,
+                               count=count,
+                               dtype=buffer.dtype,
+                               driver='GTiff'
+                           )) as dst:
+            for i in range(count):
+                data = buffer[..., i]
+                dst.write(data, i + 1)
+
+        self.create_overview()
 
     def create_overview(self):
         with rasterio.open(self.path, 'r+') as dst:
@@ -28,7 +50,7 @@ class FastDataSource(DataSource):
                 over = dst.overviews(i)
                 if over == []:
                     log.debug(f'overview created for {self.path}')
-                    factors = [2, 4, 8, 16, 32]
+                    factors = [2, 4, 8, 16, 32, 64]
                     dst.build_overviews(factors, Resampling.average)
                     dst.update_tags(ns='rio_overview', resampling='average')
                     break
