@@ -1,8 +1,11 @@
+import numpy as np
 from PyQt5.QtWidgets import *
 from pyqtgraph.dockarea import Dock
 
 from piafedit.config.config import WinConfig, Win
 from piafedit.gui.dock_panel import DockPanel
+from piafedit.gui.layouts.flow_layout import FlowLayout
+from piafedit.gui.layouts.utils import image_button
 
 
 class EditorWindow(QMainWindow):
@@ -10,6 +13,15 @@ class EditorWindow(QMainWindow):
         super().__init__()
         self.config = config
         self.dock = DockPanel()
+        self.browser = FlowLayout()
+        # TODO: use DataSource in the browser
+        for _ in range(20):
+            w, h = 128, 96
+            shape = (h, w, 3)
+            buffer = np.random.randint(0, 255, size=shape).astype('uint8')
+            self.browser.register(image_button(buffer))
+        self.browser.update_layout()
+
         self.setWindowTitle(config.title)
         self.resize(*config.size.raw())
         self.setCentralWidget(self.dock.area)
@@ -29,16 +41,18 @@ class EditorWindow(QMainWindow):
 
 
 class LayoutBuilder:
-    def __init__(self, win: QMainWindow):
+    def __init__(self, win: EditorWindow):
         self.win = win
 
     def build(self):
+        browser = self.win.dock.add_dock('browser', size=self.win.config.layout.browser)
         view = self.win.dock.add_dock('view', size=self.win.config.layout.view)
         overview = self.win.dock.add_dock('overview', size=self.win.config.layout.overview)
         toolbar = self.win.dock.add_dock('tools', size=self.win.config.layout.tools)
         infos = self.win.dock.add_dock('infos')
         self.win.widgets = {
             Win.view: view,
+            Win.browser: browser,
             Win.overview: overview,
             Win.toolbar: toolbar,
             Win.infos: infos,
@@ -46,7 +60,9 @@ class LayoutBuilder:
         self.win.dock.area.moveDock(toolbar, 'left', view)
         self.win.dock.area.moveDock(overview, 'top', toolbar)
         self.win.dock.area.moveDock(infos, 'bottom', overview)
+        self.win.dock.area.moveDock(browser, 'bottom', view)
 
+        self.win.set_content(browser, self.win.browser)
         self.win.set_content(toolbar, self.win.dock.panel)
         self.win.dock.lock_ui(True)
         self.win.statusBar().showMessage('coucou')

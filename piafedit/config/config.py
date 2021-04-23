@@ -7,6 +7,7 @@ from piafedit.geometry.size import SizeAbs
 @dataclass
 class LayoutConfig:
     view: SizeAbs = SizeAbs(1024, 512)
+    browser: SizeAbs = SizeAbs(1024, 128)
     overview: SizeAbs = SizeAbs(256, 256)
     tools: SizeAbs = SizeAbs(256, 512)
 
@@ -21,5 +22,6 @@ class WinConfig:
 class Win(Enum):
     overview = auto()
     view = auto()
+    browser = auto()
     toolbar = auto()
     infos = auto()
