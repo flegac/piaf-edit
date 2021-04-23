@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import *
 
 from piafedit.config.config import WinConfig, Win
 from piafedit.data_source.fast_data_source import FastDataSource
-from piafedit.gui.image_manager import ImageManager
+from piafedit.gui.image.image_manager import ImageManager
 from piafedit.gui.main_window import MainWindow
 
 

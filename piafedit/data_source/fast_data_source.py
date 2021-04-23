@@ -1,3 +1,4 @@
+import logging
 import warnings
 from pathlib import Path
 from typing import Union, Tuple
@@ -14,10 +15,23 @@ from piafedit.geometry.size import SizeAbs, Size
 warnings.filterwarnings("ignore", category=rasterio.errors.NotGeoreferencedWarning)
 
 
+log = logging.getLogger()
+
 class FastDataSource(DataSource):
     def __init__(self, path: Path):
         super().__init__(path.stem)
         self.path = path
+
+    def create_overview(self):
+        with rasterio.open(self.path, 'r+') as dst:
+            for i in dst.indexes:
+                over = dst.overviews(i)
+                if over == []:
+                    log.debug(f'overview created for {self.path}')
+                    factors = [2, 4, 8, 16, 32]
+                    dst.build_overviews(factors, Resampling.average)
+                    dst.update_tags(ns='rio_overview', resampling='average')
+                    break
 
     def dtype(self):
         with rasterio.open(self.path) as src:

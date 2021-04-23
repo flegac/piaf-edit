@@ -54,6 +54,9 @@ class TestFastDataSource(TestCase):
 
     # actual tests -----------------------------------------------------
 
+    def test_overview(self):
+        source.create_overview()
+
     def test_size(self):
         print('read size:', source.size())
 

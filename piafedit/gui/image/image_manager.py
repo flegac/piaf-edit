@@ -5,7 +5,7 @@ from piafedit.data_source.data_source import DataSource
 from piafedit.geometry.point import Point
 from piafedit.geometry.rect import Rect, RectAbs
 from piafedit.geometry.size import SizeAbs, Size
-from piafedit.gui.event.roi_handler import RoiHandler
+from piafedit.gui.image.roi_handler import RoiHandler
 from piafedit.gui.utils import rect_to_roi, setup_roi
 
 MAX_AREA_SIZE = SizeAbs(1024, 1024)
