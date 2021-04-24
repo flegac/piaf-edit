@@ -3,10 +3,10 @@ from typing import Union, Tuple
 import cv2
 import numpy as np
 
-from piafedit.data_source.data_source import DataSource
-from piafedit.geometry.point import PointAbs
-from piafedit.geometry.rect import RectAbs, Rect
-from piafedit.geometry.size import SizeAbs, Size
+from piafedit.model.source.data_source import DataSource
+from piafedit.model.geometry.point import PointAbs
+from piafedit.model.geometry.rect import RectAbs, Rect
+from piafedit.model.geometry.size import SizeAbs, Size
 
 
 class SimpleDataSource(DataSource):
@@ -14,6 +14,9 @@ class SimpleDataSource(DataSource):
     def __init__(self, data: np.ndarray):
         super().__init__()
         self.data = data
+
+    def bands(self):
+        return self.data.shape[2]
 
     def dtype(self):
         return self.data.dtype
@@ -41,7 +44,7 @@ class SimpleDataSource(DataSource):
             if isinstance(out_shape, Size):
                 out_shape = out_shape.abs(self.size())
             buffer = buffer.astype('uint16')  # TODO: remove this when all is fine
-            buffer = cv2.resize(buffer, dsize=(256, 256), interpolation=cv2.INTER_CUBIC)
+            buffer = cv2.resize(buffer, dsize=out_shape.raw(), interpolation=cv2.INTER_CUBIC)
 
         return buffer
 

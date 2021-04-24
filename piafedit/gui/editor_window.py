@@ -5,7 +5,14 @@ from pyqtgraph.dockarea import Dock
 from piafedit.config.config import WinConfig, Win
 from piafedit.gui.dock_panel import DockPanel
 from piafedit.gui.layouts.flow_layout import FlowLayout
-from piafedit.gui.layouts.utils import image_button
+from piafedit.gui.layouts.utils import source_button
+from piafedit.model.source.data_source import DataSource
+from piafedit.model.source.simple_data_source import SimpleDataSource
+
+
+class SourceBrowser(FlowLayout):
+    def open_source(self, source: DataSource):
+        self.register(source_button(source, size=230))
 
 
 class EditorWindow(QMainWindow):
@@ -13,13 +20,13 @@ class EditorWindow(QMainWindow):
         super().__init__()
         self.config = config
         self.dock = DockPanel()
-        self.browser = FlowLayout()
-        # TODO: use DataSource in the browser
-        for _ in range(20):
-            w, h = 128, 96
+        self.browser = SourceBrowser(1)
+        for _ in range(7):
+            w, h = 2000, int(2000/1.66)
             shape = (h, w, 3)
             buffer = np.random.randint(0, 255, size=shape).astype('uint8')
-            self.browser.register(image_button(buffer))
+            source = SimpleDataSource(buffer)
+            self.browser.open_source(source)
         self.browser.update_layout()
 
         self.setWindowTitle(config.title)
@@ -34,7 +41,12 @@ class EditorWindow(QMainWindow):
         self.set_content(dock, widget)
 
     def set_content(self, dock: Dock, widget: QWidget):
-        dock.addWidget(widget)
+        dock.currentRow = 1
+        dock.widgets = [widget]
+        dock.layout.addWidget(widget, dock.currentRow, 0, 1, 1)
+        dock.raiseOverlay()
+
+        # dock.addWidget(widget)
 
     def get_dock(self, win_id: Win):
         return self.widgets.get(win_id)
@@ -57,10 +69,10 @@ class LayoutBuilder:
             Win.toolbar: toolbar,
             Win.infos: infos,
         }
-        self.win.dock.area.moveDock(toolbar, 'left', view)
-        self.win.dock.area.moveDock(overview, 'top', toolbar)
+        self.win.dock.area.moveDock(toolbar, 'bottom', view)
+        self.win.dock.area.moveDock(browser, 'left', view)
+        self.win.dock.area.moveDock(overview, 'top', browser)
         self.win.dock.area.moveDock(infos, 'bottom', overview)
-        self.win.dock.area.moveDock(browser, 'bottom', view)
 
         self.win.set_content(browser, self.win.browser)
         self.win.set_content(toolbar, self.win.dock.panel)
@@ -90,11 +102,10 @@ class MenuLoader:
 
     def open(self):
         from piafedit.editor_api import P
-
         action = QAction('Open', self.win)
         action.setShortcut("Alt+O")
         action.setStatusTip('Exit application')
-        action.triggered.connect(P.select_files)
+        action.triggered.connect(P.open_files)
         return action
 
     def exit(self):

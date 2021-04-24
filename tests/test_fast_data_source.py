@@ -3,10 +3,10 @@ from unittest import TestCase
 
 import numpy as np
 
-from piafedit.data_source.fast_data_source import FastDataSource
-from piafedit.geometry.point import Point
-from piafedit.geometry.rect import Rect
-from piafedit.geometry.size import SizeAbs, Size
+from piafedit.model.source.fast_data_source import FastDataSource
+from piafedit.model.geometry.point import Point
+from piafedit.model.geometry.rect import Rect
+from piafedit.model.geometry.size import SizeAbs, Size
 
 path = Path('../resources/test.tif')
 source = FastDataSource(path)

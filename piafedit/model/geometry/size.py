@@ -3,7 +3,7 @@ from typing import Tuple
 
 import numpy as np
 
-from piafedit.geometry.utils import absolute, relative
+from piafedit.model.utils import absolute, relative
 
 
 @dataclass

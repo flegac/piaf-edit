@@ -2,10 +2,10 @@ from unittest import TestCase
 
 import numpy as np
 
-from piafedit.data_source.simple_data_source import SimpleDataSource
-from piafedit.geometry.point import PointAbs
-from piafedit.geometry.rect import RectAbs
-from piafedit.geometry.size import SizeAbs
+from piafedit.model.source.simple_data_source import SimpleDataSource
+from piafedit.model.geometry.point import PointAbs
+from piafedit.model.geometry.rect import RectAbs
+from piafedit.model.geometry.size import SizeAbs
 
 area = RectAbs(
     pos=PointAbs(1, 1),

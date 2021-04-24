@@ -1,15 +1,15 @@
 from dataclasses import dataclass
 from enum import Enum, auto
 
-from piafedit.geometry.size import SizeAbs
+from piafedit.model.geometry.size import SizeAbs
 
 
 @dataclass
 class LayoutConfig:
     view: SizeAbs = SizeAbs(1024, 512)
-    browser: SizeAbs = SizeAbs(1024, 128)
+    browser: SizeAbs = SizeAbs(256, 1024)
     overview: SizeAbs = SizeAbs(256, 256)
-    tools: SizeAbs = SizeAbs(256, 512)
+    tools: SizeAbs = SizeAbs(256, 16)
 
 
 @dataclass

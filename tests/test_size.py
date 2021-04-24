@@ -1,4 +1,4 @@
-from piafedit.geometry.size import SizeAbs, Size
+from piafedit.model.geometry.size import SizeAbs, Size
 
 
 def test_size():

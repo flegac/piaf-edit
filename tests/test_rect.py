@@ -1,8 +1,8 @@
 import numpy as np
 
-from piafedit.geometry.point import Point
-from piafedit.geometry.rect import Rect
-from piafedit.geometry.size import Size
+from piafedit.model.geometry.point import Point
+from piafedit.model.geometry.rect import Rect
+from piafedit.model.geometry.size import Size
 
 
 def test_crop():

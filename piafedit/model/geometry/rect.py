@@ -3,8 +3,8 @@ from typing import Tuple
 
 import numpy as np
 
-from piafedit.geometry.point import Point, PointAbs
-from piafedit.geometry.size import Size, SizeAbs
+from piafedit.model.geometry.point import Point, PointAbs
+from piafedit.model.geometry.size import Size, SizeAbs
 
 
 @dataclass

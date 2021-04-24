@@ -1,4 +1,4 @@
-from piafedit.geometry.point import Point
+from piafedit.model.geometry.point import Point
 from piafedit.geometry.size_abs import SizeAbs
 
 

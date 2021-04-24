@@ -9,9 +9,9 @@ from rasterio.enums import Resampling
 from rasterio.profiles import DefaultGTiffProfile
 from rasterio.windows import Window
 
-from piafedit.data_source.data_source import DataSource
-from piafedit.geometry.rect import Rect, RectAbs
-from piafedit.geometry.size import SizeAbs, Size
+from piafedit.model.geometry.rect import Rect, RectAbs
+from piafedit.model.geometry.size import SizeAbs, Size
+from piafedit.model.source.data_source import DataSource
 
 warnings.filterwarnings("ignore", category=rasterio.errors.NotGeoreferencedWarning)
 
@@ -55,6 +55,10 @@ class FastDataSource(DataSource):
                     dst.update_tags(ns='rio_overview', resampling='average')
                     break
 
+    def bands(self):
+        with rasterio.open(self.path) as src:
+            return src.count
+
     def dtype(self):
         with rasterio.open(self.path) as src:
             return src.dtypes[0]
@@ -88,7 +92,6 @@ class FastDataSource(DataSource):
             dst.write(buffer, window=window, indexes=1)
 
     def read(self, area: Union[Rect, RectAbs] = None, out_shape: Union[Size, SizeAbs] = None) -> np.ndarray:
-        # TODO: resampling https://rasterio.readthedocs.io/en/latest/topics/resampling.html
         window = None
         if area:
             if isinstance(area, Rect):
@@ -97,7 +100,7 @@ class FastDataSource(DataSource):
 
         with rasterio.open(self.path) as src:
             target = None
-
+            # resampling https://rasterio.readthedocs.io/en/latest/topics/resampling.html
             if out_shape:
                 if isinstance(out_shape, Size):
                     out_shape = out_shape.abs(self.size())

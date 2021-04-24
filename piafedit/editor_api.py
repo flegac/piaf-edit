@@ -1,35 +1,35 @@
 from pathlib import Path
-from typing import List
 
-from PyQt5.QtWidgets import QFileDialog, QWidget
+from PyQt5.QtWidgets import QWidget
 
 from piafedit.config.config import Win
-from piafedit.data_source.data_source import DataSource
 from piafedit.gui.editor_window import EditorWindow
 from piafedit.gui.image.image_manager import ImageManager
+from piafedit.gui.utils import select_files
+from piafedit.model.source.data_source import DataSource
+from piafedit.model.source.fast_data_source import FastDataSource
 
 
 class P:
     main_window: EditorWindow = None
 
     @staticmethod
-    def select_files() -> List[str]:
-        dialog = QFileDialog()
-        dialog.setFileMode(QFileDialog.ExistingFiles)
-        dialog.setDirectory(str(Path('.').absolute()))
-        # dialog.setFilter('Image files (*.jpg *.gif)')
-
-        if dialog.exec():
-            filenames = dialog.selectedFiles()
-            print(filenames)
-            return filenames
-
-    @staticmethod
-    def display(widget: QWidget):
+    def show_widget(widget: QWidget):
         P.main_window.show_widget(widget)
 
     @staticmethod
-    def select_source(source: DataSource):
+    def open_files():
+        files = select_files()
+        for file in files:
+            P.open_source(FastDataSource(Path(file)))
+        P.main_window.browser.update_layout()
+
+    @staticmethod
+    def open_source(source: DataSource):
+        P.main_window.browser.open_source(source)
+
+    @staticmethod
+    def show_source(source: DataSource):
         manager = ImageManager(source)
         win = P.main_window
         win.set_content(win.widgets[Win.view], manager.view)

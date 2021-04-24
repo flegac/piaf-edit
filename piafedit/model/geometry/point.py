@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Tuple
 
-from piafedit.geometry.size import SizeAbs
-from piafedit.geometry.utils import absolute, relative
+from piafedit.model.geometry.size import SizeAbs
+from piafedit.model.utils import absolute, relative
 
 
 @dataclass

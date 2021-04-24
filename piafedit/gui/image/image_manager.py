@@ -1,10 +1,10 @@
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel
 
-from piafedit.data_source.data_source import DataSource
-from piafedit.geometry.point import Point
-from piafedit.geometry.rect import Rect, RectAbs
-from piafedit.geometry.size import SizeAbs, Size
+from piafedit.model.source.data_source import DataSource
+from piafedit.model.geometry.point import Point
+from piafedit.model.geometry.rect import Rect, RectAbs
+from piafedit.model.geometry.size import SizeAbs, Size
 from piafedit.gui.image.roi_handler import RoiHandler
 from piafedit.gui.utils import rect_to_roi, setup_roi
 
@@ -18,7 +18,7 @@ class ImageManager:
         self.source = source
         self.rect = ImageManager.ROI.abs(self.source.size())
         self.rect.size.limit(MAX_AREA_SIZE)
-        self.overview_size = SizeAbs(256, 256)
+        self.overview_size = 96
 
         roi = rect_to_roi(self.rect)
         self.overview = self.create_overview(roi)
@@ -33,7 +33,7 @@ class ImageManager:
         self.panel.update_manager()
 
     def update_rect(self, roi: pg.RectROI):
-        over = self.overview_size
+        over = self.source.overview_size(self.overview_size)
         full = self.source.size()
         rx = full.width / over.width
         ry = full.height / over.height
@@ -46,7 +46,7 @@ class ImageManager:
         self.update_view()
 
     def update_roi(self, roi: pg.RectROI, rect: RectAbs):
-        over = self.overview_size
+        over = self.source.overview_size(self.overview_size)
         full = self.source.size()
         rx = full.width / over.width
         ry = full.height / over.height
@@ -71,9 +71,10 @@ class ImageManager:
         return view
 
     def create_overview(self, roi: pg.RectROI):
-        data = self.source.read(Rect(), self.overview_size)
+        buffer = self.source.overview(size=self.overview_size)
+
         view = pg.ImageView()
-        view.setImage(data)
+        view.setImage(buffer)
         view.ui.histogram.hide()
         view.ui.roiBtn.hide()
         view.ui.menuBtn.hide()

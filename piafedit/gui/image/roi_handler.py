@@ -2,8 +2,8 @@ from typing import Callable
 
 from PyQt5.QtCore import Qt
 
-from piafedit.geometry.point import PointAbs
-from piafedit.geometry.rect import RectAbs
+from piafedit.model.geometry.point import PointAbs
+from piafedit.model.geometry.rect import RectAbs
 from piafedit.gui.event.event_handler import EventHandler
 
 
