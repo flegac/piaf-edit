@@ -34,4 +34,7 @@ class P:
         win = P.main_window
         win.set_content(win.widgets[Win.view], manager.view)
         win.set_content(win.widgets[Win.overview], manager.overview)
-        win.set_content(win.widgets[Win.infos], manager.panel)
+
+    @staticmethod
+    def update_status(text: str):
+        P.main_window.statusBar().showMessage(text)

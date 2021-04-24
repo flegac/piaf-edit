@@ -5,7 +5,7 @@ from typing import Union, Tuple
 import numpy as np
 
 from piafedit.model.geometry.rect import Rect, RectAbs
-from piafedit.model.geometry.size import SizeAbs, Size
+from piafedit.model.geometry.size import SizeAbs
 
 
 class DataSource(ABC):
@@ -28,21 +28,16 @@ class DataSource(ABC):
     def size(self) -> SizeAbs:
         ...
 
-    @property
-    def aspect_ratio(self):
-        size = self.size()
-        return size.width / size.height
-
     @abstractmethod
-    def read(self, area: Union[Rect, RectAbs] = None, out_shape: Union[Size, SizeAbs] = None) -> np.ndarray:
+    def read(self, window: Union[Rect, RectAbs] = None, output_size: SizeAbs = None) -> np.ndarray:
         ...
 
     @abstractmethod
-    def write(self, buffer: np.ndarray, area: Union[Rect, RectAbs] = None):
+    def write(self, buffer: np.ndarray, window: Union[Rect, RectAbs] = None):
         ...
 
     def overview_size(self, size: int) -> SizeAbs:
-        aspect = self.aspect_ratio
+        aspect = self.size().aspect_ratio
         if aspect > 1:
             w, h = size, size / aspect
         else:
@@ -51,5 +46,5 @@ class DataSource(ABC):
 
     def overview(self, size: int):
         overview_size = self.overview_size(size)
-        overview = self.read(out_shape=overview_size)
+        overview = self.read(output_size=overview_size)
         return overview

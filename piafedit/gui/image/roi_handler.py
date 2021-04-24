@@ -1,28 +1,30 @@
+from copy import deepcopy
 from typing import Callable
 
 from PyQt5.QtCore import Qt
 
+from piafedit.gui.event.event_handler import EventHandler
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
-from piafedit.gui.event.event_handler import EventHandler
 
 
 class RoiHandler(EventHandler):
-    zoom_speed: int = 1.05
+    zoom_speed: int = 1.1
 
     def __init__(self, manager: 'ImageManager', updater: Callable[[RectAbs], None]):
         self.manager = manager
         self.updater = updater
 
-        self.mouse_control = False
-        self.last_mouse_pos = None
+        self.cursor_origin = None
+        self.rect_origin: RectAbs = None
 
     def mousePressEvent(self, ev):
-        self.mouse_control = True
+        self.cursor_origin = ev.pos()
+        self.rect_origin = deepcopy(self.manager.rect)
 
     def mouseReleaseEvent(self, ev):
-        self.mouse_control = False
-        self.last_mouse_pos = None
+        self.cursor_origin = None
+        self.rect_origin = None
 
     def keyPressEvent(self, ev):
         rect = self.manager.rect
@@ -44,21 +46,34 @@ class RoiHandler(EventHandler):
     def wheelEvent(self, ev):
         rect = self.manager.rect
         delta = ev.angleDelta().y()
-        speed = self.zoom_speed if delta > 0 else 1/self.zoom_speed
+        speed = self.zoom_speed if delta > 0 else 1 / self.zoom_speed
         rect.size.width = round(rect.size.width * speed)
         rect.size.height = round(rect.size.height * speed)
         self._update()
 
     def mouseMoveEvent(self, ev):
-        rect = self.manager.rect
-        last_pos = self.last_mouse_pos
-        self.last_mouse_pos = ev.pos()
-        if last_pos and self.mouse_control:
-            dx = self.last_mouse_pos.x() - last_pos.x()
-            dy = self.last_mouse_pos.y() - last_pos.y()
-            rect.pos.x -= dx
-            rect.pos.y -= dy
+        from piafedit.editor_api import P
+        cursor = ev.pos()
+        x, y = cursor.x(), cursor.y()
+        rect: RectAbs = self.manager.rect
+
+        dx, dy = (0, 0)
+        if self.cursor_origin:
+            ox, oy = self.cursor_origin.x(), self.cursor_origin.y()
+
+            dx = self.cursor_origin.x() - cursor.x()
+            dy = self.cursor_origin.y() - cursor.y()
+
+            # dx = round(dx / rect.size.width)
+            # dy = round(dy / rect.size.height)
+
+
+            rect.pos.x = self.rect_origin.pos.x + dx
+            rect.pos.y = self.rect_origin.pos.y + dy
             self._update()
+
+        delta = f'[{dx},{dy}]' if dx != 0 or dy != 0 else ''
+        P.update_status(f'cursor: {x, y}{delta} rect: {rect} buffer: {self.manager.current_buffer_shape}')
 
     def switch_mouse_control_action(self, status: bool):
         def action():

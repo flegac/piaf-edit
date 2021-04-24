@@ -13,6 +13,7 @@ from piafedit.model.source.simple_data_source import SimpleDataSource
 class SourceBrowser(FlowLayout):
     def open_source(self, source: DataSource):
         self.register(source_button(source, size=230))
+        self.update_layout()
 
 
 class EditorWindow(QMainWindow):
@@ -21,13 +22,6 @@ class EditorWindow(QMainWindow):
         self.config = config
         self.dock = DockPanel()
         self.browser = SourceBrowser(1)
-        for _ in range(7):
-            w, h = 2000, int(2000/1.66)
-            shape = (h, w, 3)
-            buffer = np.random.randint(0, 255, size=shape).astype('uint8')
-            source = SimpleDataSource(buffer)
-            self.browser.open_source(source)
-        self.browser.update_layout()
 
         self.setWindowTitle(config.title)
         self.resize(*config.size.raw())
@@ -61,18 +55,15 @@ class LayoutBuilder:
         view = self.win.dock.add_dock('view', size=self.win.config.layout.view)
         overview = self.win.dock.add_dock('overview', size=self.win.config.layout.overview)
         toolbar = self.win.dock.add_dock('tools', size=self.win.config.layout.tools)
-        infos = self.win.dock.add_dock('infos')
         self.win.widgets = {
             Win.view: view,
             Win.browser: browser,
             Win.overview: overview,
             Win.toolbar: toolbar,
-            Win.infos: infos,
         }
         self.win.dock.area.moveDock(toolbar, 'bottom', view)
         self.win.dock.area.moveDock(browser, 'left', view)
         self.win.dock.area.moveDock(overview, 'top', browser)
-        self.win.dock.area.moveDock(infos, 'bottom', overview)
 
         self.win.set_content(browser, self.win.browser)
         self.win.set_content(toolbar, self.win.dock.panel)

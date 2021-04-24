@@ -76,12 +76,12 @@ class FastDataSource(DataSource):
             h = src.height
             return SizeAbs(w, h)
 
-    def write(self, buffer: np.ndarray, area: Union[Rect, RectAbs] = None):
+    def write(self, buffer: np.ndarray, window: Union[Rect, RectAbs] = None):
         window = None
-        if area:
-            if isinstance(area, Rect):
-                area = area.abs(self.size())
-            window = window_from_rect(area)
+        if window:
+            if isinstance(window, Rect):
+                window = window.abs(self.size())
+            window = window_from_rect(window)
 
         width, height = self.size().raw()
         shape = buffer.shape
@@ -91,24 +91,21 @@ class FastDataSource(DataSource):
                            dtype=buffer.dtype) as dst:
             dst.write(buffer, window=window, indexes=1)
 
-    def read(self, area: Union[Rect, RectAbs] = None, out_shape: Union[Size, SizeAbs] = None) -> np.ndarray:
-        window = None
-        if area:
-            if isinstance(area, Rect):
-                area = area.abs(self.size())
-            window = window_from_rect(area)
+    def read(self, window: Union[Rect, RectAbs] = None, output_size: SizeAbs = None) -> np.ndarray:
+        if window:
+            if isinstance(window, Rect):
+                window = window.abs(self.size())
+            window = window_from_rect(window)
 
         with rasterio.open(self.path) as src:
             target = None
             # resampling https://rasterio.readthedocs.io/en/latest/topics/resampling.html
-            if out_shape:
-                if isinstance(out_shape, Size):
-                    out_shape = out_shape.abs(self.size())
-                target = (src.count, out_shape.height, out_shape.width)
+            if output_size:
+                target = (src.count, output_size.height, output_size.width)
             data = src.read(
                 window=window,
                 out_shape=target,
-                resampling=Resampling.bilinear
+                resampling=Resampling.cubic
             )
             data = np.moveaxis(data, 0, 2)
             return data

@@ -1,14 +1,11 @@
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel
 
-from piafedit.model.source.data_source import DataSource
-from piafedit.model.geometry.point import Point
-from piafedit.model.geometry.rect import Rect, RectAbs
-from piafedit.model.geometry.size import SizeAbs, Size
 from piafedit.gui.image.roi_handler import RoiHandler
 from piafedit.gui.utils import rect_to_roi, setup_roi
-
-MAX_AREA_SIZE = SizeAbs(1024, 1024)
+from piafedit.model.geometry.point import Point
+from piafedit.model.geometry.rect import Rect, RectAbs
+from piafedit.model.geometry.size import Size, SizeAbs
+from piafedit.model.source.data_source import DataSource
 
 
 class ImageManager:
@@ -16,21 +13,24 @@ class ImageManager:
 
     def __init__(self, source: DataSource):
         self.source = source
-        self.rect = ImageManager.ROI.abs(self.source.size())
-        self.rect.size.limit(MAX_AREA_SIZE)
+        self.rect = Rect().abs(self.source.size())
         self.overview_size = 96
+        self.buffer_size = 256
+        self.current_buffer_shape = None
 
         roi = rect_to_roi(self.rect)
         self.overview = self.create_overview(roi)
         self.view = self.create_view(roi)
-        self.panel = InfoPanel(self)
         self.update_view()
 
     def update_view(self):
-        self.rect.size.limit(MAX_AREA_SIZE)
-        buffer = self.source.read(self.rect)
+        window = self.rect.limit(self.source.size())
+
+        abs_size = SizeAbs(self.buffer_size, self.buffer_size)
+        size = Size.from_aspect(window.size.aspect_ratio).abs(abs_size)
+        buffer = self.source.read(window, output_size=size)
+        self.current_buffer_shape = buffer.shape
         self.view.setImage(buffer)
-        self.panel.update_manager()
 
     def update_rect(self, roi: pg.RectROI):
         over = self.source.overview_size(self.overview_size)
@@ -42,7 +42,6 @@ class ImageManager:
         self.rect.pos.y = round(roi.pos().y() * ry)
         self.rect.size.width = round(roi.size().x() * rx)
         self.rect.size.height = round(roi.size().y() * ry)
-        self.rect.size.limit(MAX_AREA_SIZE)
         self.update_view()
 
     def update_roi(self, roi: pg.RectROI, rect: RectAbs):
@@ -93,35 +92,3 @@ class ImageManager:
             self.overview.ui.menuBtn.hide()
 
 
-class InfoPanel(QWidget):
-    def __init__(self, manager: ImageManager):
-        super().__init__()
-        self.manager = manager
-
-        self.view_infos = QLabel()
-        self.overview_infos = QLabel()
-        self.area_infos = QLabel()
-
-        l = QVBoxLayout()
-        l.addWidget(self.view_infos)
-        l.addWidget(self.overview_infos)
-        l.addWidget(self.area_infos)
-        self.setLayout(l)
-
-    def update_manager(self):
-        manager = self.manager
-        source = manager.source
-        h, w, b = source.shape()
-        dtype = source.dtype()
-        self.view_infos.setText(f'view: {source.name} {w}x{h}:{b} {dtype}')
-
-        buffer = manager.overview.image
-        h, w, b = buffer.shape
-        dtype = buffer.dtype
-        self.overview_infos.setText(f'overview: {w}x{h}:{b} {dtype}')
-
-        area = manager.rect
-        x, y = area.pos.raw()
-        w, h = area.size.raw()
-
-        self.area_infos.setText(f'area: {x},{y} {w}x{h}')

@@ -24,6 +24,10 @@ class SizeAbs:
     def from_raw(data: Tuple[int, int]):
         return SizeAbs(*data)
 
+    @property
+    def aspect_ratio(self):
+        return self.width / self.height
+
     def limit(self, size: 'SizeAbs'):
         self.width = min(size.width, self.width)
         self.height = min(size.height, self.height)
@@ -37,11 +41,20 @@ class SizeAbs:
             height=relative(self.height, size.height),
         )
 
+    def __str__(self) -> str:
+        return f'{self.width}x{self.height}'
+
 
 @dataclass
 class Size:
     width: float = 1.
     height: float = 1.
+
+    @staticmethod
+    def from_aspect(aspect_ratio: float):
+        if aspect_ratio >= 1.0:
+            return Size(1.0, 1.0 / aspect_ratio)
+        return Size(aspect_ratio, 1.0)
 
     @staticmethod
     def from_raw(data: Tuple[float, float]):
@@ -55,3 +68,7 @@ class Size:
             width=absolute(self.width, size.width),
             height=absolute(self.height, size.height),
         )
+
+    @property
+    def aspect_ratio(self):
+        return self.width / self.height

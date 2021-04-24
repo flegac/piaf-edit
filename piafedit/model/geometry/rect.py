@@ -1,3 +1,4 @@
+from copy import deepcopy
 from dataclasses import dataclass
 from typing import Tuple
 
@@ -25,6 +26,18 @@ class RectAbs:
             size=self.size.rel(size)
         )
 
+    def limit(self, size: Size):
+        res = deepcopy(self)
+        if res.pos.x < 0:
+            res.size.width+=res.pos.x
+            res.pos.x = 0
+        if res.pos.y < 0:
+            res.size.height += res.pos.y
+            res.pos.y = 0
+        res.size.width = min(size.width - res.pos.x, res.size.width)
+        res.size.height = min(size.height - res.pos.y, res.size.height)
+        return res
+
     def scale(self, rx: float, ry: float):
         return RectAbs(
             pos=PointAbs(
@@ -50,6 +63,9 @@ class RectAbs:
         x1 = max(0, min(x1, bw))
         y1 = max(0, min(y1, bh))
         return buffer[y1:y2, x1:x2]
+
+    def __str__(self) -> str:
+        return f'[{self.pos} @ {self.size}]'
 
 
 @dataclass

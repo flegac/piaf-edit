@@ -27,24 +27,24 @@ class SimpleDataSource(DataSource):
     def size(self):
         return SizeAbs.from_buffer(self.data)
 
-    def write(self, buffer: np.ndarray, area: Union[Rect, RectAbs] = None):
-        if area is None:
-            area = RectAbs(pos=PointAbs(0, 0), size=self.size())
-        if isinstance(area, Rect):
-            area = area.abs(self.size())
-        area.crop(self.data)[...] = buffer
+    def write(self, buffer: np.ndarray, window: Union[Rect, RectAbs] = None):
+        if window is None:
+            window = RectAbs(pos=PointAbs(0, 0), size=self.size())
+        if isinstance(window, Rect):
+            window = window.abs(self.size())
+        window.crop(self.data)[...] = buffer
 
-    def read(self, area: Union[Rect, RectAbs] = None, out_shape: Union[Size, SizeAbs] = None) -> np.ndarray:
-        if area is None:
-            area = RectAbs(pos=PointAbs(0, 0), size=self.size())
-        if isinstance(area, Rect):
-            area = area.abs(self.size())
-        buffer = area.crop(self.data)
-        if out_shape:
-            if isinstance(out_shape, Size):
-                out_shape = out_shape.abs(self.size())
+    def read(self, window: Union[Rect, RectAbs] = None, output_size: Union[Size, SizeAbs] = None) -> np.ndarray:
+        if window is None:
+            window = RectAbs(pos=PointAbs(0, 0), size=self.size())
+        if isinstance(window, Rect):
+            window = window.abs(self.size())
+        buffer = window.crop(self.data)
+        if output_size:
+            if isinstance(output_size, Size):
+                output_size = output_size.abs(self.size())
             buffer = buffer.astype('uint16')  # TODO: remove this when all is fine
-            buffer = cv2.resize(buffer, dsize=out_shape.raw(), interpolation=cv2.INTER_CUBIC)
+            buffer = cv2.resize(buffer, dsize=output_size.raw(), interpolation=cv2.INTER_CUBIC)
 
         return buffer
 

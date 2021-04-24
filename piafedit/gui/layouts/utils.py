@@ -39,7 +39,7 @@ def image_button(buffer: np.ndarray):
     pixmap = pixmap_from_numpy(buffer)
 
     widget = QPushButton()
-    widget.clicked.connect(lambda: print('ok'))
+    # widget.clicked.connect(lambda: print('ok'))
     # widget.setText(text)
     widget.setStyleSheet(f'QPushButton {{ color: rgb{r, g, b}; margin: 0px }}')
     widget.setIcon(QIcon(pixmap))

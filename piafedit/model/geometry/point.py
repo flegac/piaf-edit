@@ -27,6 +27,8 @@ class PointAbs:
             y=relative(self.y, size.height)
         )
 
+    def __str__(self) -> str:
+        return f'{self.x,self.y}'
 
 @dataclass
 class Point:
