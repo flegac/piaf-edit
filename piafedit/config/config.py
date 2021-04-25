@@ -14,7 +14,7 @@ class LayoutConfig:
 
 @dataclass
 class WinConfig:
-    title: str = 'easy-qt'
+    title: str = 'Piaf Edit'
     size: SizeAbs = SizeAbs(1280, 860)
     layout: LayoutConfig = LayoutConfig()
 

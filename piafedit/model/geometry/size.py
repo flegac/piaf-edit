@@ -26,6 +26,8 @@ class SizeAbs:
 
     @property
     def aspect_ratio(self):
+        if self.height == 0:
+            return 1.0
         return self.width / self.height
 
     def limit(self, size: 'SizeAbs'):

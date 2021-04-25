@@ -6,6 +6,7 @@ from PyQt5.QtCore import Qt
 from piafedit.gui.event.event_handler import EventHandler
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
+from piafedit.model.geometry.size import SizeAbs
 
 
 class RoiHandler(EventHandler):
@@ -42,6 +43,7 @@ class RoiHandler(EventHandler):
             Qt.Key_End: self.setup_action(end),
         }
         handlers.get(ev.key(), lambda: None)()
+        self.update_status(ev)
 
     def wheelEvent(self, ev):
         rect = self.manager.rect
@@ -50,9 +52,9 @@ class RoiHandler(EventHandler):
         rect.size.width = round(rect.size.width * speed)
         rect.size.height = round(rect.size.height * speed)
         self._update()
+        self.update_status(ev)
 
     def mouseMoveEvent(self, ev):
-        from piafedit.editor_api import P
         cursor = ev.pos()
         x, y = cursor.x(), cursor.y()
         rect: RectAbs = self.manager.rect
@@ -67,13 +69,27 @@ class RoiHandler(EventHandler):
             # dx = round(dx / rect.size.width)
             # dy = round(dy / rect.size.height)
 
-
             rect.pos.x = self.rect_origin.pos.x + dx
             rect.pos.y = self.rect_origin.pos.y + dy
             self._update()
 
-        delta = f'[{dx},{dy}]' if dx != 0 or dy != 0 else ''
-        P.update_status(f'cursor: {x, y}{delta} rect: {rect} buffer: {self.manager.current_buffer_shape}')
+        self.update_status(ev)
+
+    def update_status(self, ev):
+        cursor = None
+        try:
+            cursor = ev.pos()
+        except:
+            pass
+        cursor_rect = None
+        if cursor:
+            x, y = cursor.x(), cursor.y()
+            dx, dy = (0, 0)
+            if self.cursor_origin:
+                dx = self.cursor_origin.x() - cursor.x()
+                dy = self.cursor_origin.y() - cursor.y()
+            cursor_rect = RectAbs(PointAbs(x, y), SizeAbs(dx, dy))
+        self.manager.update_status(cursor_rect)
 
     def switch_mouse_control_action(self, status: bool):
         def action():

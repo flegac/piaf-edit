@@ -29,13 +29,13 @@ class RectAbs:
     def limit(self, size: Size):
         res = deepcopy(self)
         if res.pos.x < 0:
-            res.size.width+=res.pos.x
+            res.size.width += res.pos.x
             res.pos.x = 0
         if res.pos.y < 0:
             res.size.height += res.pos.y
             res.pos.y = 0
-        res.size.width = min(size.width - res.pos.x, res.size.width)
-        res.size.height = min(size.height - res.pos.y, res.size.height)
+        res.size.width = max(0, min(size.width - res.pos.x, res.size.width))
+        res.size.height = max(0, min(size.height - res.pos.y, res.size.height))
         return res
 
     def scale(self, rx: float, ry: float):

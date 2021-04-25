@@ -23,6 +23,16 @@ class ImageManager:
         self.view = self.create_view(roi)
         self.update_view()
 
+    def update_status(self, cursor: RectAbs = None):
+        from piafedit.editor_api import P
+        cursor_infos = ''
+        if cursor:
+            x, y = cursor.pos.raw()
+            dx, dy = cursor.size.raw()
+            delta = f'[{dx},{dy}]' if dx != 0 or dy != 0 else ''
+            cursor_infos = f'cursor: {x, y}{delta} '
+        P.update_status(f'{cursor_infos}rect: {self.rect} buffer: {self.current_buffer_shape}')
+
     def update_view(self):
         window = self.rect.limit(self.source.size())
 
@@ -31,6 +41,9 @@ class ImageManager:
         buffer = self.source.read(window, output_size=size)
         self.current_buffer_shape = buffer.shape
         self.view.setImage(buffer)
+        self.update_status()
+        self.view.view.autoRange(padding=0.0)
+        self.overview.view.autoRange(padding=0.0)
 
     def update_rect(self, roi: pg.RectROI):
         over = self.source.overview_size(self.overview_size)
@@ -57,6 +70,7 @@ class ImageManager:
         view = pg.ImageView()
         view.ui.roiBtn.hide()
         view.ui.menuBtn.hide()
+
         manager = self
 
         def handle_rect_update(rect: RectAbs):
@@ -90,5 +104,3 @@ class ImageManager:
             self.overview.ui.histogram.hide()
             self.overview.ui.roiBtn.hide()
             self.overview.ui.menuBtn.hide()
-
-
