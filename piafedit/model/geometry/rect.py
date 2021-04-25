@@ -6,6 +6,7 @@ import numpy as np
 
 from piafedit.model.geometry.point import Point, PointAbs
 from piafedit.model.geometry.size import Size, SizeAbs
+from piafedit.model.lib.operator import Buffer
 
 
 @dataclass
@@ -54,7 +55,7 @@ class RectAbs:
         self.pos.x += dx
         self.pos.y += dy
 
-    def crop(self, buffer: np.ndarray):
+    def crop(self, buffer: Buffer):
         x1, y1 = self.pos.raw()
         w, h = self.size.raw()
         bh, bw = buffer.shape[:2]
@@ -86,5 +87,5 @@ class Rect:
             size=self.size.abs(size)
         )
 
-    def crop(self, buffer: np.ndarray):
+    def crop(self, buffer: Buffer):
         return self.abs(SizeAbs.from_buffer(buffer)).crop(buffer)

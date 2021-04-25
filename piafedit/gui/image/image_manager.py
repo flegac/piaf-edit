@@ -5,6 +5,7 @@ from piafedit.gui.utils import rect_to_roi, setup_roi
 from piafedit.model.geometry.point import Point
 from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import Size, SizeAbs
+from piafedit.model.lib.filters import edge_detection, contrast_stretching, dilate, erode
 from piafedit.model.source.data_source import DataSource
 
 
@@ -40,9 +41,10 @@ class ImageManager:
         size = Size.from_aspect(window.size.aspect_ratio).abs(abs_size)
 
         source = self.source
-        # kernel = gauss_kernel(std=1)
-        # kernel = sobel()
-        # source = KernelDataSource(self.source, kernel)
+        # source = self.source.map(edge_detection)
+        # source = self.source.map(contrast_stretching)
+        # source = self.source.map(dilate)
+        # source = self.source.map(erode)
 
         buffer = source.read(window, output_size=size)
         self.current_buffer_shape = buffer.shape

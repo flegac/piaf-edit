@@ -11,6 +11,7 @@ from rasterio.windows import Window
 
 from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import SizeAbs
+from piafedit.model.lib.operator import Buffer
 from piafedit.model.source.data_source import DataSource
 
 warnings.filterwarnings("ignore", category=rasterio.errors.NotGeoreferencedWarning)
@@ -20,11 +21,10 @@ log = logging.getLogger()
 
 class RIODataSource(DataSource):
     def __init__(self, path: Path):
-        super().__init__(path.stem)
         self.path = path
         self.resampling: Resampling = Resampling.cubic
 
-    def create(self, buffer: np.ndarray):
+    def create(self, buffer: Buffer):
         h, w = buffer.shape[:2]
         count = 1
         if len(buffer.shape) >= 2:
@@ -56,6 +56,9 @@ class RIODataSource(DataSource):
                     dst.update_tags(ns='rio_overview', resampling='average')
                     break
 
+    def name(self) -> str:
+        return self.path.stem
+
     def bands(self):
         with rasterio.open(self.path) as src:
             return src.count
@@ -77,7 +80,7 @@ class RIODataSource(DataSource):
             h = src.height
             return SizeAbs(w, h)
 
-    def write(self, buffer: np.ndarray, window: Union[Rect, RectAbs] = None):
+    def write(self, buffer: Buffer, window: Union[Rect, RectAbs] = None):
         window = None
         if window:
             if isinstance(window, Rect):
@@ -92,7 +95,7 @@ class RIODataSource(DataSource):
                            dtype=buffer.dtype) as dst:
             dst.write(buffer, window=window, indexes=1)
 
-    def read(self, window: Union[Rect, RectAbs] = None, output_size: SizeAbs = None) -> np.ndarray:
+    def read(self, window: Union[Rect, RectAbs] = None, output_size: SizeAbs = None) -> Buffer:
         if window:
             if isinstance(window, Rect):
                 window = window.abs(self.size())

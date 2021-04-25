@@ -1,20 +1,20 @@
-import numpy as np
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QPixmap, QImage, QIcon
 from PyQt5.QtWidgets import QPushButton, QSizePolicy
 
+from piafedit.model.lib.filters import normalize
+from piafedit.model.lib.operator import Buffer
 from piafedit.model.source.data_source import DataSource
-from piafedit.model.utils import normalize
 
 
-def pixmap_from_numpy(buffer: np.ndarray) -> QPixmap:
+def pixmap_from_numpy(buffer: Buffer) -> QPixmap:
     buffer = (normalize(buffer) * 255).astype('uint8')
     h, w = buffer.shape[:2]
     img = QImage(buffer.tobytes(), w, h, QImage.Format_RGB888)
     return QPixmap.fromImage(img)
 
 
-def source_button(source: DataSource, size:int = 256):
+def source_button(source: DataSource, size: int = 256):
     overview = source.overview(size=size)
     button = image_button(overview)
 
@@ -33,7 +33,7 @@ def source_button(source: DataSource, size:int = 256):
     return button
 
 
-def image_button(buffer: np.ndarray):
+def image_button(buffer: Buffer):
     r, g, b = 0, 0, 0
     h, w = buffer.shape[:2]
     pixmap = pixmap_from_numpy(buffer)

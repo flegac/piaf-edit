@@ -3,12 +3,6 @@ from math import floor
 import numpy as np
 
 
-def normalize(buffer: np.ndarray):
-    a, b = buffer.min(), buffer.max()
-    if b - a != 0:
-        buffer = (buffer - a) / (b - a)
-    return buffer
-
 def absolute(a: float, size: int, clip: bool = False) -> int:
     res = a * size
     if clip:

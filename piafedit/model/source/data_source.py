@@ -1,4 +1,3 @@
-import uuid
 from abc import ABC, abstractmethod
 from typing import Union, Tuple
 
@@ -6,11 +5,17 @@ import numpy as np
 
 from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import SizeAbs
+from piafedit.model.lib.operator import Operator, Buffer
 
 
 class DataSource(ABC):
-    def __init__(self, name: str = None):
-        self.name = name or str(uuid.uuid4())
+    def map(self, operator: Operator) -> 'DataSource':
+        from piafedit.model.source.map_data_source import MapDataSource
+        return MapDataSource(self, operator)
+
+    @abstractmethod
+    def name(self) -> str:
+        ...
 
     @abstractmethod
     def bands(self) -> int:
@@ -29,11 +34,11 @@ class DataSource(ABC):
         ...
 
     @abstractmethod
-    def read(self, window: Union[Rect, RectAbs] = None, output_size: SizeAbs = None) -> np.ndarray:
+    def read(self, window: Union[Rect, RectAbs] = None, output_size: SizeAbs = None) -> Buffer:
         ...
 
     @abstractmethod
-    def write(self, buffer: np.ndarray, window: Union[Rect, RectAbs] = None):
+    def write(self, buffer: Buffer, window: Union[Rect, RectAbs] = None):
         ...
 
     def overview_size(self, size: int) -> SizeAbs:
@@ -48,5 +53,3 @@ class DataSource(ABC):
         overview_size = self.overview_size(size)
         overview = self.read(output_size=overview_size)
         return overview
-
-
