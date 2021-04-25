@@ -3,13 +3,13 @@ from unittest import TestCase
 
 import numpy as np
 
-from piafedit.model.source.fast_data_source import FastDataSource
+from piafedit.model.source.rio_data_source import RIODataSource
 from piafedit.model.geometry.point import Point
 from piafedit.model.geometry.rect import Rect
 from piafedit.model.geometry.size import SizeAbs, Size
 
 path = Path('../resources/test.tif')
-source = FastDataSource(path)
+source = RIODataSource(path)
 area = Rect(
     pos=Point(.1, .1),
     size=Size(.1, .1)

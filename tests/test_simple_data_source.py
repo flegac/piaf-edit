@@ -2,7 +2,7 @@ from unittest import TestCase
 
 import numpy as np
 
-from piafedit.model.source.simple_data_source import SimpleDataSource
+from piafedit.model.source.raw_data_source import RawDataSource
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
 from piafedit.model.geometry.size import SizeAbs
@@ -12,7 +12,7 @@ area = RectAbs(
     size=SizeAbs(2, 2)
 )
 data = np.zeros((5, 5))
-source = SimpleDataSource(data)
+source = RawDataSource(data)
 
 
 class TestSimpleDataSource(TestCase):

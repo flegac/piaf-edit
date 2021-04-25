@@ -9,7 +9,7 @@ from piafedit.model.geometry.rect import RectAbs, Rect
 from piafedit.model.geometry.size import SizeAbs, Size
 
 
-class SimpleDataSource(DataSource):
+class RawDataSource(DataSource):
 
     def __init__(self, data: np.ndarray):
         super().__init__()
@@ -55,7 +55,7 @@ if __name__ == '__main__':
         size=SizeAbs(2, 2)
     )
     data = np.zeros((5, 5))
-    source = SimpleDataSource(data)
+    source = RawDataSource(data)
 
     out = source.read()
     print(out)

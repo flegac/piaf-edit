@@ -1,14 +1,11 @@
 import math
 from typing import List
 
-import numpy as np
 from PyQt5.QtWidgets import *
-
-from piafedit.gui.layouts.utils import image_button
 
 
 class FlowLayout(QWidget):
-    def __init__(self, width:int=None, parent=None) -> None:
+    def __init__(self, width: int = None, parent=None) -> None:
         super().__init__(parent)
         self.width = width
         self._widgets: List[QWidget] = []
@@ -45,18 +42,3 @@ class FlowLayout(QWidget):
         widget = QWidget()
         widget.setLayout(layout)
         self.scroll.setWidget(widget)
-
-
-if __name__ == '__main__':
-    app = QApplication([])
-    flow = FlowLayout()
-    for _ in range(20):
-        w, h = 128, 96
-        shape = (h, w, 3)
-        buffer = np.random.randint(0, 255, size=shape).astype('uint8')
-
-        flow.register(image_button(buffer))
-    flow.update_layout()
-    flow.show()
-
-    app.exec_()

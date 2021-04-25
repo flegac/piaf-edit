@@ -7,14 +7,14 @@ from piafedit.config.config import WinConfig
 from piafedit.editor_api import P
 from piafedit.gui.editor_window import EditorWindow
 from piafedit.model.geometry.size import SizeAbs
-from piafedit.model.source.fast_data_source import FastDataSource
+from piafedit.model.source.rio_data_source import RIODataSource
 
 IMAGE_SIZE = 4_000
 
 
 def gen_big_image():
-    source = FastDataSource(Path('../resources/kitten.jpg'))
-    dest = FastDataSource(Path('../resources/fat.tif'))
+    source = RIODataSource(Path('../resources/kitten.jpg'))
+    dest = RIODataSource(Path('../resources/fat.tif'))
     size = SizeAbs(8000, 8000 / source.size().aspect_ratio)
     print(f'resize from {source.size()} to {size}')
     if not dest.path.exists():

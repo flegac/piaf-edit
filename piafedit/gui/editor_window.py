@@ -1,13 +1,11 @@
-import numpy as np
 from PyQt5.QtWidgets import *
 from pyqtgraph.dockarea import Dock
 
 from piafedit.config.config import WinConfig, Win
 from piafedit.gui.dock_panel import DockPanel
-from piafedit.gui.layouts.flow_layout import FlowLayout
-from piafedit.gui.layouts.utils import source_button
+from piafedit.gui.common.flow_layout import FlowLayout
+from piafedit.gui.common.utils import source_button
 from piafedit.model.source.data_source import DataSource
-from piafedit.model.source.simple_data_source import SimpleDataSource
 
 
 class SourceBrowser(FlowLayout):

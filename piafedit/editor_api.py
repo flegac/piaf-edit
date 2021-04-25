@@ -7,7 +7,7 @@ from piafedit.gui.editor_window import EditorWindow
 from piafedit.gui.image.image_manager import ImageManager
 from piafedit.gui.utils import select_files
 from piafedit.model.source.data_source import DataSource
-from piafedit.model.source.fast_data_source import FastDataSource
+from piafedit.model.source.rio_data_source import RIODataSource
 
 
 class P:
@@ -21,7 +21,7 @@ class P:
     def open_files():
         files = select_files()
         for file in files:
-            P.open_source(FastDataSource(Path(file)))
+            P.open_source(RIODataSource(Path(file)))
         P.main_window.browser.update_layout()
 
     @staticmethod

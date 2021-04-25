@@ -18,7 +18,7 @@ warnings.filterwarnings("ignore", category=rasterio.errors.NotGeoreferencedWarni
 log = logging.getLogger()
 
 
-class FastDataSource(DataSource):
+class RIODataSource(DataSource):
     def __init__(self, path: Path):
         super().__init__(path.stem)
         self.path = path

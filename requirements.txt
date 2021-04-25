@@ -3,3 +3,4 @@ rasterio
 tqdm
 pyqtgraph>=0.12.1
 PyQT5>=5.13.0
+RxPy
