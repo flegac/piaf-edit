@@ -38,7 +38,13 @@ class ImageManager:
 
         abs_size = SizeAbs(self.buffer_size, self.buffer_size)
         size = Size.from_aspect(window.size.aspect_ratio).abs(abs_size)
-        buffer = self.source.read(window, output_size=size)
+
+        source = self.source
+        # kernel = gauss_kernel(std=1)
+        # kernel = sobel()
+        # source = KernelDataSource(self.source, kernel)
+
+        buffer = source.read(window, output_size=size)
         self.current_buffer_shape = buffer.shape
         self.view.setImage(buffer)
         self.update_status()

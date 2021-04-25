@@ -22,6 +22,7 @@ class RIODataSource(DataSource):
     def __init__(self, path: Path):
         super().__init__(path.stem)
         self.path = path
+        self.resampling: Resampling = Resampling.cubic
 
     def create(self, buffer: np.ndarray):
         h, w = buffer.shape[:2]
@@ -105,7 +106,7 @@ class RIODataSource(DataSource):
             data = src.read(
                 window=window,
                 out_shape=target,
-                resampling=Resampling.cubic
+                resampling=self.resampling
             )
             data = np.moveaxis(data, 0, 2)
             return data

@@ -35,10 +35,10 @@ class RoiHandler(EventHandler):
         end = PointAbs(size.width - rect.size.width, size.height - rect.size.height)
 
         handlers = {
-            Qt.Key_Left: self.move_action(-1, 0),
-            Qt.Key_Right: self.move_action(1, 0),
-            Qt.Key_Up: self.move_action(0, -1),
-            Qt.Key_Down: self.move_action(0, 1),
+            Qt.Key_Left: self.move_tile_action(-1, 0),
+            Qt.Key_Right: self.move_tile_action(1, 0),
+            Qt.Key_Up: self.move_tile_action(0, -1),
+            Qt.Key_Down: self.move_tile_action(0, 1),
             Qt.Key_Home: self.setup_action(start),
             Qt.Key_End: self.setup_action(end),
         }
@@ -105,13 +105,19 @@ class RoiHandler(EventHandler):
 
         return action
 
-    def move_action(self, dx: int, dy: int):
+    def move_tile_action(self, dx: int, dy: int):
         def action():
             rect = self.manager.rect
             w = rect.size.width
             h = rect.size.height
-            rect.pos.x += dx * w
-            rect.pos.y += dy * h
+
+            new_x = rect.pos.x + dx * w
+            new_y = rect.pos.y + dy * h
+
+            if -w < new_x <= self.manager.source.size().width:
+                rect.pos.x += dx * w
+            if -h < new_y <= self.manager.source.size().height:
+                rect.pos.y += dy * h
             self._update()
 
         return action

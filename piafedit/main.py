@@ -9,13 +9,14 @@ from piafedit.gui.editor_window import EditorWindow
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.source.rio_data_source import RIODataSource
 
-IMAGE_SIZE = 4_000
+IMAGE_SIZE = 10_000
 
 
 def gen_big_image():
     source = RIODataSource(Path('../resources/kitten.jpg'))
     dest = RIODataSource(Path('../resources/fat.tif'))
-    size = SizeAbs(8000, 8000 / source.size().aspect_ratio)
+
+    size = SizeAbs(IMAGE_SIZE, IMAGE_SIZE / source.size().aspect_ratio)
     print(f'resize from {source.size()} to {size}')
     if not dest.path.exists():
         buffer = source.read(output_size=size)
@@ -33,10 +34,10 @@ def main():
     source = gen_big_image()
     P.show_source(source)
 
-    P.open_source(source)
-    P.open_source(source)
-    P.open_source(source)
-    P.open_source(source)
+    # P.open_source(source)
+    # P.open_source(source)
+    # P.open_source(source)
+    # P.open_source(source)
 
     app.exec_()
 
