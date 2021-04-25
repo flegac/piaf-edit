@@ -3,7 +3,7 @@ from typing import Tuple
 
 import numpy as np
 
-from piafedit.model.lib.operator import Buffer
+from piafedit.model.libs.operator import Buffer
 from piafedit.model.utils import absolute, relative
 
 

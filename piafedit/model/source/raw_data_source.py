@@ -7,7 +7,7 @@ import numpy as np
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs, Rect
 from piafedit.model.geometry.size import SizeAbs, Size
-from piafedit.model.lib.operator import Buffer
+from piafedit.model.libs.operator import Buffer
 from piafedit.model.source.data_source import DataSource
 
 

@@ -5,7 +5,7 @@ import numpy as np
 
 from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import SizeAbs
-from piafedit.model.lib.operator import Operator, Buffer
+from piafedit.model.libs.operator import Operator, Buffer
 
 
 class DataSource(ABC):

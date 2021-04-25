@@ -2,8 +2,8 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QPixmap, QImage, QIcon
 from PyQt5.QtWidgets import QPushButton, QSizePolicy
 
-from piafedit.model.lib.filters import normalize
-from piafedit.model.lib.operator import Buffer
+from piafedit.model.libs.filters import normalize
+from piafedit.model.libs.operator import Buffer
 from piafedit.model.source.data_source import DataSource
 
 
