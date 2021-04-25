@@ -10,7 +10,7 @@ from rasterio.profiles import DefaultGTiffProfile
 from rasterio.windows import Window
 
 from piafedit.model.geometry.rect import Rect, RectAbs
-from piafedit.model.geometry.size import SizeAbs, Size
+from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.source.data_source import DataSource
 
 warnings.filterwarnings("ignore", category=rasterio.errors.NotGeoreferencedWarning)

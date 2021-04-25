@@ -43,7 +43,7 @@ class ImageManager:
         self.view.setImage(buffer)
         self.update_status()
         self.view.view.autoRange(padding=0.0)
-        self.overview.view.autoRange(padding=0.0)
+        self.overview.view.autoRange(padding=0.05)
 
     def update_rect(self, roi: pg.RectROI):
         over = self.source.overview_size(self.overview_size)
