@@ -25,3 +25,4 @@ class Win(Enum):
     browser = auto()
     toolbar = auto()
     infos = auto()
+    console = auto()

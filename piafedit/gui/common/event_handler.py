@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 from typing import Callable, Any
 
@@ -5,14 +6,15 @@ import pyqtgraph as pg
 
 Handler = Callable[[Any], None]
 
+log = logging.getLogger()
 
 @dataclass
 class EventHandler:
-    mousePressEvent: Handler = print
-    mouseReleaseEvent: Handler = print
-    mouseMoveEvent: Handler = print
-    wheelEvent: Handler = print
-    keyPressEvent: Handler = print
+    mousePressEvent: Handler = log.debug
+    mouseReleaseEvent: Handler = log.debug
+    mouseMoveEvent: Handler = log.debug
+    wheelEvent: Handler = log.debug
+    keyPressEvent: Handler = log.debug
 
     @staticmethod
     def backup(gv: pg.GraphicsView):

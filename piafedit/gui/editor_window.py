@@ -1,7 +1,10 @@
+import logging
+
 from PyQt5.QtWidgets import *
 from pyqtgraph.dockarea import Dock
 
 from piafedit.config.config import WinConfig, Win
+from piafedit.gui.common.log_widget import LogWidget
 from piafedit.gui.dock_panel import DockPanel
 from piafedit.gui.common.flow_layout import FlowLayout
 from piafedit.gui.common.utils import source_button
@@ -53,16 +56,22 @@ class LayoutBuilder:
         view = self.win.dock.add_dock('view', size=self.win.config.layout.view)
         overview = self.win.dock.add_dock('overview', size=self.win.config.layout.overview)
         toolbar = self.win.dock.add_dock('tools', size=self.win.config.layout.tools)
+        console = self.win.dock.add_dock('console', size=self.win.config.layout.tools)
         self.win.widgets = {
             Win.view: view,
             Win.browser: browser,
             Win.overview: overview,
             Win.toolbar: toolbar,
+            Win.console: console,
         }
         self.win.dock.area.moveDock(toolbar, 'bottom', view)
         self.win.dock.area.moveDock(browser, 'left', view)
         self.win.dock.area.moveDock(overview, 'top', browser)
+        self.win.dock.area.moveDock(console, 'bottom', view)
 
+        logs = LogWidget('toto')
+        logs.follow(logging.getLogger())
+        self.win.set_content(console, logs)
         self.win.set_content(browser, self.win.browser)
         self.win.set_content(toolbar, self.win.dock.panel)
         self.win.dock.lock_ui(True)

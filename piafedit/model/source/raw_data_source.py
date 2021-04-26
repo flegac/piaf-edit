@@ -1,3 +1,4 @@
+import logging
 import uuid
 from typing import Union, Tuple
 
@@ -10,6 +11,7 @@ from piafedit.model.geometry.size import SizeAbs, Size
 from piafedit.model.libs.operator import Buffer
 from piafedit.model.source.data_source import DataSource
 
+log=logging.getLogger()
 
 class RawDataSource(DataSource):
 
@@ -53,20 +55,3 @@ class RawDataSource(DataSource):
             buffer = cv2.resize(buffer, dsize=output_size.raw(), interpolation=cv2.INTER_CUBIC)
 
         return buffer
-
-
-if __name__ == '__main__':
-    area = RectAbs(
-        pos=PointAbs(1, 1),
-        size=SizeAbs(2, 2)
-    )
-    data = np.zeros((5, 5))
-    source = RawDataSource(data)
-
-    out = source.read()
-    print(out)
-
-    source.write(np.ones((1, 1)), area)
-
-    out = source.read()
-    print(out)

@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 import pyqtgraph as pg
@@ -11,13 +12,15 @@ from piafedit.model.source.rio_data_source import RIODataSource
 
 IMAGE_SIZE = 10_000
 
+log=logging.getLogger()
+log.setLevel(logging.DEBUG)
 
 def gen_big_image():
     source = RIODataSource(Path('../resources/kitten.jpg'))
     dest = RIODataSource(Path('../resources/fat.tif'))
 
     size = SizeAbs(IMAGE_SIZE, IMAGE_SIZE / source.size().aspect_ratio)
-    print(f'resize from {source.size()} to {size}')
+    log.debug(f'resize from {source.size()} to {size}')
     if not dest.path.exists():
         buffer = source.read(output_size=size)
         dest.create(buffer)

@@ -32,7 +32,7 @@ def show_contours(buffer: Buffer) -> Buffer:
 
 def normalize(buffer: Buffer) -> Buffer:
     buffer -= buffer.min()
-    buffer /= max(1, buffer.max())
+    buffer = buffer / max(1, buffer.max())
     return buffer
 
 

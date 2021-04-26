@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from typing import List
 
@@ -7,6 +8,8 @@ from PyQt5.QtWidgets import QFileDialog
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
 from piafedit.model.geometry.size import SizeAbs
+
+log = logging.getLogger()
 
 
 def rect_to_roi(rect: RectAbs):
@@ -32,5 +35,5 @@ def select_files() -> List[str]:
 
     if dialog.exec():
         filenames = dialog.selectedFiles()
-        print(filenames)
+        log.debug(filenames)
         return filenames

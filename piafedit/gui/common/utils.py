@@ -1,3 +1,5 @@
+import logging
+
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QPixmap, QImage, QIcon
 from PyQt5.QtWidgets import QPushButton, QSizePolicy
@@ -5,6 +7,8 @@ from PyQt5.QtWidgets import QPushButton, QSizePolicy
 from piafedit.model.libs.filters import normalize
 from piafedit.model.libs.operator import Buffer
 from piafedit.model.source.data_source import DataSource
+
+log = logging.getLogger()
 
 
 def pixmap_from_numpy(buffer: Buffer) -> QPixmap:
@@ -39,7 +43,7 @@ def image_button(buffer: Buffer):
     pixmap = pixmap_from_numpy(buffer)
 
     widget = QPushButton()
-    # widget.clicked.connect(lambda: print('ok'))
+    # widget.clicked.connect(lambda: log.debug('ok'))
     # widget.setText(text)
     widget.setStyleSheet(f'QPushButton {{ color: rgb{r, g, b}; margin: 0px }}')
     widget.setIcon(QIcon(pixmap))
