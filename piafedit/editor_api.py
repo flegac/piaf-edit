@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 from PyQt5.QtWidgets import QWidget
@@ -8,6 +9,8 @@ from piafedit.gui.image.image_manager import ImageManager
 from piafedit.gui.utils import select_files
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.rio_data_source import RIODataSource
+
+log = logging.getLogger()
 
 
 class P:
@@ -22,11 +25,12 @@ class P:
         files = select_files()
         for file in files:
             P.open_source(RIODataSource(Path(file)))
-        P.main_window.browser.update_layout()
 
     @staticmethod
     def open_source(source: DataSource):
+        log.debug(f'open source: {source}')
         P.main_window.browser.open_source(source)
+        P.main_window.browser.update_layout()
 
     @staticmethod
     def show_source(source: DataSource):
