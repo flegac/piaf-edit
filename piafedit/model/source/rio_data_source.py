@@ -19,6 +19,8 @@ warnings.filterwarnings("ignore", category=rasterio.errors.NotGeoreferencedWarni
 log = logging.getLogger()
 
 
+logging.getLogger('rasterio').setLevel(logging.WARNING)
+
 class RIODataSource(DataSource):
     def __init__(self, path: Path):
         self.path = path

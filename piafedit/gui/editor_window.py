@@ -58,7 +58,7 @@ class LayoutBuilder:
             Win.console: console,
         }
         self.win.dock.area.moveDock(toolbar, 'bottom', view)
-        self.win.dock.area.moveDock(browser, 'above', view)
+        self.win.dock.area.moveDock(browser, 'left', view)
         self.win.dock.area.moveDock(overview, 'top', browser)
         self.win.dock.area.moveDock(console, 'bottom', view)
 
