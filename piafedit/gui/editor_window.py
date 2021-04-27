@@ -6,23 +6,16 @@ from pyqtgraph.dockarea import Dock
 from piafedit.config.config import WinConfig, Win
 from piafedit.gui.common.log_widget import LogWidget
 from piafedit.gui.dock_panel import DockPanel
-from piafedit.gui.common.flow_layout import FlowLayout
-from piafedit.gui.common.utils import source_button
-from piafedit.model.source.data_source import DataSource
-
-
-class SourceBrowser(FlowLayout):
-    def open_source(self, source: DataSource):
-        self.register(source_button(source, size=230))
-        self.update_layout()
+from piafedit.gui.browser.source_browser import SourceBrowser
 
 
 class EditorWindow(QMainWindow):
     def __init__(self, config: WinConfig):
         super().__init__()
+        self.setGeometry(0,0,1024,1024)
         self.config = config
         self.dock = DockPanel()
-        self.browser = SourceBrowser(1)
+        self.browser = SourceBrowser(100)
 
         self.setWindowTitle(config.title)
         self.resize(*config.size.raw())
@@ -65,7 +58,7 @@ class LayoutBuilder:
             Win.console: console,
         }
         self.win.dock.area.moveDock(toolbar, 'bottom', view)
-        self.win.dock.area.moveDock(browser, 'left', view)
+        self.win.dock.area.moveDock(browser, 'above', view)
         self.win.dock.area.moveDock(overview, 'top', browser)
         self.win.dock.area.moveDock(console, 'bottom', view)
 

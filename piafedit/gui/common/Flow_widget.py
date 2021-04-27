@@ -1,13 +1,18 @@
 import math
-from typing import List
+from typing import List, Callable, TypeVar, Generic, Any
 
+from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import *
 
+T = TypeVar('T')
+WidgetBuilder = Callable[[Any], QWidget]
 
-class FlowLayout(QWidget):
-    def __init__(self, width: int = None, parent=None) -> None:
+
+class FlowWidget(QWidget, Generic[T]):
+    def __init__(self, builder: WidgetBuilder, widget_width: int, parent=None) -> None:
         super().__init__(parent)
-        self.width = width
+        self.widget_width = widget_width
+        self.builder = builder
         self._widgets: List[QWidget] = []
 
         self.scroll = QScrollArea()
@@ -18,19 +23,25 @@ class FlowLayout(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.scroll)
         self.setLayout(layout)
+
+    def is_empty(self):
+        return len(self._widgets) == 0
+
+    def register(self, data: T):
+        widget = self.builder(data)
+        self._widgets.append(widget)
         self.update_layout()
 
-    def register(self, widget: QWidget):
-        self._widgets.append(widget)
+    def resizeEvent(self, event: QResizeEvent):
+        self.update_layout()
 
-    def update_layout(self, width: int = None):
-
+    def update_layout(self):
         n = len(self._widgets)
         if n == 0:
             return
 
-        if width is None:
-            width = self.width or int(math.sqrt(n))
+        w = 30 + max(1, self.widget_width)
+        width = max(1, math.floor(self.width() / w))
 
         layout = QGridLayout()
         layout.setSpacing(0)

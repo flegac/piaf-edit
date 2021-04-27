@@ -29,8 +29,7 @@ class P:
     @staticmethod
     def open_source(source: DataSource):
         log.debug(f'open source: {source}')
-        P.main_window.browser.open_source(source)
-        P.main_window.browser.update_layout()
+        P.main_window.browser.register(source)
 
     @staticmethod
     def show_source(source: DataSource):

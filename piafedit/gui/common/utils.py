@@ -18,6 +18,21 @@ def pixmap_from_numpy(buffer: Buffer) -> QPixmap:
     return QPixmap.fromImage(img)
 
 
+
+def image_button(buffer: Buffer):
+    r, g, b = 0, 0, 0
+    h, w = buffer.shape[:2]
+    pixmap = pixmap_from_numpy(buffer)
+
+    widget = QPushButton()
+    # widget.clicked.connect(lambda: log.debug('ok'))
+    # widget.setText(text)
+    widget.setStyleSheet(f'QPushButton {{ color: rgb{r, g, b}; margin: 0px }}')
+    widget.setIcon(QIcon(pixmap))
+    widget.setIconSize(QSize(w, h))
+    widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+    return widget
+
 def source_button(source: DataSource, size: int = 256):
     overview = source.overview(size=size)
     button = image_button(overview)
@@ -35,18 +50,3 @@ def source_button(source: DataSource, size: int = 256):
     button.setToolTip(f'{name} {width}x{height} {bands} {dtype}')
 
     return button
-
-
-def image_button(buffer: Buffer):
-    r, g, b = 0, 0, 0
-    h, w = buffer.shape[:2]
-    pixmap = pixmap_from_numpy(buffer)
-
-    widget = QPushButton()
-    # widget.clicked.connect(lambda: log.debug('ok'))
-    # widget.setText(text)
-    widget.setStyleSheet(f'QPushButton {{ color: rgb{r, g, b}; margin: 0px }}')
-    widget.setIcon(QIcon(pixmap))
-    widget.setIconSize(QSize(w, h))
-    widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-    return widget

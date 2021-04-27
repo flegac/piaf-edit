@@ -2,19 +2,17 @@ from typing import Callable
 
 from PyQt5.QtCore import Qt
 
-from piafedit.gui.common.handler.event_handler import EventHandler
+from piafedit.gui.common.handler.keyboard_handler import KeyboardHandler
 from piafedit.gui.image.handler.roi_common import RoiCommon
-from piafedit.gui.image.handler.roi_drag import RoiDragHandler
 from piafedit.gui.image.handler.roi_mouse import RoiMouseHandler
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
 
 
-class RoiHandler(RoiCommon, EventHandler):
+class RoiKeyboardHandler(RoiCommon, KeyboardHandler):
 
     def __init__(self, manager: 'ImageManager', updater: Callable[[RectAbs], None]):
         super().__init__(manager, updater)
-        self.drag = RoiDragHandler()
         self.mouse = RoiMouseHandler(manager, updater)
         self.manager = manager
         self.updater = updater

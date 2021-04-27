@@ -1,11 +1,12 @@
 import pyqtgraph as pg
 
-from piafedit.gui.image.handler.roi_handler import RoiHandler
+from piafedit.gui.browser.image_drag_handler import ImageDragHandler
+from piafedit.gui.image.handler.roi_handler import RoiKeyboardHandler
+from piafedit.gui.image.handler.roi_mouse import RoiMouseHandler
 from piafedit.gui.utils import rect_to_roi, setup_roi
 from piafedit.model.geometry.point import Point
 from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import Size, SizeAbs
-from piafedit.model.libs.filters import erode
 from piafedit.model.source.data_source import DataSource
 
 
@@ -16,7 +17,7 @@ class ImageManager:
         self.source = source
         self.rect = Rect().abs(self.source.size())
         self.overview_size = 96
-        self.buffer_size = 256
+        self.buffer_size = 128
         self.current_buffer_shape = None
 
         roi = rect_to_roi(self.rect)
@@ -37,14 +38,16 @@ class ImageManager:
     def update_view(self):
         window = self.rect.limit(self.source.size())
 
-        abs_size = SizeAbs(self.buffer_size, self.buffer_size)
+        w = self.view.view.width()
+        h = self.view.view.height()
+        s = max(w, h)
+        abs_size = SizeAbs(s, s)
         size = Size.from_aspect(window.size.aspect_ratio).abs(abs_size)
 
         source = self.source
         # source = self.source.map(edge_detection)
-        # source = self.source.map(contrast_stretching)
         # source = self.source.map(dilate)
-        source = self.source.map(erode)
+        # source = self.source.map(erode)
 
         buffer = source.read(window, output_size=size)
         self.current_buffer_shape = buffer.shape
@@ -81,12 +84,21 @@ class ImageManager:
 
         manager = self
 
+        old_resizeEvent = view.ui.graphicsView.resizeEvent
+
+        def resizeEvent(ev):
+            old_resizeEvent(ev)
+            manager.update_view()
+
+        view.ui.graphicsView.resizeEvent = resizeEvent
+
         def handle_rect_update(rect: RectAbs):
             manager.update_roi(roi, rect)
             manager.update_view()
 
-        handler = RoiHandler(self, handle_rect_update)
-        handler.patch(view.ui.graphicsView)
+        RoiKeyboardHandler(self, handle_rect_update).patch(view.ui.graphicsView)
+        RoiMouseHandler(self, handle_rect_update).patch(view.ui.graphicsView)
+        ImageDragHandler().patch(view.ui.graphicsView)
 
         roi.sigRegionChanged.connect(lambda: manager.update_rect(roi))
         return view

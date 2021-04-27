@@ -1,7 +1,7 @@
 import logging
 from dataclasses import dataclass
 
-import pyqtgraph as pg
+from PyQt5.QtWidgets import QWidget
 
 from piafedit.gui.common.handler.drag_handler import Handler
 
@@ -16,24 +16,24 @@ class MouseHandler:
     wheelEvent: Handler = log.debug
 
     @staticmethod
-    def backup(gv: pg.GraphicsView):
-        if not hasattr(gv, '_mouse_backup'):
-            gv._backup = MouseHandler(
-                mousePressEvent=gv.mousePressEvent,
-                mouseReleaseEvent=gv.mouseReleaseEvent,
-                mouseMoveEvent=gv.mouseMoveEvent,
-                wheelEvent=gv.wheelEvent,
+    def backup(w: QWidget):
+        if not hasattr(w, '_mouse_backup'):
+            w._backup = MouseHandler(
+                mousePressEvent=w.mousePressEvent,
+                mouseReleaseEvent=w.mouseReleaseEvent,
+                mouseMoveEvent=w.mouseMoveEvent,
+                wheelEvent=w.wheelEvent,
             )
 
     @staticmethod
-    def reset(gv: pg.GraphicsView):
-        if hasattr(gv, '_mouse_backup'):
-            gv._backup.patch(gv)
-            del gv._backup
+    def reset(w: QWidget):
+        if hasattr(w, '_mouse_backup'):
+            w._backup.patch(w)
+            del w._backup
 
-    def patch(self, gv: pg.GraphicsView):
-        MouseHandler.backup(gv)
-        gv.mousePressEvent = self.mousePressEvent
-        gv.mouseReleaseEvent = self.mouseReleaseEvent
-        gv.mouseMoveEvent = self.mouseMoveEvent
-        gv.wheelEvent = self.wheelEvent
+    def patch(self, w: QWidget):
+        MouseHandler.backup(w)
+        w.mousePressEvent = self.mousePressEvent
+        w.mouseReleaseEvent = self.mouseReleaseEvent
+        w.mouseMoveEvent = self.mouseMoveEvent
+        w.wheelEvent = self.wheelEvent

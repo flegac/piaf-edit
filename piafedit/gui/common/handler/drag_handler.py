@@ -1,7 +1,7 @@
 import logging
 from dataclasses import dataclass
 
-import pyqtgraph as pg
+from PyQt5.QtWidgets import QWidget
 
 from piafedit.gui.common.handler.utils import Handler
 
@@ -41,7 +41,7 @@ class DragHandler:
     acceptDrops: bool = False
 
     @staticmethod
-    def backup(gv: pg.GraphicsView):
+    def backup(gv: QWidget):
         if not hasattr(gv, '_drag_backup'):
             gv._backup = DragHandler(
                 dragEnterEvent=gv.dragEnterEvent,
@@ -52,12 +52,12 @@ class DragHandler:
             )
 
     @staticmethod
-    def reset(gv: pg.GraphicsView):
+    def reset(gv: QWidget):
         if hasattr(gv, '_drag_backup'):
             gv._drag_backup.patch(gv)
             del gv._drag_backup
 
-    def patch(self, gv: pg.GraphicsView):
+    def patch(self, gv: QWidget):
         DragHandler.backup(gv)
         gv.dragEnterEvent = self.dragEnterEvent
         gv.dragLeaveEvent = self.dragLeaveEvent
