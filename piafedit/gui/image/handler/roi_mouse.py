@@ -1,4 +1,5 @@
 from copy import deepcopy
+from math import floor
 from typing import Callable
 
 from piafedit.gui.common.handler.mouse_handler import MouseHandler
@@ -19,11 +20,21 @@ class RoiMouseHandler(RoiCommon, MouseHandler):
         self.rect_origin = None
 
     def wheelEvent(self, ev):
-        rect = self.manager.rect
+        rect: RectAbs = self.manager.rect
+
+        old_size = deepcopy(rect.size)
+
         delta = ev.angleDelta().y()
-        speed = self.zoom_speed if delta > 0 else 1 / self.zoom_speed
+        speed = self.zoom_speed if delta < 0 else 1 / self.zoom_speed
         rect.size.width = round(rect.size.width * speed)
         rect.size.height = round(rect.size.height * speed)
+
+        dx = old_size.width - rect.size.width
+        dy = old_size.height - rect.size.height
+
+        rect.pos.x += floor(dx/2)
+        rect.pos.y += floor(dy/2)
+
         self._update()
         self.update_status(ev)
 
@@ -39,8 +50,11 @@ class RoiMouseHandler(RoiCommon, MouseHandler):
             dx = self.cursor_origin.x() - cursor.x()
             dy = self.cursor_origin.y() - cursor.y()
 
-            # dx = round(dx / rect.size.width)
-            # dy = round(dy / rect.size.height)
+            w = self.manager.view.view.width()
+            h = self.manager.view.view.height()
+
+            dx = (dx * rect.size.width / w)
+            dy = (dy * rect.size.height / h)
 
             rect.pos.x = self.rect_origin.pos.x + dx
             rect.pos.y = self.rect_origin.pos.y + dy

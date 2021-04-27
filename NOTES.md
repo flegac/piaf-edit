@@ -4,7 +4,7 @@
 
 
 
-- display statistics: (min,max,avg) + (mean, std)
+- display statistics: (min,max,avg) + (mean, std) + bands
 
 - allow to define a filter to apply to the zoomed region
     - ressampling function (bilinear, cubic or average)
@@ -15,6 +15,8 @@
   - view single band
 
 ## TECHNICAL FEATURES
+
+- refact docking system
 
 - reactive stream (RX) ?
 - Bigger images (QuadTree, Tiling)

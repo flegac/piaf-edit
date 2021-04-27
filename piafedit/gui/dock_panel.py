@@ -1,5 +1,5 @@
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QPushButton
+from PyQt5.QtWidgets import QPushButton, QWidget
 from pyqtgraph.dockarea import DockArea, Dock
 
 from piafedit.model.geometry.size import SizeAbs
@@ -27,9 +27,6 @@ class DockPanel:
         self.restore_button.setEnabled(False)
 
         panel = pg.LayoutWidget()
-        panel.addWidget(save_button, row=0, col=0)
-        panel.addWidget(self.restore_button, row=0, col=1)
-        panel.addWidget(lock_button, row=0, col=2)
         self.lock_ui(self.is_locked)
         return panel
 
@@ -49,7 +46,7 @@ class DockPanel:
         for dock in self.area.docks.values():
             self.setup_lock(dock, status)
 
-    def add_dock(self, name: str, size: SizeAbs = None):
+    def add_dock(self, name: str, widget: QWidget, size: SizeAbs = None):
         if size is not None:
             size = size.raw()
         else:
@@ -57,7 +54,17 @@ class DockPanel:
         dock = Dock(name, size=size)
         self.area.addDock(dock, 'above')
         self.setup_lock(dock, self.is_locked)
+        self.set_content(dock, widget)
+
         return dock
+
+    def set_content(self, dock: Dock, widget: QWidget):
+        dock.currentRow = 1
+        dock.widgets = [widget]
+        dock.layout.addWidget(widget, dock.currentRow, 0, 1, 1)
+        dock.raiseOverlay()
+
+        # dock.addWidget(widget)
 
     def setup_lock(self, dock: Dock, status: bool):
         if status:

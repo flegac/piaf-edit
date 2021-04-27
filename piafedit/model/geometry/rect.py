@@ -2,8 +2,6 @@ from copy import deepcopy
 from dataclasses import dataclass
 from typing import Tuple
 
-import numpy as np
-
 from piafedit.model.geometry.point import Point, PointAbs
 from piafedit.model.geometry.size import Size, SizeAbs
 from piafedit.model.libs.operator import Buffer
@@ -20,6 +18,13 @@ class RectAbs:
     @staticmethod
     def from_raw(data: Tuple[Tuple[int, int], Tuple[int, int]]):
         return Rect(Point.from_raw(data[0]), Size.from_raw(data[1]))
+
+    @property
+    def center(self):
+        return PointAbs(
+            int(self.pos.x + self.size.width / 2),
+            int(self.pos.y + self.size.height / 2)
+        )
 
     def rel(self, size: SizeAbs):
         return Rect(

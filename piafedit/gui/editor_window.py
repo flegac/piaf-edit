@@ -1,18 +1,19 @@
 import logging
 
 from PyQt5.QtWidgets import *
-from pyqtgraph.dockarea import Dock
 
-from piafedit.config.config import WinConfig, Win
+from piafedit.config.config import WinConfig
+from piafedit.gui.browser.source_browser import SourceBrowser
 from piafedit.gui.common.log_widget import LogWidget
 from piafedit.gui.dock_panel import DockPanel
-from piafedit.gui.browser.source_browser import SourceBrowser
+from piafedit.gui.tool_bar import ToolBar
+from piafedit.gui.widgets_enum import Widgets
 
 
 class EditorWindow(QMainWindow):
     def __init__(self, config: WinConfig):
         super().__init__()
-        self.setGeometry(0,0,1024,1024)
+        self.setGeometry(0, 0, 1024, 1024)
         self.config = config
         self.dock = DockPanel()
         self.browser = SourceBrowser(100)
@@ -25,18 +26,10 @@ class EditorWindow(QMainWindow):
         MenuLoader(self).load()
 
     def show_widget(self, widget: QWidget):
-        dock = self.get_dock(Win.view)
+        dock = self.get_dock(Widgets.view)
         self.set_content(dock, widget)
 
-    def set_content(self, dock: Dock, widget: QWidget):
-        dock.currentRow = 1
-        dock.widgets = [widget]
-        dock.layout.addWidget(widget, dock.currentRow, 0, 1, 1)
-        dock.raiseOverlay()
-
-        # dock.addWidget(widget)
-
-    def get_dock(self, win_id: Win):
+    def get_dock(self, win_id: Widgets):
         return self.widgets.get(win_id)
 
 
@@ -45,30 +38,48 @@ class LayoutBuilder:
         self.win = win
 
     def build(self):
-        browser = self.win.dock.add_dock('browser', size=self.win.config.layout.browser)
-        view = self.win.dock.add_dock('view', size=self.win.config.layout.view)
-        overview = self.win.dock.add_dock('overview', size=self.win.config.layout.overview)
-        toolbar = self.win.dock.add_dock('tools', size=self.win.config.layout.tools)
-        console = self.win.dock.add_dock('console', size=self.win.config.layout.tools)
-        self.win.widgets = {
-            Win.view: view,
-            Win.browser: browser,
-            Win.overview: overview,
-            Win.toolbar: toolbar,
-            Win.console: console,
-        }
-        self.win.dock.area.moveDock(toolbar, 'bottom', view)
-        self.win.dock.area.moveDock(browser, 'left', view)
-        self.win.dock.area.moveDock(overview, 'top', browser)
-        self.win.dock.area.moveDock(console, 'bottom', view)
+        browser = self.win.dock.add_dock(
+            'browser',
+            widget=self.win.browser,
+            size=self.win.config.layout.browser
+        )
+        view = self.win.dock.add_dock(
+            'view',
+            widget=None,
+            size=self.win.config.layout.view
+        )
+        overview = self.win.dock.add_dock(
+            'overview',
+            widget=None,
+            size=self.win.config.layout.overview
+        )
+        toolbar = self.win.dock.add_dock(
+            'tools',
+            widget=ToolBar(),
+            size=self.win.config.layout.tools
+        )
 
         logs = LogWidget('toto')
         logs.follow(logging.getLogger())
-        self.win.set_content(console, logs)
-        self.win.set_content(browser, self.win.browser)
-        self.win.set_content(toolbar, self.win.dock.panel)
+        console = self.win.dock.add_dock(
+            'console',
+            widget=logs,
+            size=self.win.config.layout.tools
+        )
+
+        self.win.widgets = {
+            Widgets.view: view,
+            Widgets.browser: browser,
+            Widgets.overview: overview,
+            Widgets.toolbar: toolbar,
+            Widgets.console: console,
+        }
+        self.win.dock.area.moveDock(console, 'bottom', view)
+        self.win.dock.area.moveDock(toolbar, 'left', view)
+        self.win.dock.area.moveDock(browser, 'right', view)
+        self.win.dock.area.moveDock(overview, 'top', browser)
         self.win.dock.lock_ui(True)
-        self.win.statusBar().showMessage('coucou')
+        self.win.statusBar().showMessage('')
 
 
 class MenuLoader:
@@ -85,11 +96,29 @@ class MenuLoader:
 
         edit = menu.addMenu('Edit')
         view = menu.addMenu('View')
-        view.addSection('save UI')
-        view.addSection('restore UI')
-        view.addSection('lock UI')
+        view.addAction(self.save_ui())
+        view.addAction(self.restore_ui())
+        view.addAction(self.switch_ui_lock())
 
         help = menu.addMenu('Help')
+
+    def restore_ui(self):
+        from piafedit.editor_api import P
+        action = QAction('Restore UI', self.win)
+        action.triggered.connect(P.restore)
+        return action
+
+    def save_ui(self):
+        from piafedit.editor_api import P
+        action = QAction('Save UI', self.win)
+        action.triggered.connect(P.save)
+        return action
+
+    def switch_ui_lock(self):
+        from piafedit.editor_api import P
+        action = QAction('Switch UI lock', self.win)
+        action.triggered.connect(P.switch_lock)
+        return action
 
     def open(self):
         from piafedit.editor_api import P

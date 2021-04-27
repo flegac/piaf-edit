@@ -3,10 +3,10 @@ from pathlib import Path
 
 from PyQt5.QtWidgets import QWidget
 
-from piafedit.config.config import Win
 from piafedit.gui.editor_window import EditorWindow
 from piafedit.gui.image.image_manager import ImageManager
 from piafedit.gui.utils import select_files
+from piafedit.gui.widgets_enum import Widgets
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.rio_data_source import RIODataSource
 
@@ -35,9 +35,21 @@ class P:
     def show_source(source: DataSource):
         manager = ImageManager(source)
         win = P.main_window
-        win.set_content(win.widgets[Win.view], manager.view)
-        win.set_content(win.widgets[Win.overview], manager.overview)
+        win.dock.set_content(win.widgets[Widgets.view], manager.view)
+        win.dock.set_content(win.widgets[Widgets.overview], manager.overview)
 
     @staticmethod
     def update_status(text: str):
         P.main_window.statusBar().showMessage(text)
+
+    @staticmethod
+    def save():
+        P.main_window.dock.save()
+
+    @staticmethod
+    def restore():
+        P.main_window.dock.restore()
+
+    @staticmethod
+    def switch_lock():
+        P.main_window.dock.switch_lock()

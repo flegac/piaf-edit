@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from enum import Enum, auto
 
 from piafedit.model.geometry.size import SizeAbs
 
@@ -19,10 +18,3 @@ class WinConfig:
     layout: LayoutConfig = LayoutConfig()
 
 
-class Win(Enum):
-    overview = auto()
-    view = auto()
-    browser = auto()
-    toolbar = auto()
-    infos = auto()
-    console = auto()

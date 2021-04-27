@@ -1,7 +1,7 @@
 import pyqtgraph as pg
 
 from piafedit.gui.browser.image_drag_handler import ImageDragHandler
-from piafedit.gui.image.handler.roi_handler import RoiKeyboardHandler
+from piafedit.gui.image.handler.roi_keyboard import RoiKeyboardHandler
 from piafedit.gui.image.handler.roi_mouse import RoiMouseHandler
 from piafedit.gui.utils import rect_to_roi, setup_roi
 from piafedit.model.geometry.point import Point
