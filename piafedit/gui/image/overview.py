@@ -5,11 +5,15 @@ from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import Rect
 from piafedit.model.geometry.size import SizeAbs, Size
 from piafedit.model.source.data_source import DataSource
+from piafedit.model.source.roi_data_source import RoiDataSource
 
 
 class Overview(pg.ImageView):
     def __init__(self, source: DataSource):
         super().__init__()
+        # TODO: use RoiDataSource!
+        # self.source = RoiDataSource(source)
+
         self.source = source
         self.the_roi = pg.RectROI(PointAbs(0, 0).raw(), SizeAbs(0, 0).raw())
         self.rect = Rect().abs(self.source.size())
