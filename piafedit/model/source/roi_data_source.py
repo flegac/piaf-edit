@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import Union, Tuple
 
 from piafedit.model.geometry.point import PointAbs
@@ -29,15 +30,19 @@ class RoiDataSource(DataSource):
         return self.roi.size
 
     def read(self, window: Union[Rect, RectAbs] = None, output_size: SizeAbs = None) -> Buffer:
+        size = deepcopy(self.roi.size).limit(self.source.size())
+
         if window:
             if isinstance(window, RectAbs):
-                window = window.rel(self.roi.size)
-            window = window.abs(self.roi.size)
+                window = window.rel(size)
+            window = window.abs(size)
         return self.source.read(window, output_size)
 
     def write(self, buffer: Buffer, window: Union[Rect, RectAbs] = None):
+        size = deepcopy(self.roi.size)
+        size = size.limit(self.source.size())
         if window:
             if isinstance(window, RectAbs):
-                window = window.rel(self.roi.size)
-            window = window.abs(self.roi.size)
+                window = window.rel(size)
+            window = window.abs(size)
         return self.source.write(buffer, window)
