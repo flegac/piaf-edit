@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Union, Tuple
 
-import numpy as np
-
 from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.libs.operator import Operator, Buffer

@@ -11,10 +11,9 @@ class RoiKeyboardHandler(KeyboardHandler):
         self.manager: ImageManager = manager
 
     def keyPressEvent(self, ev):
-        rect = self.manager.overview.rect
-        size = self.manager.source.size()
-
-        start = PointAbs(0, 0)
+        manager = self.manager
+        rect = manager.overview.rect
+        size = manager.overview.source.size()
         end = PointAbs(size.width - rect.size.width, size.height - rect.size.height)
 
         handlers = {
@@ -22,27 +21,17 @@ class RoiKeyboardHandler(KeyboardHandler):
             Qt.Key_Right: self.move_tile_action(1, 0),
             Qt.Key_Up: self.move_tile_action(0, -1),
             Qt.Key_Down: self.move_tile_action(0, 1),
-            Qt.Key_Home: self.setup_action(start),
-            Qt.Key_End: self.setup_action(end),
+            Qt.Key_Home: manager.setup_action(PointAbs(0, 0)),
+            Qt.Key_End: manager.setup_action(end),
         }
         handlers.get(ev.key(), lambda: None)()
         self.update_status(ev)
-
-    def setup_action(self, pos: PointAbs):
-        manager = self.manager
-
-        def action():
-            rect = manager.overview.rect
-            rect.pos = pos
-            manager.update_roi()
-
-        return action
 
     def move_tile_action(self, dx: int, dy: int):
         manager = self.manager
 
         def action():
-            full_size = manager.source.size()
+            full_size = manager.overview.source.size()
             rect = manager.overview.rect
 
             w = rect.size.width

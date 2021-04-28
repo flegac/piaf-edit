@@ -1,8 +1,10 @@
+import numpy as np
 import pyqtgraph as pg
 
 from piafedit.gui.browser.image_drag_handler import ImageDragHandler
 from piafedit.gui.image.handler.roi_keyboard import RoiKeyboardHandler
 from piafedit.gui.image.handler.roi_mouse import RoiMouseHandler
+from piafedit.model.geometry.size import SizeAbs
 
 
 class RoiView(pg.ImageView):
@@ -11,7 +13,28 @@ class RoiView(pg.ImageView):
         self.manager = manager
         self.ui.roiBtn.hide()
         self.ui.menuBtn.hide()
+        self.current_buffer_shape = None
 
+        # events handlers
+        self.setup_resize_event()
+        RoiKeyboardHandler(manager).patch(self.ui.graphicsView)
+        # Ui.actions.handler().patch(self.ui.graphicsView)
+        RoiMouseHandler(manager).patch(self.ui.graphicsView)
+        ImageDragHandler().patch(self.ui.graphicsView)
+
+    def size(self):
+        view = self.view
+        w = view.width()
+        h = view.height()
+        return SizeAbs(w, h)
+
+    def set_buffer(self, buffer: np.ndarray):
+        self.setImage(buffer)
+        self.view.autoRange(padding=0.0)
+        self.current_buffer_shape = buffer.shape
+
+    def setup_resize_event(self):
+        manager = self.manager
         old_resizeEvent = self.ui.graphicsView.resizeEvent
 
         def resizeEvent(ev):
@@ -19,22 +42,3 @@ class RoiView(pg.ImageView):
             manager.update_view()
 
         self.ui.graphicsView.resizeEvent = resizeEvent
-
-        RoiKeyboardHandler(manager).patch(self.ui.graphicsView)
-        # Ui.actions.handler().patch(self.ui.graphicsView)
-
-        RoiMouseHandler(manager).patch(self.ui.graphicsView)
-        ImageDragHandler().patch(self.ui.graphicsView)
-
-        manager.overview.the_roi.sigRegionChanged.connect(self.update_rect)
-
-    def update_rect(self):
-        rx, ry = self.manager.compute_roi_rect_ratio()
-        rect = self.manager.overview.rect
-        roi = self.manager.overview.the_roi
-
-        rect.pos.x = round(roi.pos().x() * rx)
-        rect.pos.y = round(roi.pos().y() * ry)
-        rect.size.width = round(roi.size().x() * rx)
-        rect.size.height = round(roi.size().y() * ry)
-        self.manager.update_view()
