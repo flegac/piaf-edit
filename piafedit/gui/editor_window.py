@@ -53,6 +53,7 @@ class LayoutBuilder:
             widget=None,
             size=self.win.config.layout.overview
         )
+
         toolbar = self.win.dock.add_dock(
             'tools',
             widget=ToolBar(),

@@ -10,10 +10,9 @@ from piafedit.gui.widgets_enum import Widgets
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.rio_data_source import RIODataSource
 
-log = logging.getLogger()
-
 
 class P:
+    log = logging.getLogger()
     main_window: EditorWindow = None
 
     @staticmethod
@@ -28,7 +27,7 @@ class P:
 
     @staticmethod
     def open_source(source: DataSource):
-        log.debug(f'open source: {source}')
+        P.log.debug(f'open source: {source}')
         P.main_window.browser.register(source)
 
     @staticmethod

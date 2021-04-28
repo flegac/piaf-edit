@@ -1,11 +1,8 @@
-import logging
 from dataclasses import dataclass
 
 from PyQt5.QtWidgets import QWidget
 
 from piafedit.gui.common.handler.utils import Handler
-
-log = logging.getLogger()
 
 
 def dragEnterEvent(e):
@@ -30,13 +27,17 @@ def dropEvent(e):
     print('handle', e.mimeData())
 
 
+def default_handler(ev):
+    from piafedit.editor_api import P
+    P.log.debug(ev)
+
 @dataclass
 class DragHandler:
     # https://www.tutorialspoint.com/pyqt/pyqt_drag_and_drop.htm
 
     dragEnterEvent: Handler = dragEnterEvent
-    dragLeaveEvent: Handler = log.debug
-    dragMoveEvent: Handler = log.debug
+    dragLeaveEvent: Handler = default_handler
+    dragMoveEvent: Handler = default_handler
     dropEvent: Handler = dropEvent
     acceptDrops: bool = False
 

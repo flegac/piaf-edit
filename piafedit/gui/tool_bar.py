@@ -1,5 +1,15 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QVBoxLayout
+
+from piafedit.extension.test_sequences import KeySequenceEdit
 
 
 class ToolBar(QWidget):
-    pass
+    def __init__(self):
+        super().__init__()
+
+        layout = QVBoxLayout()
+        layout.setSpacing(0)
+        layout.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(layout)
+
+        layout.addWidget(KeySequenceEdit())

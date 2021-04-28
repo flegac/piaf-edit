@@ -1,27 +1,17 @@
-from typing import Callable
-
 from PyQt5.QtCore import Qt
 
 from piafedit.gui.common.handler.keyboard_handler import KeyboardHandler
-from piafedit.gui.image.handler.roi_common import RoiCommon
-from piafedit.gui.image.handler.roi_mouse import RoiMouseHandler
 from piafedit.model.geometry.point import PointAbs
-from piafedit.model.geometry.rect import RectAbs
 
 
-class RoiKeyboardHandler(RoiCommon, KeyboardHandler):
+class RoiKeyboardHandler(KeyboardHandler):
 
-    def __init__(self, manager: 'ImageManager', updater: Callable[[RectAbs], None]):
-        super().__init__(manager, updater)
-        self.mouse = RoiMouseHandler(manager, updater)
-        self.manager = manager
-        self.updater = updater
-
-        self.cursor_origin = None
-        self.rect_origin: RectAbs = None
+    def __init__(self, manager: 'ImageManager'):
+        from piafedit.gui.image.image_manager import ImageManager
+        self.manager: ImageManager = manager
 
     def keyPressEvent(self, ev):
-        rect = self.manager.rect
+        rect = self.manager.overview.rect
         size = self.manager.source.size()
 
         start = PointAbs(0, 0)
@@ -37,3 +27,35 @@ class RoiKeyboardHandler(RoiCommon, KeyboardHandler):
         }
         handlers.get(ev.key(), lambda: None)()
         self.update_status(ev)
+
+    def setup_action(self, pos: PointAbs):
+        manager = self.manager
+
+        def action():
+            rect = manager.overview.rect
+            rect.pos = pos
+            manager.update_roi()
+
+        return action
+
+    def move_tile_action(self, dx: int, dy: int):
+        manager = self.manager
+
+        def action():
+            full_size = manager.source.size()
+            rect = manager.overview.rect
+
+            w = rect.size.width
+            h = rect.size.height
+            new_x = rect.pos.x + dx * w
+            new_y = rect.pos.y + dy * h
+            if -w < new_x <= full_size.width:
+                rect.pos.x += dx * w
+            if -h < new_y <= full_size.height:
+                rect.pos.y += dy * h
+            manager.update_roi()
+
+        return action
+
+    def update_status(self, ev):
+        self.manager.update_status(None)
