@@ -1,19 +1,40 @@
+from piafedit.gui.browser.image_drag_handler import ImageDragHandler
 from piafedit.gui.image.overview import Overview
-from piafedit.gui.image.roi_view import RoiView
-from piafedit.model.geometry.point import Point, PointAbs
-from piafedit.model.geometry.rect import Rect, RectAbs
-from piafedit.model.geometry.size import Size
+from piafedit.gui.image.roi.roi_keyboard import RoiKeyboardHandler
+from piafedit.gui.image.roi.roi_mouse import RoiMouseHandler
+from piafedit.gui.image.roi.roi_view import RoiView
+from piafedit.model.geometry.point import PointAbs
+from piafedit.model.geometry.rect import RectAbs
 from piafedit.model.source.data_source import DataSource
 
 
 class ImageManager:
-    ROI = Rect(Point(0.5, 0.5), Size(.2, .2))
-
     def __init__(self, source: DataSource):
         self.overview = Overview(source)
-        self.view = RoiView(self)
         self.overview.the_roi.sigRegionChanged.connect(self.update_rect)
+        self.view = self.create_view()
+
         self.update_roi()
+
+    def create_view(self):
+        view = RoiView()
+
+        manager = self
+        widget = view.ui.graphicsView
+
+        RoiKeyboardHandler(self).patch(widget)
+        # Ui.actions.handler().patch(self.ui.graphicsView)
+        RoiMouseHandler(self).patch(widget)
+        ImageDragHandler().patch(widget)
+
+        old_resizeEvent = widget.resizeEvent
+
+        def resizeEvent(ev):
+            old_resizeEvent(ev)
+            manager.update_view()
+
+        widget.resizeEvent = resizeEvent
+        return view
 
     def update_view(self):
         view_size = self.view.size()
