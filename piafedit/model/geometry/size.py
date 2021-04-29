@@ -34,6 +34,7 @@ class SizeAbs:
     def limit(self, size: 'SizeAbs'):
         self.width = min(size.width, self.width)
         self.height = min(size.height, self.height)
+        return self
 
     def raw(self):
         return self.width, self.height

@@ -17,7 +17,7 @@ class RectAbs:
 
     @staticmethod
     def from_raw(data: Tuple[Tuple[int, int], Tuple[int, int]]):
-        return Rect(Point.from_raw(data[0]), Size.from_raw(data[1]))
+        return RectAbs(Point.from_raw(data[0]), Size.from_raw(data[1]))
 
     @property
     def center(self):
