@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import Union, Tuple
+from typing import Union
 
+from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.libs.operator import Operator, Buffer
+from piafedit.model.source.source_infos import SourceInfos
 
 
 class DataSource(ABC):
@@ -12,23 +14,7 @@ class DataSource(ABC):
         return MapDataSource(self, operator)
 
     @abstractmethod
-    def name(self) -> str:
-        ...
-
-    @abstractmethod
-    def bands(self) -> int:
-        ...
-
-    @abstractmethod
-    def dtype(self):
-        ...
-
-    @abstractmethod
-    def shape(self) -> Tuple[int, int, int]:
-        ...
-
-    @abstractmethod
-    def size(self) -> SizeAbs:
+    def infos(self) -> SourceInfos:
         ...
 
     @abstractmethod
@@ -39,8 +25,15 @@ class DataSource(ABC):
     def write(self, buffer: Buffer, window: Union[Rect, RectAbs] = None):
         ...
 
+    def update_window(self, window: Union[Rect, RectAbs] = None):
+        if window is None:
+            window = RectAbs(pos=PointAbs(0, 0), size=self.infos().size)
+        if isinstance(window, Rect):
+            window = window.abs(self.infos().size)
+        return window
+
     def overview_size(self, size: int) -> SizeAbs:
-        aspect = self.size().aspect_ratio
+        aspect = self.infos().aspect
         if aspect > 1:
             w, h = size, size / aspect
         else:

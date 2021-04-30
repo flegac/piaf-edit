@@ -79,12 +79,12 @@ class Rect:
     pos: Point = Point()
     size: Size = Size()
 
-    def raw(self) -> Tuple[Tuple[float, float], Tuple[float, float]]:
-        return self.pos.raw(), self.size.raw()
-
     @staticmethod
     def from_raw(data: Tuple[Tuple[float, float], Tuple[float, float]]):
         return Rect(Point.from_raw(data[0]), Size.from_raw(data[1]))
+
+    def raw(self) -> Tuple[Tuple[float, float], Tuple[float, float]]:
+        return self.pos.raw(), self.size.raw()
 
     def abs(self, size: SizeAbs):
         return RectAbs(

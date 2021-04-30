@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Union, Tuple
+from typing import Union
 
 import cv2
 
@@ -9,31 +9,25 @@ from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.libs.operator import Buffer
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.raw_data_source import RawDataSource
+from piafedit.model.source.source_infos import SourceInfos
 
 
 class RoiDataSource(DataSource):
     def __init__(self, source: DataSource):
         self.source = source
-        self.roi = RectAbs(PointAbs(0, 0), source.size())
+        self.roi = RectAbs(PointAbs(0, 0), source.infos().size)
 
-    def name(self) -> str:
-        return f'{self.source.name()}@{self.roi}'
-
-    def bands(self) -> int:
-        return self.source.bands()
-
-    def dtype(self):
-        return self.source.dtype()
-
-    def shape(self) -> Tuple[int, int, int]:
+    def infos(self) -> SourceInfos:
+        b = self.source.infos().bands
         w, h = self.roi.size.raw()
-        return self.bands(), h, w
-
-    def size(self) -> SizeAbs:
-        return self.roi.size
+        return SourceInfos(
+            name=self.source.infos().name,
+            dtype=self.source.infos().dtype,
+            shape=(b, h, w),
+        )
 
     def read(self, window: Union[Rect, RectAbs] = None, output_size: SizeAbs = None) -> Buffer:
-        source_size = self.source.size()
+        source_size = self.source.infos().size
         roi = deepcopy(self.roi).limit(source_size)
 
         if window:
@@ -46,7 +40,7 @@ class RoiDataSource(DataSource):
         return self.source.read(window, output_size)
 
     def write(self, buffer: Buffer, window: Union[Rect, RectAbs] = None):
-        source_size = self.source.size()
+        source_size = self.source.infos().size
         roi = deepcopy(self.roi).limit(source_size)
 
         if window:

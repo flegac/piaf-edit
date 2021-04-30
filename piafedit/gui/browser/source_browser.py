@@ -5,6 +5,8 @@ from piafedit.gui.common.Flow_widget import FlowWidget, QVBoxLayout
 from piafedit.gui.common.utils import source_button
 
 
+
+
 class SourceBrowser(FlowWidget):
     def __init__(self, width: int):
         super().__init__(lambda x: source_button(x, width), width)

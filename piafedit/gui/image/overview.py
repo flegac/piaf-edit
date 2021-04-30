@@ -5,18 +5,15 @@ from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import Rect
 from piafedit.model.geometry.size import SizeAbs, Size
 from piafedit.model.source.data_source import DataSource
-from piafedit.model.source.roi_data_source import RoiDataSource
 
 
 class Overview(pg.ImageView):
     def __init__(self, source: DataSource):
         super().__init__()
-        # TODO: use RoiDataSource!
-        # self.source = RoiDataSource(source)
-
         self.source = source
+        self.rect = Rect().abs(self.source.infos().size)
+
         self.the_roi = pg.RectROI(PointAbs(0, 0).raw(), SizeAbs(0, 0).raw())
-        self.rect = Rect().abs(self.source.size())
 
         self.ui.histogram.hide()
         self.ui.roiBtn.hide()
@@ -28,9 +25,13 @@ class Overview(pg.ImageView):
         self.setImage(buffer)
         self.view.autoRange(padding=0.01)
 
+    # @property
+    # def rect(self):
+    #     return self.source.roi
+
     def get_buffer(self, size: SizeAbs):
         source = self.source
-        window = self.rect.limit(source.size())
+        window = self.rect.limit(source.infos().size)
         aspect = window.size.aspect_ratio
 
         s = max(size.width, size.height)
@@ -58,7 +59,7 @@ class Overview(pg.ImageView):
 
     def compute_roi_rect_ratio(self):
         over = self.source.overview_size(self.size)
-        full = self.source.size()
+        full = self.source.infos().size
         rx = full.width / over.width
         ry = full.height / over.height
         return rx, ry

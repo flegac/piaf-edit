@@ -18,7 +18,7 @@ area = Rect(
 SIZE = 8_000
 
 
-class TestFastDataSource(TestCase):
+class TestRIODataSource(TestCase):
     # configure tests --------------------------------------------------
     @classmethod
     def setUpClass(cls) -> None:

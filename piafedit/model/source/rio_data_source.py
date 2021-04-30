@@ -1,7 +1,7 @@
 import logging
 import warnings
 from pathlib import Path
-from typing import Union, Tuple
+from typing import Union
 
 import numpy as np
 import rasterio
@@ -13,6 +13,7 @@ from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.libs.operator import Buffer
 from piafedit.model.source.data_source import DataSource
+from piafedit.model.source.source_infos import SourceInfos
 
 warnings.filterwarnings("ignore", category=rasterio.errors.NotGeoreferencedWarning)
 
@@ -24,6 +25,15 @@ class RIODataSource(DataSource):
     def __init__(self, path: Path):
         self.path = path
         self.resampling: Resampling = Resampling.cubic
+        with rasterio.open(path) as src:
+            w = src.width
+            h = src.height
+            b = src.count
+            self._infos = SourceInfos(
+                name=self.path.stem,
+                shape=(h, w, b),
+                dtype=src.dtypes[0]
+            )
 
     def create(self, buffer: Buffer):
         h, w = buffer.shape[:2]
@@ -57,38 +67,18 @@ class RIODataSource(DataSource):
                     dst.update_tags(ns='rio_overview', resampling='average')
                     break
 
-    def name(self) -> str:
-        return self.path.stem
-
-    def bands(self):
-        with rasterio.open(self.path) as src:
-            return src.count
-
-    def dtype(self):
-        with rasterio.open(self.path) as src:
-            return src.dtypes[0]
-
-    def shape(self) -> Tuple[int, int, int]:
-        with rasterio.open(self.path) as src:
-            w = src.width
-            h = src.height
-            b = src.count
-            return h, w, b
-
-    def size(self) -> SizeAbs:
-        with rasterio.open(self.path) as src:
-            w = src.width
-            h = src.height
-            return SizeAbs(w, h)
+    def infos(self) -> SourceInfos:
+        return self._infos
 
     def write(self, buffer: Buffer, window: Union[Rect, RectAbs] = None):
         window = None
+        infos = self.infos()
         if window:
             if isinstance(window, Rect):
-                window = window.abs(self.size())
+                window = window.abs(infos.size)
             window = window_from_rect(window)
 
-        width, height = self.size().raw()
+        width, height = infos.size.raw()
         shape = buffer.shape
         bands = 1 if len(shape) <= 2 else shape[2]
         with rasterio.open(self.path, 'w', driver='GTiff',
@@ -100,7 +90,7 @@ class RIODataSource(DataSource):
         log.debug(f'reading: {window} -> {output_size}')
         if window:
             if isinstance(window, Rect):
-                window = window.abs(self.size())
+                window = window.abs(self.infos().size)
             window = window_from_rect(window)
 
         with rasterio.open(self.path) as src:
