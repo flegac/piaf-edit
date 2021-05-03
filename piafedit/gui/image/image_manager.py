@@ -5,6 +5,7 @@ from piafedit.gui.image.roi.roi_mouse import RoiMouseHandler
 from piafedit.gui.image.roi.roi_view import RoiView
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
+from piafedit.model.libs.operator import Operator
 from piafedit.model.source.data_source import DataSource
 
 
@@ -13,7 +14,7 @@ class ImageManager:
         self.overview = Overview(source)
         self.overview.the_roi.sigRegionChanged.connect(self.update_rect)
         self.view = self.create_view()
-
+        self.op: Operator = None
         self.update_roi()
 
     def create_view(self):
@@ -36,9 +37,15 @@ class ImageManager:
         widget.resizeEvent = resizeEvent
         return view
 
+    def set_operator(self, op: Operator):
+        self.op = op
+        self.update_view()
+
     def update_view(self):
         view_size = self.view.size()
         buffer = self.overview.get_buffer(view_size)
+        if self.op:
+            buffer = self.op(buffer)
         self.view.set_buffer(buffer)
         self.update_status()
 

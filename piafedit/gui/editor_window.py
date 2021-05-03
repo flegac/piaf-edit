@@ -6,8 +6,11 @@ from piafedit.config.config import WinConfig
 from piafedit.gui.browser.source_browser import SourceBrowser
 from piafedit.gui.common.log_widget import LogWidget
 from piafedit.gui.dock_panel import DockPanel
+from piafedit.gui.image.image_manager import ImageManager
 from piafedit.gui.tool_bar import ToolBar
 from piafedit.gui.widgets_enum import Widgets
+from piafedit.model.libs.operator import Operator
+from piafedit.model.source.data_source import DataSource
 
 
 class EditorWindow(QMainWindow):
@@ -24,6 +27,11 @@ class EditorWindow(QMainWindow):
 
         LayoutBuilder(self).build()
         MenuLoader(self).load()
+
+    def set_source(self, source: DataSource):
+        manager = ImageManager(source)
+        self.dock.set_content(self.widgets[Widgets.view], manager.view)
+        self.dock.set_content(self.widgets[Widgets.overview], manager.overview)
 
     def show_widget(self, widget: QWidget):
         dock = self.get_dock(Widgets.view)
