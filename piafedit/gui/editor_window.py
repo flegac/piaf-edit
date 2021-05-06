@@ -4,12 +4,11 @@ from PyQt5.QtWidgets import *
 
 from piafedit.config.config import WinConfig
 from piafedit.gui.browser.source_browser import SourceBrowser
-from piafedit.gui.common.log_widget import LogWidget
+from piafedit.gui2.console.log_widget import LogWidget
 from piafedit.gui.dock_panel import DockPanel
 from piafedit.gui.image.image_manager import ImageManager
 from piafedit.gui.tool_bar import ToolBar
 from piafedit.gui.widgets_enum import Widgets
-from piafedit.model.libs.operator import Operator
 from piafedit.model.source.data_source import DataSource
 
 

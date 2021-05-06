@@ -5,7 +5,7 @@ import time
 from PyQt5.QtCore import QThreadPool
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout, QApplication
 
-from piafedit.gui.common.worker import Worker, Task
+from piafedit.gui2.tasks.worker import Worker, Task
 
 
 def create_worker():

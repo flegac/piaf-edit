@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QApplication
 
-from piafedit.gui.common.Flow_widget import FlowWidget
+from piafedit.gui2.common.Flow_widget import FlowWidget
 from piafedit.gui.common.utils import source_button
 from piafedit.model.source.raw_data_source import RawDataSource
 

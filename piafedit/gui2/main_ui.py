@@ -4,16 +4,18 @@ from pathlib import Path
 from PyQt5 import uic
 from PyQt5.QtWidgets import QFileSystemModel, QMainWindow, QVBoxLayout
 
-from piafedit.gui.common.log_widget import LogWidget
+from piafedit.gui2.console.log_widget import LogWidget
 from piafedit.gui.image.image_manager import ImageManager
+from piafedit.gui2.tasks.create_worker import create_worker
+from piafedit.gui2.tasks.processes_widget import ProcessesWidget
 from piafedit.model.libs.filters import erode, edge_detection, dilate
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.rio_data_source import RIODataSource
 
 
-class Ui(QMainWindow):
+class MainUi(QMainWindow):
     def __init__(self, root_dir: Path):
-        super(Ui, self).__init__()  # Call the inherited classes __init__ method
+        super(MainUi, self).__init__()  # Call the inherited classes __init__ method
         uic.loadUi(root_dir / 'ui/main.ui', self)  # Load the .ui file
         self.show()
 
@@ -29,8 +31,14 @@ class Ui(QMainWindow):
         logs = LogWidget('toto')
         logs.follow(logging.getLogger())
         self.console.setLayout(QVBoxLayout())
-
         self.console.layout().addWidget(logs)
+
+        self.worker.setLayout(QVBoxLayout())
+        processes = ProcessesWidget()
+        processes.start(create_worker())
+        processes.start(create_worker())
+        processes.start(create_worker())
+        self.worker.layout().addWidget(processes)
 
         # toolbox
         self.erodeButton.clicked.connect(lambda: self.manager.set_operator(erode))

@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QPushButton
 
 from piafedit.gui.browser.image_drag_handler import ImageDragHandler
-from piafedit.gui.common.Flow_widget import FlowWidget, QVBoxLayout
+from piafedit.gui2.common.Flow_widget import FlowWidget, QVBoxLayout
 from piafedit.gui.common.utils import source_button
 
 

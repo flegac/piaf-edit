@@ -14,6 +14,10 @@ class P:
     main_window: EditorWindow = None
 
     @staticmethod
+    def resources():
+        return Path('../resources')
+
+    @staticmethod
     def show_widget(widget: QWidget):
         P.main_window.show_widget(widget)
 

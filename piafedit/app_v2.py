@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QApplication
 
 from piafedit.app_v1 import IMAGE_SIZE, log
 from piafedit.editor_api import P
-from piafedit.gui2.main_ui import Ui
+from piafedit.gui2.main_ui import MainUi
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.source.rio_data_source import RIODataSource
 
@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     pg.setConfigOptions(imageAxisOrder='row-major')
     app = QApplication([])
-    P.main_window = Ui(ROOT_DIR)
+    P.main_window = MainUi(ROOT_DIR)
 
     P.show_source(source)
 
