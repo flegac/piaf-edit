@@ -24,5 +24,5 @@ class ProcessesWidget(QWidget):
     def close_tab(self, index: int):
         tabs: QTabWidget = self.tabs
         process: ProcessWidget = tabs.widget(index)
-        process.stop()
+        process.abort_task()
         self.tabs.removeTab(index)

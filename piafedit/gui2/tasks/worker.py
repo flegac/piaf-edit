@@ -42,22 +42,20 @@ class Worker(QRunnable):
 
     def run(self):
         try:
+            self.canceled = False
             self.signal.status.emit(WorkerStatus.started)
             total = len(self.tasks)
             for i, task in enumerate(self.tasks):
-                if self.canceled:
-                    raise ValueError('Canceled')
                 try:
-
-                    self.signal.progress.emit(Progress(i, total - i))
+                    if self.canceled:
+                        break
                     res = task(self.logger)
+                    self.signal.progress.emit(Progress(i + 1, total - i - 1))
                     self.signal.result.emit(res)
                 except Exception as e:
                     self.signal.error.emit(e)
-            self.signal.progress.emit(Progress(total, 0))
-
         finally:
             self.signal.status.emit(WorkerStatus.finished)
 
-    def stop(self):
+    def abort(self):
         self.canceled = True
