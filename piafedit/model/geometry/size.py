@@ -1,7 +1,6 @@
+from copy import deepcopy
 from dataclasses import dataclass
 from typing import Tuple
-
-import numpy as np
 
 from piafedit.model.libs.operator import Buffer
 from piafedit.model.utils import absolute, relative
@@ -36,6 +35,9 @@ class SizeAbs:
         self.height = min(size.height, self.height)
         return self
 
+    def copy(self):
+        return deepcopy(self)
+
     def raw(self):
         return self.width, self.height
 
@@ -55,6 +57,14 @@ class Size:
     height: float = 1.
 
     @staticmethod
+    def random():
+        import random
+        return Size(
+            width=random.random(),
+            height=random.random()
+        )
+
+    @staticmethod
     def from_aspect(aspect_ratio: float):
         if aspect_ratio >= 1.0:
             return Size(1.0, 1.0 / aspect_ratio)
@@ -63,6 +73,14 @@ class Size:
     @staticmethod
     def from_raw(data: Tuple[float, float]):
         return Size(*data)
+
+    def copy(self):
+        return deepcopy(self)
+
+    def interpolate(self, a: float, other: 'Size'):
+        dw = other.width - self.width
+        dh = other.height - self.height
+        return Size(width=self.width + a * dw, height=self.height + a * dh)
 
     def raw(self):
         return self.width, self.height

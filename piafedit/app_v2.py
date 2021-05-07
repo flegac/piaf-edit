@@ -8,6 +8,7 @@ from piafedit.editor_api import P
 from piafedit.gui2.main_ui import MainUi
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.source.rio_data_source import RIODataSource
+from piafedit.model.source.tile_source import TileSource, TileConfig
 
 ROOT_DIR = Path('../resources')
 
@@ -26,11 +27,13 @@ def gen_big_image():
 
 if __name__ == '__main__':
     source = gen_big_image()
+    source2 = TileSource(source, TileConfig(SizeAbs(1024, 1024)))
 
     pg.setConfigOptions(imageAxisOrder='row-major')
     app = QApplication([])
     P.main_window = MainUi(ROOT_DIR)
 
     P.show_source(source)
+    # P.show_source(source2)
 
     app.exec_()

@@ -6,17 +6,22 @@ from piafedit.model.geometry.point import Point, PointAbs
 from piafedit.model.geometry.size import Size, SizeAbs
 from piafedit.model.libs.operator import Buffer
 
+RawRect = Tuple[Tuple[int, int], Tuple[int, int]]
+
 
 @dataclass
 class RectAbs:
     pos: PointAbs
     size: SizeAbs
 
-    def raw(self) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+    def copy(self):
+        return deepcopy(self)
+
+    def raw(self) -> RawRect:
         return self.pos.raw(), self.size.raw()
 
     @staticmethod
-    def from_raw(data: Tuple[Tuple[int, int], Tuple[int, int]]):
+    def from_raw(data: RawRect):
         return RectAbs(Point.from_raw(data[0]), Size.from_raw(data[1]))
 
     @property
@@ -57,8 +62,8 @@ class RectAbs:
         )
 
     def move(self, dx: int, dy: int):
-        self.pos.x += dx
-        self.pos.y += dy
+        self.pos.move(dx, dy)
+        return self
 
     def crop(self, buffer: Buffer):
         x1, y1 = self.pos.raw()
@@ -68,7 +73,7 @@ class RectAbs:
         y2 = max(0, y1 + h)
         x1 = max(0, min(x1, bw))
         y1 = max(0, min(y1, bh))
-        return buffer[y1:y2, x1:x2]
+        return buffer[y1:y2, x1:x2, ...]
 
     def __str__(self) -> str:
         return f'[{self.pos} @ {self.size}]'
@@ -80,8 +85,24 @@ class Rect:
     size: Size = Size()
 
     @staticmethod
+    def random():
+        return Rect(pos=Point.random(), size=Size.random())
+
+    @staticmethod
     def from_raw(data: Tuple[Tuple[float, float], Tuple[float, float]]):
         return Rect(Point.from_raw(data[0]), Size.from_raw(data[1]))
+
+    def copy(self):
+        return deepcopy(self)
+
+    def move(self, dx: float, dy: float):
+        self.pos.move(dx, dy)
+
+    def interpolate(self, a: float, other: 'Rect'):
+        return Rect(
+            pos=self.pos.interpolate(a, other.pos),
+            size=self.size.interpolate(a, other.size)
+        )
 
     def raw(self) -> Tuple[Tuple[float, float], Tuple[float, float]]:
         return self.pos.raw(), self.size.raw()

@@ -2,8 +2,6 @@
 
 ## BUSINESS FEATURES
 
-
-
 - display statistics: (min,max,avg) + (mean, std) + bands
 
 - allow to define a filter to apply to the zoomed region
