@@ -25,15 +25,7 @@ class RIODataSource(DataSource):
     def __init__(self, path: Path):
         self.path = path
         self.resampling: Resampling = Resampling.cubic
-        with rasterio.open(path) as src:
-            w = src.width
-            h = src.height
-            b = src.count
-            self._infos = SourceInfos(
-                name=self.path.stem,
-                shape=(h, w, b),
-                dtype=src.dtypes[0]
-            )
+        self._infos = None
 
     def create(self, buffer: Buffer):
         h, w = buffer.shape[:2]
@@ -62,12 +54,22 @@ class RIODataSource(DataSource):
                 over = dst.overviews(i)
                 if over == []:
                     log.debug(f'overview created for {self.path}')
-                    factors = [2, 4, 8, 16, 32, 64]
+                    factors = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
                     dst.build_overviews(factors, Resampling.average)
                     dst.update_tags(ns='rio_overview', resampling='average')
                     break
 
     def infos(self) -> SourceInfos:
+        if not self._infos:
+            with rasterio.open(self.path) as src:
+                w = src.width
+                h = src.height
+                b = src.count
+                self._infos = SourceInfos(
+                    name=self.path.stem,
+                    shape=(h, w, b),
+                    dtype=src.dtypes[0]
+                )
         return self._infos
 
     def write(self, buffer: Buffer, window: Union[Rect, RectAbs] = None):
