@@ -4,13 +4,16 @@ from pathlib import Path
 from PyQt5 import uic
 from PyQt5.QtWidgets import QFileSystemModel, QMainWindow, QVBoxLayout
 
-from piafedit.gui2.console.log_widget import LogWidget
+from piafedit.gui.browser.source_browser import SourceBrowser
 from piafedit.gui.image.image_manager import ImageManager
-from piafedit.gui2.tasks.create_worker import create_worker
-from piafedit.gui2.tasks.processes_widget import ProcessesWidget
+from piafedit.gui2.worker_creator import create_worker
 from piafedit.model.libs.filters import erode, edge_detection, dilate
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.rio_data_source import RIODataSource
+from qtwidgets.console.console_config import ConsoleConfig
+from qtwidgets.console.console_widget import ConsoleWidget
+from qtwidgets.flow.flow_config import FlowConfig, Item, Page
+from qtwidgets.tasker.tasker_widget import TaskerWidget
 
 
 class MainUi(QMainWindow):
@@ -28,16 +31,23 @@ class MainUi(QMainWindow):
         self.treeView.doubleClicked.connect(self.on_click)
         self.treeView.setRootIndex(self.tree_model.index(path))
 
-        logs = LogWidget('toto')
-        logs.follow(logging.getLogger())
+        logs = ConsoleWidget(ConsoleConfig(
+            'toto',
+            loggers=[logging.getLogger()]
+        ))
         self.console.setLayout(QVBoxLayout())
         self.console.layout().addWidget(logs)
 
         self.worker.setLayout(QVBoxLayout())
-        processes = ProcessesWidget()
-        processes.start(create_worker())
-        processes.start(create_worker())
-        processes.start(create_worker())
+        processes = TaskerWidget(
+            workers=[
+                create_worker() for i in range(10)
+            ],
+            config=FlowConfig(
+                item=Item(width=250),
+                page=Page(size=1)
+            )
+        )
         self.worker.layout().addWidget(processes)
 
         # toolbox
@@ -45,6 +55,16 @@ class MainUi(QMainWindow):
         self.dilateButton.clicked.connect(lambda: self.manager.set_operator(dilate))
         self.edgeButton.clicked.connect(lambda: self.manager.set_operator(edge_detection))
         self.identityButton.clicked.connect(lambda: self.manager.set_operator(None))
+
+        # browser
+        self.browser = SourceBrowser(
+            config=FlowConfig(
+                item=Item(width=250),
+                page=Page(size=20)
+            )
+        )
+        self.images.setLayout(QVBoxLayout())
+        self.images.layout().addWidget(self.browser)
 
         # view / overview
         self.manager = None

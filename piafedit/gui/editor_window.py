@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import *
 
 from piafedit.config.config import WinConfig
 from piafedit.gui.browser.source_browser import SourceBrowser
-from piafedit.gui2.console.log_widget import LogWidget
+from qtwidgets.console.console_widget import ConsoleWidget
 from piafedit.gui.dock_panel import DockPanel
 from piafedit.gui.image.image_manager import ImageManager
 from piafedit.gui.tool_bar import ToolBar
@@ -67,8 +67,8 @@ class LayoutBuilder:
             size=self.win.config.layout.tools
         )
 
-        logs = LogWidget('toto')
-        logs.follow(logging.getLogger())
+        logs = ConsoleWidget('toto')
+        logs.add_logger(logging.getLogger())
         console = self.win.dock.add_dock(
             'console',
             widget=logs,

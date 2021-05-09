@@ -18,7 +18,6 @@ def pixmap_from_numpy(buffer: Buffer) -> QPixmap:
     return QPixmap.fromImage(img)
 
 
-
 def image_button(buffer: Buffer):
     r, g, b = 0, 0, 0
     h, w = buffer.shape[:2]
@@ -33,6 +32,7 @@ def image_button(buffer: Buffer):
     widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
     return widget
 
+
 def source_button(source: DataSource, size: int = 256):
     overview = source.overview(size=size)
     button = image_button(overview)
@@ -43,10 +43,11 @@ def source_button(source: DataSource, size: int = 256):
         P.show_source(source)
 
     button.clicked.connect(handler)
-    width, height = source.size().raw()
-    dtype = source.dtype()
-    bands = source.bands()
-    name = source.name
+    infos = source.infos()
+    width, height = infos.size.raw()
+    dtype = infos.dtype
+    bands = infos.bands
+    name = infos.name
     button.setToolTip(f'{name} {width}x{height} {bands} {dtype}')
 
     return button

@@ -1,3 +1,5 @@
+import time
+
 from piafedit.gui.browser.image_drag_handler import ImageDragHandler
 from piafedit.gui.image.overview import Overview
 from piafedit.gui.image.roi.roi_keyboard import RoiKeyboardHandler
@@ -5,12 +7,15 @@ from piafedit.gui.image.roi.roi_mouse import RoiMouseHandler
 from piafedit.gui.image.roi.roi_view import RoiView
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
+from piafedit.model.geometry.size import Size, SizeAbs
 from piafedit.model.libs.operator import Operator
 from piafedit.model.source.data_source import DataSource
 
 
 class ImageManager:
     def __init__(self, source: DataSource):
+        self.last_update = 0
+
         self.overview = Overview(source)
         self.overview.the_roi.sigRegionChanged.connect(self.update_rect)
         self.view = self.create_view()
@@ -43,6 +48,11 @@ class ImageManager:
 
     def update_view(self):
         view_size = self.view.size()
+        now = time.time()
+        if now - self.last_update < 3:
+            view_size = SizeAbs(64, 64)
+        self.last_update = now
+
         buffer = self.overview.get_buffer(view_size)
         if self.op:
             buffer = self.op(buffer)

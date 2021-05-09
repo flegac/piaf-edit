@@ -26,14 +26,14 @@ def gen_big_image():
 
 
 if __name__ == '__main__':
-    source = gen_big_image()
-    source2 = TileSource(source, TileConfig(SizeAbs(1024, 1024)))
-
     pg.setConfigOptions(imageAxisOrder='row-major')
     app = QApplication([])
     P.main_window = MainUi(ROOT_DIR)
 
+    source = gen_big_image()
     P.show_source(source)
+
+    # source2 = TileSource(source, TileConfig(SizeAbs(1024, 1024)))
     # P.show_source(source2)
 
     app.exec_()

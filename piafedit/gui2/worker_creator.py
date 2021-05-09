@@ -2,7 +2,7 @@ import random
 import time
 from logging import Logger
 
-from piafedit.gui2.tasks.worker import Task, Worker
+from qtwidgets.tasker.worker import Task, Worker
 
 
 def create_worker():

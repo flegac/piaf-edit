@@ -1,6 +1,8 @@
 numpy
 rasterio
 tqdm
+qt-widgets
+pyqt5
+pyqt5-tools
 pyqtgraph>=0.12.1
-PyQT5>=5.13.0
 RxPy

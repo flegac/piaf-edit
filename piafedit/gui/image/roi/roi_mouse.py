@@ -1,4 +1,5 @@
 from copy import deepcopy
+
 from math import floor
 
 from piafedit.gui.common.handler.mouse_handler import MouseHandler
