@@ -38,11 +38,6 @@ def main():
     source = gen_big_image()
     P.show_source(source)
 
-    # P.open_source(source)
-    # P.open_source(source)
-    # P.open_source(source)
-    # P.open_source(source)
-
     app.exec_()
 
 

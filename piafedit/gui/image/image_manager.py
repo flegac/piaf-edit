@@ -1,13 +1,13 @@
 import time
 
-from piafedit.gui.browser.image_drag_handler import ImageDragHandler
+from piafedit.gui2.browser.image_drag_handler import ImageDragHandler
 from piafedit.gui.image.overview import Overview
 from piafedit.gui.image.roi.roi_keyboard import RoiKeyboardHandler
 from piafedit.gui.image.roi.roi_mouse import RoiMouseHandler
 from piafedit.gui.image.roi.roi_view import RoiView
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
-from piafedit.model.geometry.size import Size, SizeAbs
+from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.libs.operator import Operator
 from piafedit.model.source.data_source import DataSource
 

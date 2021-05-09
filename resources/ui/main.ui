@@ -38,7 +38,7 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="spacing">
-         <number>0</number>
+         <number>5</number>
         </property>
         <item>
          <widget class="QWidget" name="overview" native="true">
@@ -83,28 +83,28 @@
            <property name="spacing">
             <number>0</number>
            </property>
-           <item row="2" column="0">
-            <widget class="QToolButton" name="dilateButton">
-             <property name="text">
-              <string>Dilate</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
+           <item row="1" column="0">
             <widget class="QToolButton" name="edgeButton">
              <property name="text">
               <string>Edge detection</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item row="3" column="0">
+            <widget class="QToolButton" name="dilateButton">
+             <property name="text">
+              <string>Dilate</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
             <widget class="QToolButton" name="erodeButton">
              <property name="text">
               <string>Erode</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item row="4" column="0">
             <widget class="QToolButton" name="identityButton">
              <property name="text">
               <string>Identity</string>
@@ -112,6 +112,22 @@
             </widget>
            </item>
           </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTreeView" name="treeView">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
          </widget>
         </item>
        </layout>
@@ -136,6 +152,12 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>200</height>
+       </size>
+      </property>
       <property name="baseSize">
        <size>
         <width>0</width>
@@ -146,46 +168,8 @@
        <enum>QTabWidget::South</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
-      <widget class="QWidget" name="fileTab">
-       <attribute name="title">
-        <string>File Browser</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QTreeView" name="treeView">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
       <widget class="QWidget" name="imagesTab">
        <attribute name="title">
         <string>Images</string>
@@ -297,7 +281,7 @@
     <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
     <addaction name="separator"/>
-    <addaction name="actionFermer"/>
+    <addaction name="actionClose"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -340,9 +324,9 @@
     <string>Save as...</string>
    </property>
   </action>
-  <action name="actionFermer">
+  <action name="actionClose">
    <property name="text">
-    <string>Fermer</string>
+    <string>Close</string>
    </property>
   </action>
  </widget>

@@ -1,4 +1,4 @@
-from piafedit.gui.browser.image_drag_handler import ImageDragHandler
+from piafedit.gui2.browser.image_drag_handler import ImageDragHandler
 from piafedit.gui.common.utils import source_button
 from qtwidgets.flow.flow_config import FlowConfig
 from qtwidgets.flow.flow_widget import FlowWidget

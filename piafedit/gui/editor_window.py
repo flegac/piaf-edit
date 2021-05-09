@@ -3,7 +3,7 @@ import logging
 from PyQt5.QtWidgets import *
 
 from piafedit.config.config import WinConfig
-from piafedit.gui.browser.source_browser import SourceBrowser
+from piafedit.gui2.browser.source_browser import SourceBrowser
 from qtwidgets.console.console_widget import ConsoleWidget
 from piafedit.gui.dock_panel import DockPanel
 from piafedit.gui.image.image_manager import ImageManager
