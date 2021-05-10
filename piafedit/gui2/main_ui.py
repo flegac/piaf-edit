@@ -15,7 +15,7 @@ from piafedit.model.source.rio_data_source import RIODataSource
 from qtwidgets.console.console_config import ConsoleConfig
 from qtwidgets.console.console_widget import ConsoleWidget
 from qtwidgets.flow.flow_config import FlowConfig, Item, Page
-from qtwidgets.tasker.tasker_widget import TaskerWidget
+from qtwidgets.worker.worker_manager_widget import WorkerManagerWidget
 
 
 class MainUi(QMainWindow):
@@ -34,7 +34,7 @@ class MainUi(QMainWindow):
         ))
         self.setup(self.console, logs)
 
-        processes = TaskerWidget(
+        processes = WorkerManagerWidget(
             workers=[
                 create_worker() for i in range(10)
             ],

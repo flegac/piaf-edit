@@ -2,7 +2,7 @@ import random
 import time
 from logging import Logger
 
-from qtwidgets.tasker.worker import Task, Worker
+from qtwidgets.worker.worker import Task, Worker
 
 
 def create_worker():
@@ -24,4 +24,4 @@ def create_worker():
 
         return work
 
-    return Worker(*[task(i) for i in range(10)])
+    return Worker([task(i) for i in range(10)])
