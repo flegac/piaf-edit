@@ -12,9 +12,9 @@ from piafedit.gui2.worker_creator import create_worker
 from piafedit.model.libs.filters import erode, edge_detection, dilate
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.rio_data_source import RIODataSource
+from qtwidgets.browser.browser_config import BrowserConfig, Item, Page
 from qtwidgets.console.console_config import ConsoleConfig
 from qtwidgets.console.console_widget import ConsoleWidget
-from qtwidgets.flow.flow_config import FlowConfig, Item, Page
 from qtwidgets.worker.worker_manager_widget import WorkerManagerWidget
 
 
@@ -38,7 +38,7 @@ class MainUi(QMainWindow):
             workers=[
                 create_worker() for i in range(10)
             ],
-            config=FlowConfig(
+            config=BrowserConfig(
                 item=Item(width=250),
                 page=Page(size=1)
             )
@@ -47,8 +47,7 @@ class MainUi(QMainWindow):
 
         # browser
         self.browser = SourceBrowser(
-            config=FlowConfig(
-                item=Item(width=250),
+            config=BrowserConfig(
                 page=Page(size=20)
             )
         )
@@ -110,8 +109,11 @@ class MainUi(QMainWindow):
         )
         source = None
         for path in paths:
-            source = RIODataSource(path)
-            P.open_source(source)
+            try:
+                source = RIODataSource(path)
+                P.open_source(source)
+            except Exception as e:
+                logging.warning(f'Fail reading image: {path}')
         if source:
             P.show_source(source)
 

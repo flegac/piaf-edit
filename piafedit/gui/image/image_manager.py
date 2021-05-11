@@ -1,10 +1,12 @@
+import rx.operators as ops
 import time
+from rx.subject import Subject
 
-from piafedit.gui2.browser.image_drag_handler import ImageDragHandler
 from piafedit.gui.image.overview import Overview
 from piafedit.gui.image.roi.roi_keyboard import RoiKeyboardHandler
 from piafedit.gui.image.roi.roi_mouse import RoiMouseHandler
 from piafedit.gui.image.roi.roi_view import RoiView
+from piafedit.gui2.browser.image_drag_handler import ImageDragHandler
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
 from piafedit.model.geometry.size import SizeAbs
@@ -13,14 +15,35 @@ from piafedit.model.source.data_source import DataSource
 
 
 class ImageManager:
+    MAX_REDRAW_PER_SEC = 24
+    SMALL_REDRAW_LATENCY = 1. / MAX_REDRAW_PER_SEC
+    MEDIUM_REDRAW_LATENCY = 2 * SMALL_REDRAW_LATENCY
+    FULL_REDRAW_LATENCY = .2 + 2 * MEDIUM_REDRAW_LATENCY
+
     def __init__(self, source: DataSource):
+        self.roi_update = Subject()
         self.last_update = 0
+
+        self.roi_update.pipe(
+            ops.throttle_first(1. / ImageManager.MAX_REDRAW_PER_SEC),
+        ).subscribe(on_next=self.view_updater(SizeAbs(64, 64)))
+
+        self.roi_update.pipe(
+            ops.debounce(ImageManager.MEDIUM_REDRAW_LATENCY),
+        ).subscribe(on_next=self.view_updater(SizeAbs(512, 512)))
+
+        self.roi_update.pipe(
+            ops.debounce(ImageManager.FULL_REDRAW_LATENCY),
+        ).subscribe(on_next=self.view_updater())
 
         self.overview = Overview(source)
         self.overview.the_roi.sigRegionChanged.connect(self.update_rect)
         self.view = self.create_view()
         self.op: Operator = None
         self.update_roi()
+
+    def request_update(self):
+        self.roi_update.on_next(time.time())
 
     def create_view(self):
         view = RoiView()
@@ -37,27 +60,34 @@ class ImageManager:
 
         def resizeEvent(ev):
             old_resizeEvent(ev)
-            manager.update_view()
+            manager.request_update()
 
         widget.resizeEvent = resizeEvent
         return view
 
     def set_operator(self, op: Operator):
         self.op = op
-        self.update_view()
+        self.request_update()
 
-    def update_view(self):
-        view_size = self.view.size()
-        now = time.time()
-        if now - self.last_update < 3:
-            view_size = SizeAbs(64, 64)
-        self.last_update = now
+    def view_updater(self, size: SizeAbs = None):
+        manager = self
 
-        buffer = self.overview.get_buffer(view_size)
-        if self.op:
-            buffer = self.op(buffer)
-        self.view.set_buffer(buffer)
-        self.update_status()
+        def updater(ev):
+            if ev < manager.last_update:
+                return
+            manager.last_update = ev
+
+            view_size = size or manager.view.size()
+            if manager.view.size().width < view_size.width:
+                view_size = manager.view.size()
+
+            buffer = manager.overview.get_buffer(view_size)
+            if manager.op:
+                buffer = manager.op(buffer)
+            manager.view.set_buffer(buffer)
+            manager.update_status()
+
+        return updater
 
     def setup_action(self, pos: PointAbs):
         def action():
@@ -79,8 +109,8 @@ class ImageManager:
 
     def update_rect(self):
         self.overview.synchronize_rect()
-        self.update_view()
+        self.request_update()
 
     def update_roi(self):
         self.overview.synchronize_roi()
-        self.update_view()
+        self.request_update()

@@ -25,7 +25,18 @@ class RIODataSource(DataSource):
     def __init__(self, path: Path):
         self.path = path
         self.resampling: Resampling = Resampling.cubic
+
         self._infos = None
+        if path.exists():
+            with rasterio.open(self.path) as src:
+                w = src.width
+                h = src.height
+                b = src.count
+                self._infos = SourceInfos(
+                    name=self.path.stem,
+                    shape=(h, w, b),
+                    dtype=src.dtypes[0]
+                )
 
     def create(self, buffer: Buffer):
         h, w = buffer.shape[:2]

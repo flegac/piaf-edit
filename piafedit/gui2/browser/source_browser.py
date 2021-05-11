@@ -1,13 +1,20 @@
 from piafedit.gui2.browser.image_drag_handler import ImageDragHandler
-from piafedit.gui.common.utils import source_button
-from qtwidgets.flow.flow_config import FlowConfig
-from qtwidgets.flow.flow_widget import FlowWidget
+from piafedit.model.geometry.size import SizeAbs
+from piafedit.model.source.data_source import DataSource
+from qtwidgets.browser.browser_config import BrowserConfig
+from qtwidgets.browser.browser_widget import BrowserWidget
+from qtwidgets.gallery.image_button import ImageButton
 
 
-class SourceBrowser(FlowWidget):
-    def __init__(self, config: FlowConfig):
+class SourceBrowser(BrowserWidget):
+    def __init__(self, config: BrowserConfig):
         super().__init__(
             config=config,
-            builder=lambda x: source_button(x, config.item.width)
+            builder=self.builder,
         )
         ImageDragHandler().patch(self)
+
+    def builder(self, source: DataSource):
+        buffer = source.read(output_size=SizeAbs(256,256))
+        button = ImageButton(buffer)
+        return button
