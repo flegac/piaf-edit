@@ -15,6 +15,7 @@ from piafedit.model.source.rio_data_source import RIODataSource
 from qtwidgets.browser.browser_config import BrowserConfig, Item, Page
 from qtwidgets.console.console_config import ConsoleConfig
 from qtwidgets.console.console_widget import ConsoleWidget
+from qtwidgets.observablelist import observablelist
 from qtwidgets.worker.worker_manager_widget import WorkerManagerWidget
 
 
@@ -35,9 +36,9 @@ class MainUi(QMainWindow):
         self.setup(self.console, logs)
 
         processes = WorkerManagerWidget(
-            workers=[
+            model=observablelist([
                 create_worker() for i in range(10)
-            ],
+            ]),
             config=BrowserConfig(
                 item=Item(width=250),
                 page=Page(size=1)
