@@ -1,17 +1,21 @@
-import rx.operators as ops
+import logging
 import time
+
+import rx.operators as ops
 from rx.subject import Subject
 
+from piafedit.gui.browser.image_drag_handler import ImageDragHandler
 from piafedit.gui.image.overview import Overview
 from piafedit.gui.image.roi.roi_keyboard import RoiKeyboardHandler
 from piafedit.gui.image.roi.roi_mouse import RoiMouseHandler
 from piafedit.gui.image.roi.roi_view import RoiView
-from piafedit.gui2.browser.image_drag_handler import ImageDragHandler
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.libs.operator import Operator
 from piafedit.model.source.data_source import DataSource
+
+log = logging.getLogger(__name__)
 
 
 class ImageManager:
@@ -52,7 +56,6 @@ class ImageManager:
         widget = view.ui.graphicsView
 
         RoiKeyboardHandler(self).patch(widget)
-        # Ui.actions.handler().patch(self.ui.graphicsView)
         RoiMouseHandler(self).patch(widget)
         ImageDragHandler().patch(widget)
 
@@ -73,19 +76,23 @@ class ImageManager:
         manager = self
 
         def updater(ev):
-            if ev < manager.last_update:
-                return
-            manager.last_update = ev
+            try:
+                if ev < manager.last_update:
+                    return
+                manager.last_update = ev
 
-            view_size = size or manager.view.size()
-            if manager.view.size().width < view_size.width:
-                view_size = manager.view.size()
+                view_size = size or manager.view.size()
+                if manager.view.size().width < view_size.width:
+                    view_size = manager.view.size()
 
-            buffer = manager.overview.get_buffer(view_size)
-            if manager.op:
-                buffer = manager.op(buffer)
-            manager.view.set_buffer(buffer)
-            manager.update_status()
+                buffer = manager.overview.get_buffer(view_size)
+                if manager.op:
+                    buffer = manager.op(buffer)
+                manager.view.set_buffer(buffer)
+                manager.update_status()
+
+            except Exception as e:
+                log.warning(e)
 
         return updater
 

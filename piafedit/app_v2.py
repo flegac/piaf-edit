@@ -1,21 +1,24 @@
-from pathlib import Path
+import logging
+import sys
 
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QApplication
 
-from piafedit.app_v1 import IMAGE_SIZE, log
 from piafedit.editor_api import P
-from piafedit.gui2.main_ui import MainUi
+from piafedit.gui.main_ui import MainUi
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.source.rio_data_source import RIODataSource
-from piafedit.model.source.tile_source import TileSource, TileConfig
+from piafedit.ui_utils import resources_path
 
-ROOT_DIR = Path('../resources')
+IMAGE_SIZE = 10_000
+
+log = logging.getLogger()
+log.setLevel(logging.DEBUG)
 
 
 def gen_big_image():
-    source = RIODataSource(ROOT_DIR / 'kitten.jpg')
-    dest = RIODataSource(ROOT_DIR / 'fat.tif')
+    source = RIODataSource(resources_path() / 'kitten.jpg')
+    dest = RIODataSource(resources_path() / 'fat.tif')
 
     size = SizeAbs(IMAGE_SIZE, IMAGE_SIZE / source.infos().aspect)
     log.debug(f'resize from {source.infos().size} to {size}')
@@ -28,12 +31,5 @@ def gen_big_image():
 if __name__ == '__main__':
     pg.setConfigOptions(imageAxisOrder='row-major')
     app = QApplication([])
-    P.main_window = MainUi(ROOT_DIR)
-
-    source = gen_big_image()
-    P.show_source(source)
-
-    # source2 = TileSource(source, TileConfig(SizeAbs(1024, 1024)))
-    # P.show_source(source2)
-
-    app.exec_()
+    P.main_window = MainUi()
+    sys.exit(app.exec_())

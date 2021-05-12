@@ -30,7 +30,7 @@ def setup_roi(roi: pg.RectROI, rect: RectAbs):
 def select_files() -> List[str]:
     dialog = QFileDialog()
     dialog.setFileMode(QFileDialog.ExistingFiles)
-    dialog.setDirectory(str(Path('.').absolute()))
+    dialog.setDirectory(str(Path('../gui').absolute()))
     # dialog.setFilter('Image files (*.jpg *.gif)')
 
     if dialog.exec():

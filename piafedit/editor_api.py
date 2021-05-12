@@ -2,9 +2,8 @@ import logging
 from pathlib import Path
 
 import numpy as np
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QMainWindow
 
-from piafedit.gui.editor_window import EditorWindow
 from piafedit.gui.utils import select_files
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.raw_data_source import RawDataSource
@@ -12,8 +11,16 @@ from piafedit.model.source.rio_data_source import RIODataSource
 
 
 class P:
+    REBOOT_CODE = 5432
+
     log = logging.getLogger()
-    main_window: EditorWindow = None
+    main_window: QMainWindow = None
+
+    @staticmethod
+    def restart():
+        from piafedit.gui.main_ui import MainUi
+        P.main_window.close()
+        P.main_window = MainUi()
 
     @staticmethod
     def resources():
@@ -47,16 +54,6 @@ class P:
 
     @staticmethod
     def update_status(text: str):
-        P.main_window.statusBar().showMessage(text)
-
-    @staticmethod
-    def save():
-        P.main_window.dock.save()
-
-    @staticmethod
-    def restore():
-        P.main_window.dock.restore()
-
-    @staticmethod
-    def switch_lock():
-        P.main_window.dock.switch_lock()
+        if P.main_window:
+            status = P.main_window.statusBar()
+            status.showMessage(text)

@@ -1,4 +1,5 @@
-from piafedit.gui2.browser.image_drag_handler import ImageDragHandler
+from piafedit.editor_api import P
+from piafedit.gui.browser.image_drag_handler import ImageDragHandler
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.source.data_source import DataSource
 from qtwidgets.browser.browser_config import BrowserConfig
@@ -17,4 +18,5 @@ class SourceBrowser(BrowserWidget):
     def builder(self, source: DataSource):
         buffer = source.read(output_size=SizeAbs(256,256))
         button = ImageButton(buffer)
+        button.clicked.connect(lambda: P.show_source(source))
         return button
