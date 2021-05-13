@@ -11,8 +11,6 @@ from piafedit.model.source.rio_data_source import RIODataSource
 
 
 class P:
-    REBOOT_CODE = 5432
-
     log = logging.getLogger()
     main_window: QMainWindow = None
 

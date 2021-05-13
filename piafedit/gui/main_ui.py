@@ -2,16 +2,15 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from PyQt5.QtCore import QMutex
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget
 
 from piafedit.editor_api import P
 from piafedit.gui.action_mapper import ActionMapper
 from piafedit.gui.browser.source_browser import SourceBrowser
 from piafedit.gui.image.image_manager import ImageManager
-from piafedit.model.work_model import WorkModel
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.rio_data_source import RIODataSource
+from piafedit.model.work_model import WorkModel
 from piafedit.ui_utils import load_ui
 from qtwidgets.browser.browser_config import BrowserConfig, Item, Page
 from qtwidgets.console.console_widget import ConsoleWidget
@@ -25,12 +24,8 @@ class MainUi(QMainWindow):
         super().__init__()
         load_ui('main', self)
         self.show()
-        self.manager = None
-        self.source = None
-
         self.model = model
-
-        self.lock = QMutex()
+        self.manager: ImageManager = None
 
         self.setup_file_browser()
 
@@ -53,6 +48,11 @@ class MainUi(QMainWindow):
 
         self.actions = ActionMapper(self)
 
+
+        if self.manager:
+            self.set_source(self.manager.overview.source)
+
+
     def setup_file_browser(self):
         model = self.model.tree_model
         self.treeView.setModel(model)
@@ -68,24 +68,19 @@ class MainUi(QMainWindow):
         placeholder.setLayout(layout)
 
     def set_source(self, source: DataSource):
-        self.lock.lock()
-        try:
-            self.source = source
-            manager = ImageManager(source)
-            manager.view.setMinimumWidth(self.centralWidget().width())
-            if self.manager:
-                self.overview.layout().replaceWidget(self.manager.overview, manager.overview)
-                self.setCentralWidget(manager.view)
-                self.manager.view.close()
-                self.manager.overview.close()
-            else:
-                self.setup(self.overview, manager.overview)
-                self.setCentralWidget(manager.view)
-                # self.setup(self.image, manager.view)
+        manager = ImageManager(source)
+        manager.view.setMinimumWidth(self.centralWidget().width())
+        if self.manager:
+            self.overview.layout().replaceWidget(self.manager.overview, manager.overview)
+            self.setCentralWidget(manager.view)
+            self.manager.view.close()
+            self.manager.overview.close()
+        else:
+            self.setup(self.overview, manager.overview)
+            self.setCentralWidget(manager.view)
+            # self.setup(self.image, manager.view)
 
-            self.manager = manager
-        finally:
-            self.lock.unlock()
+        self.manager = manager
 
     def on_select(self, ev):
         paths = set(

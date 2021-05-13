@@ -17,11 +17,15 @@ class ActionMapper:
         self.setup_tools()
         self.setup_view()
 
+    @property
+    def manager(self):
+        return self.win.manager
+
     def setup_operators(self):
-        self.win.actionEdge_detection.triggered.connect(lambda: self.win.manager.set_operator(edge_detection))
-        self.win.actionErode.triggered.connect(lambda: self.win.manager.set_operator(erode))
-        self.win.actionDilate.triggered.connect(lambda: self.win.manager.set_operator(dilate))
-        self.win.actionIdentity.triggered.connect(lambda: self.win.manager.set_operator(None))
+        self.win.actionEdge_detection.triggered.connect(lambda: self.manager.set_operator(edge_detection))
+        self.win.actionErode.triggered.connect(lambda: self.manager.set_operator(erode))
+        self.win.actionDilate.triggered.connect(lambda: self.manager.set_operator(dilate))
+        self.win.actionIdentity.triggered.connect(lambda: self.manager.set_operator(None))
 
     def setup_tools(self):
         self.win.actionLogs.triggered.connect(print)
