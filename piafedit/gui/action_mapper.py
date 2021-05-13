@@ -3,6 +3,7 @@ from pathlib import Path
 from PyQt5.QtWidgets import QMainWindow
 
 from piafedit.editor_api import P
+from piafedit.model.libs.filters import erode, dilate, edge_detection
 from piafedit.ui_utils import resources_path
 
 LAYOUT_BACKUP__PATH = Path('layout.gui')
@@ -11,10 +12,30 @@ LAYOUT_BACKUP__PATH = Path('layout.gui')
 class ActionMapper:
     def __init__(self, win: QMainWindow):
         self.win = win
-        self.apply()
+        self.setup_files()
+        self.setup_operators()
+        self.setup_tools()
+        self.setup_view()
 
-    def apply(self):
-        # files
+    def setup_operators(self):
+        self.win.actionEdge_detection.triggered.connect(lambda: self.win.manager.set_operator(edge_detection))
+        self.win.actionErode.triggered.connect(lambda: self.win.manager.set_operator(erode))
+        self.win.actionDilate.triggered.connect(lambda: self.win.manager.set_operator(dilate))
+        self.win.actionIdentity.triggered.connect(lambda: self.win.manager.set_operator(None))
+
+    def setup_tools(self):
+        self.win.actionLogs.triggered.connect(print)
+        self.win.actionImages.triggered.connect(print)
+
+    def setup_view(self):
+        self.win.action100.triggered.connect(print)
+        self.win.actionRestore_layout.triggered.connect(self.restore_default_gui)
+        self.win.actionSave_layout.triggered.connect(self.save_gui)
+        self.win.actionLoad_layout.triggered.connect(self.load_gui)
+        self.win.actionLoad_layout.setDisabled(not LAYOUT_BACKUP__PATH.exists())
+        self.restore_default_gui()
+
+    def setup_files(self):
         self.win.actionNew.triggered.connect(P.new_source)
         self.win.actionOpen.triggered.connect(P.open_source)
         self.win.actionSave.triggered.connect(print)
@@ -22,18 +43,6 @@ class ActionMapper:
         self.win.actionClose.triggered.connect(print)
         self.win.actionExit.triggered.connect(print)
         self.win.actionRestart.triggered.connect(P.restart)
-
-        # tools
-        self.win.actionLogs.triggered.connect(print)
-        self.win.actionImages.triggered.connect(print)
-
-        # view
-        self.win.action100.triggered.connect(print)
-        self.win.actionRestore_layout.triggered.connect(self.restore_default_gui)
-        self.win.actionSave_layout.triggered.connect(self.save_gui)
-        self.win.actionLoad_layout.triggered.connect(self.load_gui)
-        self.win.actionLoad_layout.setDisabled(not LAYOUT_BACKUP__PATH.exists())
-        self.restore_default_gui()
 
     def save_gui(self):
         with LAYOUT_BACKUP__PATH.open('wb') as _:

@@ -1,5 +1,6 @@
 import numpy as np
 import pyqtgraph as pg
+from PyQt5.QtWidgets import QSizePolicy
 
 from piafedit.model.geometry.size import SizeAbs
 
@@ -7,6 +8,7 @@ from piafedit.model.geometry.size import SizeAbs
 class RoiView(pg.ImageView):
     def __init__(self):
         super().__init__()
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.ui.roiBtn.hide()
         self.ui.menuBtn.hide()
         self.current_buffer_shape = None

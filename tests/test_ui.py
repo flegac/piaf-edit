@@ -1,15 +1,16 @@
 from pathlib import Path
 
 from PyQt5 import uic
-from PyQt5.QtWidgets import QWidget, QApplication
+from PyQt5.QtWidgets import QWidget, QApplication, QDockWidget
+
+from piafedit.ui_utils import load_ui
 
 
-class TestUi(QWidget):
+class TestUi(QDockWidget):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi(Path('../resources') / 'ui/test.ui', self)
-
+        load_ui('ws_dock', self)
         self.show()
 
 

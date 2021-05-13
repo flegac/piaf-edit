@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import Any
+from typing import Any, List
 
 from PyQt5.QtCore import QMutex
 from PyQt5.QtWidgets import QFileSystemModel, QMainWindow, QVBoxLayout, QWidget
@@ -10,15 +10,21 @@ from piafedit.gui.action_mapper import ActionMapper
 from piafedit.gui.browser.source_browser import SourceBrowser
 from piafedit.gui.image.image_manager import ImageManager
 from piafedit.gui.worker_creator import create_worker
-from piafedit.model.libs.filters import erode, edge_detection, dilate
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.rio_data_source import RIODataSource
 from piafedit.ui_utils import load_ui, resources_path
 from qtwidgets.browser.browser_config import BrowserConfig, Item, Page
-from qtwidgets.console.console_config import ConsoleConfig
 from qtwidgets.console.console_widget import ConsoleWidget
 from qtwidgets.observablelist import observablelist
 from qtwidgets.worker.worker_manager_widget import WorkerManagerWidget
+
+
+class WorkModel:
+    def __init__(self, path: Path):
+        self.sources: List[DataSource] = observablelist([])
+        self.workers = observablelist([create_worker() for i in range(10)])
+        self.tree_model = QFileSystemModel()
+        self.tree_model.setRootPath(str(path))
 
 
 class MainUi(QMainWindow):
@@ -31,65 +37,51 @@ class MainUi(QMainWindow):
         self.manager = None
         self.source = None
 
+        self.model = WorkModel(resources_path())
+
         self.lock = QMutex()
 
-        # file browser
-        self.setup_file_browser(resources_path())
+        self.setup_file_browser()
 
-        logs = ConsoleWidget(ConsoleConfig(
-            'toto',
-            loggers=[logging.getLogger()]
+        console: ConsoleWidget = self.console
+        console.set_loggers([logging.getLogger()])
+
+        processes: WorkerManagerWidget = self.worker
+        processes.set_model(self.model.workers)
+        processes.set_config(BrowserConfig(
+            item=Item(width=250),
+            page=Page(size=2)
         ))
-        self.setup(self.console, logs)
-
-        processes = WorkerManagerWidget(
-            model=observablelist([
-                create_worker() for i in range(10)
-            ]),
-            config=BrowserConfig(
-                item=Item(width=250),
-                page=Page(size=1)
-            )
-        )
-        self.setup(self.worker, processes)
 
         # browser
-        self.browser = SourceBrowser(
-            config=BrowserConfig(
-                page=Page(size=20)
-            )
-        )
-        self.setup(self.images, self.browser)
-
-        self.setup_tool_box()
+        images: SourceBrowser = self.images
+        images.set_model(self.model.sources)
+        images.set_config(BrowserConfig(
+            page=Page(size=20)
+        ))
 
         self.actions = ActionMapper(self)
 
-    def setup(self, placeholder: QWidget, widget: Any):
-        placeholder.setLayout(QVBoxLayout())
-        placeholder.layout().addWidget(widget)
-
-    def setup_file_browser(self, root_dir: Path):
-        self.tree_model = QFileSystemModel()
-        path = str(root_dir)
-        self.tree_model.setRootPath(path)
-        self.treeView.setModel(self.tree_model)
+    def setup_file_browser(self):
+        model = self.model.tree_model
+        self.treeView.setModel(model)
         self.treeView.selectionModel().selectionChanged.connect(self.on_select)
         self.treeView.doubleClicked.connect(self.on_click)
-        self.treeView.setRootIndex(self.tree_model.index(path))
+        self.treeView.setRootIndex(model.index(model.rootPath()))
 
-    def setup_tool_box(self):
-        self.erodeButton.clicked.connect(lambda: self.manager.set_operator(erode))
-        self.dilateButton.clicked.connect(lambda: self.manager.set_operator(dilate))
-        self.edgeButton.clicked.connect(lambda: self.manager.set_operator(edge_detection))
-        self.identityButton.clicked.connect(lambda: self.manager.set_operator(None))
+    def setup(self, placeholder: QWidget, widget: Any):
+        layout = QVBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        layout.addWidget(widget)
+        placeholder.setLayout(layout)
 
     def set_source(self, source: DataSource):
         self.lock.lock()
         try:
             self.source = source
             manager = ImageManager(source)
-            # TODO fix that
+            manager.view.setMinimumWidth(self.centralWidget().width())
             if self.manager:
                 self.overview.layout().replaceWidget(self.manager.overview, manager.overview)
                 self.setCentralWidget(manager.view)
@@ -106,7 +98,7 @@ class MainUi(QMainWindow):
 
     def on_select(self, ev):
         paths = set(
-            Path(self.tree_model.filePath(idx))
+            Path(self.model.tree_model.filePath(idx))
             for idx in ev.indexes()
         )
         source = None
