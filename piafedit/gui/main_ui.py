@@ -1,43 +1,34 @@
 import logging
 from pathlib import Path
-from typing import Any, List
+from typing import Any
 
 from PyQt5.QtCore import QMutex
-from PyQt5.QtWidgets import QFileSystemModel, QMainWindow, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget
 
 from piafedit.editor_api import P
 from piafedit.gui.action_mapper import ActionMapper
 from piafedit.gui.browser.source_browser import SourceBrowser
 from piafedit.gui.image.image_manager import ImageManager
-from piafedit.gui.worker_creator import create_worker
+from piafedit.model.work_model import WorkModel
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.rio_data_source import RIODataSource
-from piafedit.ui_utils import load_ui, resources_path
+from piafedit.ui_utils import load_ui
 from qtwidgets.browser.browser_config import BrowserConfig, Item, Page
 from qtwidgets.console.console_widget import ConsoleWidget
-from qtwidgets.observablelist import observablelist
 from qtwidgets.worker.worker_manager_widget import WorkerManagerWidget
-
-
-class WorkModel:
-    def __init__(self, path: Path):
-        self.sources: List[DataSource] = observablelist([])
-        self.workers = observablelist([create_worker() for i in range(10)])
-        self.tree_model = QFileSystemModel()
-        self.tree_model.setRootPath(str(path))
 
 
 class MainUi(QMainWindow):
     EXIT_CODE_REBOOT = -123
 
-    def __init__(self, ):
+    def __init__(self, model: WorkModel):
         super().__init__()
         load_ui('main', self)
         self.show()
         self.manager = None
         self.source = None
 
-        self.model = WorkModel(resources_path())
+        self.model = model
 
         self.lock = QMutex()
 

@@ -19,8 +19,9 @@ class P:
     @staticmethod
     def restart():
         from piafedit.gui.main_ui import MainUi
+        model = P.main_window.model
         P.main_window.close()
-        P.main_window = MainUi()
+        P.main_window = MainUi(model)
 
     @staticmethod
     def resources():

@@ -8,6 +8,7 @@ from piafedit.editor_api import P
 from piafedit.gui.main_ui import MainUi
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.source.rio_data_source import RIODataSource
+from piafedit.model.work_model import WorkModel
 from piafedit.ui_utils import resources_path
 
 IMAGE_SIZE = 10_000
@@ -29,7 +30,10 @@ def gen_big_image():
 
 
 if __name__ == '__main__':
+    model = WorkModel(resources_path())
+
     pg.setConfigOptions(imageAxisOrder='row-major')
     app = QApplication([])
-    P.main_window = MainUi()
+
+    P.main_window = MainUi(model)
     sys.exit(app.exec_())
