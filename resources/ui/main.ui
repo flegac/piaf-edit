@@ -96,9 +96,11 @@
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionImages"/>
+    <addaction name="actionConsole"/>
+    <addaction name="actionOverview"/>
+    <addaction name="actionTreeview"/>
     <addaction name="actionWorkers"/>
-    <addaction name="actionLogs"/>
+    <addaction name="actionImages"/>
    </widget>
    <widget class="QMenu" name="menuOperators">
     <property name="title">
@@ -169,7 +171,7 @@
   </widget>
   <widget class="QDockWidget" name="overviewDock">
    <property name="features">
-    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+    <set>QDockWidget::AllDockWidgetFeatures</set>
    </property>
    <property name="windowTitle">
     <string>Overview</string>
@@ -248,7 +250,10 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionLogs"/>
+   <addaction name="actionConsole"/>
+   <addaction name="actionOverview"/>
+   <addaction name="actionTreeview"/>
+   <addaction name="actionWorkers"/>
    <addaction name="actionImages"/>
   </widget>
   <action name="actionOpen">
@@ -298,16 +303,6 @@
     <string>About</string>
    </property>
   </action>
-  <action name="actionLogs">
-   <property name="text">
-    <string>Logs</string>
-   </property>
-  </action>
-  <action name="actionImages">
-   <property name="text">
-    <string>Browser</string>
-   </property>
-  </action>
   <action name="action100">
    <property name="text">
     <string>100%</string>
@@ -326,11 +321,6 @@
   <action name="actionLoad_layout">
    <property name="text">
     <string>Load layout</string>
-   </property>
-  </action>
-  <action name="actionWorkers">
-   <property name="text">
-    <string>Task manager</string>
    </property>
   </action>
   <action name="actionReload">
@@ -361,6 +351,31 @@
   <action name="actionIdentity">
    <property name="text">
     <string>Identity</string>
+   </property>
+  </action>
+  <action name="actionConsole">
+   <property name="text">
+    <string>Console</string>
+   </property>
+  </action>
+  <action name="actionOverview">
+   <property name="text">
+    <string>Overview</string>
+   </property>
+  </action>
+  <action name="actionTreeview">
+   <property name="text">
+    <string>Treeview</string>
+   </property>
+  </action>
+  <action name="actionWorkers">
+   <property name="text">
+    <string>Workers</string>
+   </property>
+  </action>
+  <action name="actionImages">
+   <property name="text">
+    <string>Images</string>
    </property>
   </action>
  </widget>

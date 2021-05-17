@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 
 import numpy as np
-from PyQt5.QtWidgets import QWidget, QMainWindow
+from PyQt5.QtWidgets import QMainWindow
 
 from piafedit.gui.utils import select_files
 from piafedit.model.source.data_source import DataSource
@@ -24,10 +24,6 @@ class P:
     @staticmethod
     def resources():
         return Path('../resources')
-
-    @staticmethod
-    def show_widget(widget: QWidget):
-        P.main_window.show_widget(widget)
 
     @staticmethod
     def open_files():

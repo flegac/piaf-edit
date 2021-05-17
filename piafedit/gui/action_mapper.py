@@ -28,8 +28,11 @@ class ActionMapper:
         self.win.actionIdentity.triggered.connect(lambda: self.manager.set_operator(None))
 
     def setup_tools(self):
-        self.win.actionLogs.triggered.connect(print)
-        self.win.actionImages.triggered.connect(print)
+        self.win.actionConsole.triggered.connect(lambda: self.win.consoleDock.show())
+        self.win.actionOverview.triggered.connect(lambda: self.win.overviewDock.show())
+        self.win.actionTreeview.triggered.connect(lambda: self.win.treeviewDock.show())
+        self.win.actionImages.triggered.connect(lambda: self.win.imagesDock.show())
+        self.win.actionWorkers.triggered.connect(lambda: self.win.workerDock.show())
 
     def setup_view(self):
         self.win.action100.triggered.connect(print)

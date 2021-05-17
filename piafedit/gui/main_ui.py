@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 from typing import Any
 
+from PyQt5.QtGui import QCloseEvent
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget
 
 from piafedit.editor_api import P
@@ -48,10 +49,20 @@ class MainUi(QMainWindow):
 
         self.actions = ActionMapper(self)
 
-
         if self.manager:
             self.set_source(self.manager.overview.source)
 
+    def setup_docks(self):
+        def dock_on_close(ev: QCloseEvent):
+            ev.ignore()
+            self.consoleDock.hide()
+
+        self.workerDock.closeEvent = dock_on_close
+        self.consoleDock.closeEvent = dock_on_close
+        self.treeviewDock.closeEvent = dock_on_close
+        self.overviewDock.closeEvent = dock_on_close
+        self.imagesDock.closeEvent = dock_on_close
+        self.overviewDock.closeEvent = dock_on_close
 
     def setup_file_browser(self):
         model = self.model.tree_model
