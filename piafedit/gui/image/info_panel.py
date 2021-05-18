@@ -4,10 +4,8 @@ from piafedit.gui.image.image_manager import ImageManager
 
 
 class InfoPanel(QWidget):
-    def __init__(self, manager: ImageManager):
+    def __init__(self):
         super().__init__()
-        self.manager = manager
-
         self.view_infos = QLabel()
         self.overview_infos = QLabel()
         self.area_infos = QLabel()
@@ -18,19 +16,19 @@ class InfoPanel(QWidget):
         l.addWidget(self.area_infos)
         self.setLayout(l)
 
-    def update_manager(self):
-        manager = self.manager
-        source = manager.source
-        h, w, b = source.shape()
-        dtype = source.dtype()
-        self.view_infos.setText(f'view: {source.name} {w}x{h}:{b} {dtype}')
+    def update_manager(self, manager: ImageManager):
+        source = manager.overview.source
+        infos = source.infos()
+        h, w, b = infos.shape
+        dtype = infos.dtype
+        self.view_infos.setText(f'view: {infos.name} {w}x{h}:{b} {dtype}')
 
         buffer = manager.overview.image
         h, w, b = buffer.shape
         dtype = buffer.dtype
         self.overview_infos.setText(f'overview: {w}x{h}:{b} {dtype}')
 
-        area = manager.rect
+        area = manager.overview.rect
         x, y = area.pos.raw()
         w, h = area.size.raw()
 

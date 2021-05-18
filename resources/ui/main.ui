@@ -256,6 +256,15 @@
    <addaction name="actionWorkers"/>
    <addaction name="actionImages"/>
   </widget>
+  <widget class="QDockWidget" name="infosDock">
+   <property name="windowTitle">
+    <string>Infos</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="InfoPanel" name="infos"/>
+  </widget>
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
@@ -396,6 +405,12 @@
    <class>SourceBrowser</class>
    <extends>QWidget</extends>
    <header>piafedit.gui.browser.source_browser</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>InfoPanel</class>
+   <extends>QWidget</extends>
+   <header>piafedit.gui.image.info_panel</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
