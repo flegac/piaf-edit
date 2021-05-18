@@ -3,7 +3,6 @@ from typing import List
 
 from PyQt5.QtWidgets import QFileSystemModel
 
-from piafedit.gui.image.image_manager import ImageManager
 from piafedit.gui.worker_creator import create_worker
 from piafedit.model.source.data_source import DataSource
 from qtwidgets.observablelist import observablelist

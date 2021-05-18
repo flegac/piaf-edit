@@ -92,7 +92,7 @@ class MainUi(QMainWindow):
             # self.setup(self.image, manager.view)
 
         self.manager = manager
-        self.infos.update_manager(manager)
+        self.infos.update_overview(manager.overview)
 
     def on_select(self, ev):
         paths = set(

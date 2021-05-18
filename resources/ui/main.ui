@@ -40,7 +40,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QWidget" name="image" native="true">
+     <widget class="QFrame" name="image">
       <property name="enabled">
        <bool>false</bool>
       </property>

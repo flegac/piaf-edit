@@ -1,9 +1,11 @@
 from pathlib import Path
+from typing import Optional
 
 from PyQt5.QtWidgets import QMainWindow
 
 from piafedit.editor_api import P
 from piafedit.model.libs.filters import erode, dilate, edge_detection
+from piafedit.model.libs.operator import Operator
 from piafedit.ui_utils import resources_path
 
 LAYOUT_BACKUP__PATH = Path('layout.gui')
@@ -22,10 +24,17 @@ class ActionMapper:
         return self.win.manager
 
     def setup_operators(self):
-        self.win.actionEdge_detection.triggered.connect(lambda: self.manager.set_operator(edge_detection))
-        self.win.actionErode.triggered.connect(lambda: self.manager.set_operator(erode))
-        self.win.actionDilate.triggered.connect(lambda: self.manager.set_operator(dilate))
-        self.win.actionIdentity.triggered.connect(lambda: self.manager.set_operator(None))
+        def operator_setter(op: Optional[Operator]):
+            def action():
+                self.manager.view.set_operator(op)
+                self.manager.overview.request_update()
+
+            return action
+
+        self.win.actionEdge_detection.triggered.connect(operator_setter(edge_detection))
+        self.win.actionErode.triggered.connect(operator_setter(erode))
+        self.win.actionDilate.triggered.connect(operator_setter(dilate))
+        self.win.actionIdentity.triggered.connect(operator_setter(None))
 
     def setup_tools(self):
         self.win.actionConsole.triggered.connect(lambda: self.win.consoleDock.show())

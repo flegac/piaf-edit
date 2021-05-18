@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
 
-from piafedit.gui.image.image_manager import ImageManager
+from piafedit.gui.image.overview import Overview
 
 
 class InfoPanel(QWidget):
@@ -16,19 +16,19 @@ class InfoPanel(QWidget):
         l.addWidget(self.area_infos)
         self.setLayout(l)
 
-    def update_manager(self, manager: ImageManager):
-        source = manager.overview.source
+    def update_overview(self, overview: Overview):
+        source = overview.source
         infos = source.infos()
         h, w, b = infos.shape
         dtype = infos.dtype
         self.view_infos.setText(f'view: {infos.name} {w}x{h}:{b} {dtype}')
 
-        buffer = manager.overview.image
+        buffer = overview.image
         h, w, b = buffer.shape
         dtype = buffer.dtype
         self.overview_infos.setText(f'overview: {w}x{h}:{b} {dtype}')
 
-        area = manager.overview.rect
+        area = overview.rect
         x, y = area.pos.raw()
         w, h = area.size.raw()
 

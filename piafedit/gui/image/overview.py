@@ -1,5 +1,10 @@
-import pyqtgraph as pg
+import time
 
+import pyqtgraph as pg
+from rx.subject import Subject
+
+from piafedit.gui.image.roi_keyboard import RoiKeyboardHandler
+from piafedit.gui.image.roi_mouse import RoiMouseHandler
 from piafedit.gui.utils import setup_roi
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import Rect
@@ -10,10 +15,13 @@ from piafedit.model.source.data_source import DataSource
 class Overview(pg.ImageView):
     def __init__(self, source: DataSource):
         super().__init__()
+        self.roi_update = Subject()
+
         self.source = source
         self.rect = Rect().abs(self.source.infos().size)
 
         self.the_roi = pg.RectROI(PointAbs(0, 0).raw(), SizeAbs(0, 0).raw())
+        self.the_roi.sigRegionChanged.connect(self.update_rect)
 
         self.ui.histogram.hide()
         self.ui.roiBtn.hide()
@@ -24,6 +32,7 @@ class Overview(pg.ImageView):
         buffer = self.source.overview(size=self.size)
         self.setImage(buffer)
         self.view.autoRange(padding=0.01)
+        self.update_roi()
 
     # @property
     # def rect(self):
@@ -63,3 +72,25 @@ class Overview(pg.ImageView):
         rx = full.width / over.width
         ry = full.height / over.height
         return rx, ry
+
+    def request_update(self):
+        event = time.time(), self
+        self.roi_update.on_next(event)
+
+    def setup_action(self, pos: PointAbs):
+        overview = self
+
+        def action():
+            rect = overview.rect
+            rect.pos = pos
+            overview.update_roi()
+
+        return action
+
+    def update_rect(self):
+        self.synchronize_rect()
+        self.request_update()
+
+    def update_roi(self):
+        self.synchronize_roi()
+        self.request_update()
