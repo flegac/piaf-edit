@@ -2,13 +2,16 @@ import logging
 from pathlib import Path
 from typing import Any
 
+from PyQt5 import QtWidgets
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCloseEvent
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget
 
 from piafedit.editor_api import P
 from piafedit.gui.action_mapper import ActionMapper
 from piafedit.gui.browser.source_browser import SourceBrowser
-from piafedit.gui.image.image_manager import ImageManager
+from piafedit.gui.image.overview import Overview
+from piafedit.model.libs.operator import Operator
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.rio_data_source import RIODataSource
 from piafedit.model.work_model import WorkModel
@@ -24,10 +27,14 @@ class MainUi(QMainWindow):
     def __init__(self, model: WorkModel):
         super().__init__()
         load_ui('main', self)
-        self.show()
-        self.model = model
-        self.manager: ImageManager = None
+        self.setCentralWidget(None)
+        self.setDockOptions(QMainWindow.GroupedDragging | QMainWindow.AllowTabbedDocks | QMainWindow.AllowNestedDocks)
+        self.setTabPosition(Qt.AllDockWidgetAreas, QtWidgets.QTabWidget.North)
 
+        self.show()
+
+        self.model = model
+        self.current_view: Overview = None
         self.setup_file_browser()
 
         console: ConsoleWidget = self.console
@@ -49,8 +56,10 @@ class MainUi(QMainWindow):
 
         self.actions = ActionMapper(self)
 
-        if self.manager:
-            self.set_source(self.manager.overview.source)
+        self.managers = []
+
+        if self.current_view:
+            self.set_source(self.current_view.source)
 
     def setup_docks(self):
         def dock_on_close(ev: QCloseEvent):
@@ -78,21 +87,24 @@ class MainUi(QMainWindow):
         layout.addWidget(widget)
         placeholder.setLayout(layout)
 
-    def set_source(self, source: DataSource):
-        manager = ImageManager(source)
-        manager.view.setMinimumWidth(self.centralWidget().width())
-        if self.manager:
-            self.overview.layout().replaceWidget(self.manager.overview, manager.overview)
-            self.setCentralWidget(manager.view)
-            self.manager.view.close()
-            self.manager.overview.close()
-        else:
-            self.setup(self.overview, manager.overview)
-            self.setCentralWidget(manager.view)
-            # self.setup(self.image, manager.view)
+    def show_view(self, op: Operator):
+        view = self.current_view.get_view(op)
+        self.tabifyDockWidget(self.imageDock, view)
+        view.show()
+        view.raise_()
 
-        self.manager = manager
-        self.infos.update_overview(manager.overview)
+    def set_source(self, source: DataSource):
+        overview = Overview(source)
+        if self.current_view:
+            self.overview.layout().replaceWidget(self.current_view, overview)
+            self.current_view.close()
+        else:
+            self.setup(self.overview, overview)
+
+        self.current_view = overview
+        self.infos.update_overview(overview)
+
+        self.show_view(None)
 
     def on_select(self, ev):
         paths = set(

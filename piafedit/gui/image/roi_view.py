@@ -4,6 +4,7 @@ from typing import Optional
 import numpy as np
 import pyqtgraph as pg
 import rx.operators as ops
+from PyQt5.QtGui import QCloseEvent
 from PyQt5.QtWidgets import QSizePolicy
 
 from piafedit.gui.browser.image_drag_handler import ImageDragHandler
@@ -33,6 +34,10 @@ class RoiView(pg.ImageView):
         self.ui.menuBtn.hide()
         self.op: Optional[Operator] = None
         ImageDragHandler().patch(self)
+
+    def closeEvent(self, ev: QCloseEvent):
+        self.overview.views.remove(self)
+        super().closeEvent(ev)
 
     def subscribe(self, overview: Overview):
         self.overview = overview

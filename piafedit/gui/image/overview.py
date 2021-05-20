@@ -1,20 +1,23 @@
 import time
 
 import pyqtgraph as pg
+from PyQt5.QtGui import QCloseEvent
 from rx.subject import Subject
 
-from piafedit.gui.image.roi_keyboard import RoiKeyboardHandler
-from piafedit.gui.image.roi_mouse import RoiMouseHandler
 from piafedit.gui.utils import setup_roi
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import Rect
 from piafedit.model.geometry.size import SizeAbs, Size
+from piafedit.model.libs.operator import Operator
 from piafedit.model.source.data_source import DataSource
+from qtwidgets.dock_widget import DockWidget
 
 
 class Overview(pg.ImageView):
     def __init__(self, source: DataSource):
         super().__init__()
+        self.views = []
+
         self.roi_update = Subject()
 
         self.source = source
@@ -33,6 +36,22 @@ class Overview(pg.ImageView):
         self.setImage(buffer)
         self.view.autoRange(padding=0.01)
         self.update_roi()
+
+    def closeEvent(self, ev: QCloseEvent):
+        for view in self.views:
+            view.close()
+        super().closeEvent(ev)
+
+    def get_view(self, op: Operator = None):
+        from piafedit.gui.image.roi_view import RoiView
+        name = self.source.infos().name
+        op_name = '' if op is None else op.__name__
+        dock = DockWidget(f'{name} {op_name}')
+        view = RoiView(self)
+        view.set_operator(op)
+        dock.setWidget(view)
+        self.views.append(dock)
+        return dock
 
     # @property
     # def rect(self):

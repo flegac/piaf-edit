@@ -4,6 +4,7 @@ from typing import Optional
 from PyQt5.QtWidgets import QMainWindow
 
 from piafedit.editor_api import P
+from piafedit.gui.image.overview import Overview
 from piafedit.model.libs.filters import erode, dilate, edge_detection
 from piafedit.model.libs.operator import Operator
 from piafedit.ui_utils import resources_path
@@ -20,14 +21,13 @@ class ActionMapper:
         self.setup_view()
 
     @property
-    def manager(self):
-        return self.win.manager
+    def overview(self) -> Overview:
+        return self.win.current_view
 
     def setup_operators(self):
         def operator_setter(op: Optional[Operator]):
             def action():
-                self.manager.view.set_operator(op)
-                self.manager.overview.request_update()
+                self.win.show_view(op)
 
             return action
 
@@ -48,6 +48,7 @@ class ActionMapper:
         self.win.actionRestore_layout.triggered.connect(self.restore_default_gui)
         self.win.actionSave_layout.triggered.connect(self.save_gui)
         self.win.actionLoad_layout.triggered.connect(self.load_gui)
+        self.win.actionHistogram.triggered.connect(self.switch_histogram)
         self.win.actionLoad_layout.setDisabled(not LAYOUT_BACKUP__PATH.exists())
         self.restore_default_gui()
 
@@ -59,6 +60,9 @@ class ActionMapper:
         self.win.actionClose.triggered.connect(print)
         self.win.actionExit.triggered.connect(print)
         self.win.actionRestart.triggered.connect(P.restart)
+
+    def switch_histogram(self):
+        print('histogram')
 
     def save_gui(self):
         with LAYOUT_BACKUP__PATH.open('wb') as _:

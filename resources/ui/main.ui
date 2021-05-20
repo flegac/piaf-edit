@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1353</width>
-    <height>861</height>
+    <width>1107</width>
+    <height>752</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <bool>false</bool>
    </property>
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -39,13 +39,6 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item>
-     <widget class="QFrame" name="image">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -53,7 +46,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1353</width>
+     <width>1107</width>
      <height>21</height>
     </rect>
    </property>
@@ -91,6 +84,7 @@
     <addaction name="actionSave_layout"/>
     <addaction name="actionLoad_layout"/>
     <addaction name="separator"/>
+    <addaction name="actionHistogram"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -119,7 +113,7 @@
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QDockWidget" name="workerDock">
+  <widget class="DockWidget" name="workerDock">
    <property name="windowTitle">
     <string>Worker</string>
    </property>
@@ -130,7 +124,7 @@
     <layout class="QVBoxLayout" name="verticalLayout"/>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="consoleDock">
+  <widget class="DockWidget" name="consoleDock">
    <property name="windowTitle">
     <string>Console</string>
    </property>
@@ -139,7 +133,7 @@
    </attribute>
    <widget class="ConsoleWidget" name="console"/>
   </widget>
-  <widget class="QDockWidget" name="treeviewDock">
+  <widget class="DockWidget" name="treeviewDock">
    <property name="windowTitle">
     <string>TreeView</string>
    </property>
@@ -169,7 +163,7 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="overviewDock">
+  <widget class="DockWidget" name="overviewDock">
    <property name="features">
     <set>QDockWidget::AllDockWidgetFeatures</set>
    </property>
@@ -181,7 +175,7 @@
    </attribute>
    <widget class="QWidget" name="overview"/>
   </widget>
-  <widget class="QDockWidget" name="imagesDock">
+  <widget class="DockWidget" name="imagesDock">
    <property name="windowTitle">
     <string>Images</string>
    </property>
@@ -218,7 +212,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
    <addaction name="actionEdge_detection"/>
    <addaction name="actionErode"/>
@@ -239,6 +233,7 @@
    <addaction name="actionSave_layout"/>
    <addaction name="actionLoad_layout"/>
    <addaction name="action100"/>
+   <addaction name="actionHistogram"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
@@ -256,7 +251,7 @@
    <addaction name="actionWorkers"/>
    <addaction name="actionImages"/>
   </widget>
-  <widget class="QDockWidget" name="infosDock">
+  <widget class="DockWidget" name="infosDock">
    <property name="windowTitle">
     <string>Infos</string>
    </property>
@@ -264,6 +259,31 @@
     <number>1</number>
    </attribute>
    <widget class="InfoPanel" name="infos"/>
+  </widget>
+  <widget class="DockWidget" name="imageDock">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::AllDockWidgetAreas</set>
+   </property>
+   <property name="windowTitle">
+    <string>ImageView</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>4</number>
+   </attribute>
+   <widget class="QWidget" name="image">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+   </widget>
   </widget>
   <action name="actionOpen">
    <property name="text">
@@ -387,6 +407,11 @@
     <string>Images</string>
    </property>
   </action>
+  <action name="actionHistogram">
+   <property name="text">
+    <string>Histogram</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -411,6 +436,12 @@
    <class>InfoPanel</class>
    <extends>QWidget</extends>
    <header>piafedit.gui.image.info_panel</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DockWidget</class>
+   <extends>QDockWidget</extends>
+   <header>qtwidgets.dock_widget</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
