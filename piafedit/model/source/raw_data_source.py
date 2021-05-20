@@ -1,10 +1,9 @@
 import logging
 import uuid
-from typing import Union
 
 import cv2
 
-from piafedit.model.geometry.rect import RectAbs, Rect
+from piafedit.model.geometry.rect import RectAbs
 from piafedit.model.geometry.size import SizeAbs, Size
 from piafedit.model.libs.operator import Buffer
 from piafedit.model.source.data_source import DataSource
@@ -27,11 +26,11 @@ class RawDataSource(DataSource):
     def infos(self) -> SourceInfos:
         return self._infos
 
-    def write(self, buffer: Buffer, window: Union[Rect, RectAbs] = None):
+    def write(self, buffer: Buffer, window: RectAbs = None):
         data = self.update_window(window).crop(self.data)
         data[...] = buffer
 
-    def read(self, window: Union[Rect, RectAbs] = None, output_size: Union[Size, SizeAbs] = None) -> Buffer:
+    def read(self, window: RectAbs = None, output_size: SizeAbs = None) -> Buffer:
         data = self.update_window(window).crop(self.data)
         if output_size:
             if isinstance(output_size, Size):

@@ -1,11 +1,10 @@
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Union
 
 import numpy as np
 
 from piafedit.model.geometry.point import PointAbs
-from piafedit.model.geometry.rect import Rect, RectAbs, RawRect
+from piafedit.model.geometry.rect import RectAbs, RawRect
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.libs.operator import Buffer
 from piafedit.model.source.data_source import DataSource
@@ -33,7 +32,7 @@ class TileSource(DataSource):
     def infos(self):
         return self.source.infos()
 
-    def read(self, window: Union[Rect, RectAbs] = None, output_size: SizeAbs = None) -> Buffer:
+    def read(self, window: RectAbs = None, output_size: SizeAbs = None) -> Buffer:
         window = self.update_window(window)
         tiles = self._tiles(window)
         lines = []
@@ -51,9 +50,9 @@ class TileSource(DataSource):
                 b = tile.crop(buffer)
                 if b.shape == tile_buffer.shape:
                     b[...] = tile_buffer
-        return buffer[:window.size.height,:window.size.width,...]
+        return buffer[:window.size.height, :window.size.width, ...]
 
-    def write(self, buffer: Buffer, window: Union[Rect, RectAbs] = None):
+    def write(self, buffer: Buffer, window: RectAbs = None):
         self.source.write(buffer, window)
 
     def _tiles(self, rect: RectAbs):

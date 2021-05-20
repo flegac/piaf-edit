@@ -32,7 +32,6 @@ class RoiKeyboardHandler(KeyboardHandler):
             Qt.Key_End: overview.setup_action(end),
         }
         handlers.get(ev.key(), lambda: None)()
-        self.update_status(ev)
 
     def move_tile_action(self, dx: int, dy: int):
         overview = self.overview
@@ -52,6 +51,3 @@ class RoiKeyboardHandler(KeyboardHandler):
             overview.update_roi()
 
         return action
-
-    def update_status(self, ev):
-        self.overview.update_status(None)

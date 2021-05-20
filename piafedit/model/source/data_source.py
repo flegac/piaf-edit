@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Union
 
 from piafedit.model.geometry.point import PointAbs
-from piafedit.model.geometry.rect import Rect, RectAbs
+from piafedit.model.geometry.rect import RectAbs
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.libs.operator import Operator, Buffer
 from piafedit.model.source.source_infos import SourceInfos
@@ -18,18 +17,16 @@ class DataSource(ABC):
         ...
 
     @abstractmethod
-    def read(self, window: Union[Rect, RectAbs] = None, output_size: SizeAbs = None) -> Buffer:
+    def read(self, window: RectAbs = None, output_size: SizeAbs = None) -> Buffer:
         ...
 
     @abstractmethod
-    def write(self, buffer: Buffer, window: Union[Rect, RectAbs] = None):
+    def write(self, buffer: Buffer, window: RectAbs = None):
         ...
 
-    def update_window(self, window: Union[Rect, RectAbs] = None):
+    def update_window(self, window: RectAbs = None):
         if window is None:
             window = RectAbs(pos=PointAbs(0, 0), size=self.infos().size)
-        if isinstance(window, Rect):
-            window = window.abs(self.infos().size)
         return window
 
     def overview_size(self, size: int) -> SizeAbs:

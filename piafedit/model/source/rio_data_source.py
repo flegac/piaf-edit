@@ -1,7 +1,6 @@
 import logging
 import warnings
 from pathlib import Path
-from typing import Union
 
 import numpy as np
 import rasterio
@@ -83,7 +82,7 @@ class RIODataSource(DataSource):
                 )
         return self._infos
 
-    def write(self, buffer: Buffer, window: Union[Rect, RectAbs] = None):
+    def write(self, buffer: Buffer, window: RectAbs = None):
         window = None
         infos = self.infos()
         if window:
@@ -99,7 +98,7 @@ class RIODataSource(DataSource):
                            dtype=buffer.dtype) as dst:
             dst.write(buffer, window=window, indexes=1)
 
-    def read(self, window: Union[Rect, RectAbs] = None, output_size: SizeAbs = None) -> Buffer:
+    def read(self, window: RectAbs = None, output_size: SizeAbs = None) -> Buffer:
         log.debug(f'reading: {window} -> {output_size}')
         if window:
             if isinstance(window, Rect):

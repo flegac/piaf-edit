@@ -1,5 +1,4 @@
 from copy import deepcopy
-from typing import Union
 
 import cv2
 
@@ -26,7 +25,7 @@ class RoiDataSource(DataSource):
             shape=(b, h, w),
         )
 
-    def read(self, window: Union[Rect, RectAbs] = None, output_size: SizeAbs = None) -> Buffer:
+    def read(self, window: RectAbs = None, output_size: SizeAbs = None) -> Buffer:
         source_size = self.source.infos().size
         roi = deepcopy(self.roi).limit(source_size)
 
@@ -39,7 +38,7 @@ class RoiDataSource(DataSource):
             window = roi
         return self.source.read(window, output_size)
 
-    def write(self, buffer: Buffer, window: Union[Rect, RectAbs] = None):
+    def write(self, buffer: Buffer, window: RectAbs = None):
         source_size = self.source.infos().size
         roi = deepcopy(self.roi).limit(source_size)
 
