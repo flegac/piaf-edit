@@ -34,6 +34,5 @@ if __name__ == '__main__':
 
     pg.setConfigOptions(imageAxisOrder='row-major')
     app = QApplication([])
-
     P.main_window = MainUi(model)
     sys.exit(app.exec_())

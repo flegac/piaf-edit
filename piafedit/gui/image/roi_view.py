@@ -32,8 +32,17 @@ class RoiView(pg.ImageView):
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.ui.roiBtn.hide()
         self.ui.menuBtn.hide()
+        self.ui.histogram.hide()
+        self.ui.graphicsView.setBackground(None)
+
         self.op: Optional[Operator] = None
         ImageDragHandler().patch(self)
+
+    def switch_histogram(self):
+        if self.ui.histogram.isHidden():
+            self.ui.histogram.show()
+        else:
+            self.ui.histogram.hide()
 
     def closeEvent(self, ev: QCloseEvent):
         self.overview.views.remove(self)

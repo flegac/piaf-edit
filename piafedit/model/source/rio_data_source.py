@@ -99,7 +99,7 @@ class RIODataSource(DataSource):
             dst.write(buffer, window=window, indexes=1)
 
     def read(self, window: RectAbs = None, output_size: SizeAbs = None) -> Buffer:
-        log.debug(f'reading: {window} -> {output_size}')
+        # log.debug(f'reading: {window} -> {output_size}')
         if window:
             if isinstance(window, Rect):
                 window = window.abs(self.infos().size)

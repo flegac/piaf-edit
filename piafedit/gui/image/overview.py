@@ -1,4 +1,5 @@
 import time
+from typing import List
 
 import pyqtgraph as pg
 from PyQt5.QtGui import QCloseEvent
@@ -16,7 +17,7 @@ from qtwidgets.dock_widget import DockWidget
 class Overview(pg.ImageView):
     def __init__(self, source: DataSource):
         super().__init__()
-        self.views = []
+        self.views: List[DockWidget] = []
 
         self.roi_update = Subject()
 
@@ -52,6 +53,10 @@ class Overview(pg.ImageView):
         dock.setWidget(view)
         self.views.append(dock)
         return dock
+
+    def switch_histogram(self):
+        for view in self.views:
+            view.widget().switch_histogram()
 
     # @property
     # def rect(self):
