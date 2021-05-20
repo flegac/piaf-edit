@@ -1,3 +1,5 @@
 # piaf-edit
-Personal Insight Analyser Fabulous Editor ... Why not ?
 
+Piaf Is Another Fabulous Editor ...
+
+![](docs/img/piaf.jpg)
