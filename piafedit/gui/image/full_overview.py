@@ -7,3 +7,8 @@ class FullOverview(QWidget):
     def __init__(self):
         super().__init__()
         load_ui('overview', self)
+
+    def closeEvent(self, ev) -> None:
+        self.image.close()
+        self.infos.close()
+        super().closeEvent(ev)
