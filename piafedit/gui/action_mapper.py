@@ -62,7 +62,7 @@ class ActionMapper:
         self.win.actionRestart.triggered.connect(P.restart)
 
     def switch_histogram(self):
-        self.overview.switch_histogram()
+        self.overview.image.switch_histogram()
 
     def save_gui(self):
         with LAYOUT_BACKUP__PATH.open('wb') as _:

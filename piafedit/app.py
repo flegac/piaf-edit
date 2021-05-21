@@ -29,10 +29,13 @@ def gen_big_image():
     return dest
 
 
-if __name__ == '__main__':
+def main():
     model = WorkModel(resources_path())
-
     pg.setConfigOptions(imageAxisOrder='row-major')
     app = QApplication([])
     P.main_window = MainUi(model)
     sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()

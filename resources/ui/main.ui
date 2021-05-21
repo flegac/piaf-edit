@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Piaf</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="enabled">
@@ -47,7 +47,7 @@
      <x>0</x>
      <y>0</y>
      <width>1107</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -251,21 +251,21 @@
    <addaction name="actionWorkers"/>
    <addaction name="actionImages"/>
   </widget>
-  <widget class="DockWidget" name="infosDock">
-   <property name="windowTitle">
-    <string>Infos</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>1</number>
-   </attribute>
-   <widget class="InfoPanel" name="infos"/>
-  </widget>
   <widget class="DockWidget" name="imageDock">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>64</width>
+     <height>64</height>
+    </size>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="allowedAreas">
     <set>Qt::AllDockWidgetAreas</set>
@@ -430,12 +430,6 @@
    <class>SourceBrowser</class>
    <extends>QWidget</extends>
    <header>piafedit.gui.browser.source_browser</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>InfoPanel</class>
-   <extends>QWidget</extends>
-   <header>piafedit.gui.image.info_panel</header>
    <container>1</container>
   </customwidget>
   <customwidget>

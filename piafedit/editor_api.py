@@ -8,6 +8,7 @@ from piafedit.gui.utils import select_files
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.raw_data_source import RawDataSource
 from piafedit.model.source.rio_data_source import RIODataSource
+from piafedit.model.work_model import WorkModel
 
 
 class P:
@@ -15,9 +16,13 @@ class P:
     main_window: QMainWindow = None
 
     @staticmethod
+    def model() -> WorkModel:
+        return P.main_window.model
+
+    @staticmethod
     def restart():
         from piafedit.gui.main_ui import MainUi
-        model = P.main_window.model
+        model = P.model()
         P.main_window.close()
         P.main_window = MainUi(model)
 
@@ -41,7 +46,8 @@ class P:
     @staticmethod
     def open_source(source: DataSource):
         P.log.debug(f'open source: {source}')
-        P.main_window.images.add_item(source)
+        model = P.model()
+        model.sources += [source]
 
     @staticmethod
     def show_source(source: DataSource):

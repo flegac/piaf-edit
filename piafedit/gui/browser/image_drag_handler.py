@@ -1,7 +1,10 @@
+import logging
 from pathlib import Path
 
 from piafedit.gui.common.handler.drag_handler import DragHandler
 from piafedit.model.source.rio_data_source import RIODataSource
+
+log = logging.getLogger()
 
 
 class ImageDragHandler(DragHandler):
@@ -22,8 +25,11 @@ class ImageDragHandler(DragHandler):
                 for file in path.iterdir():
                     open_file(file)
             else:
-                source = RIODataSource(path)
-                P.open_source(source)
+                try:
+                    source = RIODataSource(path)
+                    P.open_source(source)
+                except:
+                    log.warning(f'Could not open {path}')
 
         source = None
         for url in e.mimeData().urls():

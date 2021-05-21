@@ -27,9 +27,10 @@ def dropEvent(e):
     print('handle', e.mimeData())
 
 
-def default_handler(ev):
+def default_handler(self, ev):
     from piafedit.editor_api import P
-    P.log.debug(ev)
+    P.log.debug(str(ev))
+
 
 @dataclass
 class DragHandler:

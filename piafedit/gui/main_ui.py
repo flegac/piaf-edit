@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget
 from piafedit.editor_api import P
 from piafedit.gui.action_mapper import ActionMapper
 from piafedit.gui.browser.source_browser import SourceBrowser
+from piafedit.gui.image.full_overview import FullOverview
 from piafedit.gui.image.overview import Overview
 from piafedit.model.libs.operator import Operator
 from piafedit.model.source.data_source import DataSource
@@ -88,13 +89,16 @@ class MainUi(QMainWindow):
         placeholder.setLayout(layout)
 
     def show_view(self, op: Operator):
-        view = self.current_view.get_view(op)
+        view = self.current_view.image.get_view(op)
         self.tabifyDockWidget(self.imageDock, view)
         view.show()
         view.raise_()
 
     def set_source(self, source: DataSource):
-        overview = Overview(source)
+        overview = FullOverview()
+        overview.image.set_source(source)
+        overview.infos.update_overview(overview.image)
+
         if self.current_view:
             self.overview.layout().replaceWidget(self.current_view, overview)
             self.current_view.close()
@@ -102,7 +106,6 @@ class MainUi(QMainWindow):
             self.setup(self.overview, overview)
 
         self.current_view = overview
-        self.infos.update_overview(overview)
 
         self.show_view(None)
 

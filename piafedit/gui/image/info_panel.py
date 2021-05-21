@@ -4,8 +4,8 @@ from piafedit.gui.image.overview import Overview
 
 
 class InfoPanel(QWidget):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.view_infos = QLabel()
         self.overview_infos = QLabel()
         self.area_infos = QLabel()
@@ -18,6 +18,8 @@ class InfoPanel(QWidget):
 
     def update_overview(self, overview: Overview):
         source = overview.source
+        if source is None:
+            return
         infos = source.infos()
         h, w, b = infos.shape
         dtype = infos.dtype

@@ -4,3 +4,9 @@ delivery:
 
 qt_designer:
 	pyqt5-tools designer
+
+install:
+	pip install .
+
+uninstall:
+	pip uninstall -y piaf-edit

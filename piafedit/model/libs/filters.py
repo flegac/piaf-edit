@@ -1,5 +1,3 @@
-import cv2
-import imutils
 import numpy as np
 from skimage import exposure
 
@@ -7,6 +5,8 @@ from piafedit.model.libs.operator import Buffer
 
 
 def edge_detection(buffer: Buffer) -> Buffer:
+    import cv2
+
     # data = cv2.cvtColor(data, cv2.COLOR_BGR2GRAY)
     # data = cv2.bilateralFilter(data, 11, 17, 17)
     edged = cv2.Canny(buffer, 0, 255)
@@ -14,6 +14,9 @@ def edge_detection(buffer: Buffer) -> Buffer:
 
 
 def show_contours(buffer: Buffer) -> Buffer:
+    import cv2
+    import imutils
+
     buffer = buffer.copy()
     # gray = cv2.cvtColor(data, cv2.COLOR_BGR2GRAY)
     # gray = cv2.bilateralFilter(gray, 11, 17, 17)
@@ -37,11 +40,15 @@ def normalize(buffer: Buffer) -> Buffer:
 
 
 def erode(buffer: Buffer) -> Buffer:
+    import cv2
+
     kernel = np.ones((5, 5), np.uint8)
     return cv2.erode(buffer, kernel, iterations=1)
 
 
 def dilate(buffer: Buffer) -> Buffer:
+    import cv2
+
     kernel = np.ones((5, 5), np.uint8)
     return cv2.dilate(buffer, kernel, iterations=1)
 

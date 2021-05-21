@@ -1,8 +1,6 @@
 import logging
 import uuid
 
-import cv2
-
 from piafedit.model.geometry.rect import RectAbs
 from piafedit.model.geometry.size import SizeAbs, Size
 from piafedit.model.libs.operator import Buffer
@@ -31,6 +29,8 @@ class RawDataSource(DataSource):
         data[...] = buffer
 
     def read(self, window: RectAbs = None, output_size: SizeAbs = None) -> Buffer:
+        import cv2
+
         data = self.update_window(window).crop(self.data)
         if output_size:
             if isinstance(output_size, Size):

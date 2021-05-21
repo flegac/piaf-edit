@@ -1,8 +1,13 @@
 numpy
 rasterio
 tqdm
+rx
 qt-widgets
+pyqtgraph>=0.12.1
 pyqt5
 pyqt5-tools
-pyqtgraph>=0.12.1
-RxPy
+qimage2ndarray
+
+scikit-image
+opencv-python
+imutils

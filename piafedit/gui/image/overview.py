@@ -1,5 +1,5 @@
 import time
-from typing import List
+from typing import List, Optional
 
 import pyqtgraph as pg
 from PyQt5.QtGui import QCloseEvent
@@ -7,7 +7,7 @@ from rx.subject import Subject
 
 from piafedit.gui.utils import setup_roi
 from piafedit.model.geometry.point import PointAbs
-from piafedit.model.geometry.rect import Rect
+from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import SizeAbs, Size
 from piafedit.model.libs.operator import Operator
 from piafedit.model.source.data_source import DataSource
@@ -15,15 +15,14 @@ from qtwidgets.dock_widget import DockWidget
 
 
 class Overview(pg.ImageView):
-    def __init__(self, source: DataSource):
-        super().__init__()
-        self.views: List[DockWidget] = []
-
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.histogram_status = False
         self.roi_update = Subject()
+        self.source: Optional[DataSource] = None
+        self.rect: RectAbs = None
 
-        self.source = source
-        self.rect = Rect().abs(self.source.infos().size)
-
+        self.views: List[DockWidget] = []
         self.the_roi = pg.RectROI(PointAbs(0, 0).raw(), SizeAbs(0, 0).raw())
         self.the_roi.sigRegionChanged.connect(self.update_rect)
 
@@ -33,6 +32,9 @@ class Overview(pg.ImageView):
         self.addItem(self.the_roi)
         self.size = 256
 
+    def set_source(self, source: DataSource):
+        self.source = source
+        self.rect = Rect().abs(self.source.infos().size)
         buffer = self.source.overview(size=self.size)
         self.setImage(buffer)
         self.view.autoRange(padding=0.01)
@@ -45,22 +47,26 @@ class Overview(pg.ImageView):
 
     def get_view(self, op: Operator = None):
         from piafedit.gui.image.roi_view import RoiView
-        name = self.source.infos().name
+        name = 'undefined'
+        if self.source:
+            name = self.source.infos().name
         op_name = '' if op is None else op.__name__
         dock = DockWidget(f'{name} {op_name}')
         view = RoiView(self)
+        view.set_histogram(self.histogram_status)
         view.set_operator(op)
         dock.setWidget(view)
         self.views.append(dock)
         return dock
 
-    def switch_histogram(self):
+    def set_histogram(self, status: bool):
+        self.histogram_status = status
         for view in self.views:
-            view.widget().switch_histogram()
+            view.widget().set_histogram(status)
 
-    # @property
-    # def rect(self):
-    #     return self.source.roi
+    def switch_histogram(self):
+        self.histogram_status = not self.histogram_status
+        self.set_histogram(self.histogram_status)
 
     def get_buffer(self, size: SizeAbs):
         source = self.source
@@ -112,8 +118,9 @@ class Overview(pg.ImageView):
         return action
 
     def update_rect(self):
-        self.synchronize_rect()
-        self.request_update()
+        if self.source:
+            self.synchronize_rect()
+            self.request_update()
 
     def update_roi(self):
         self.synchronize_roi()
