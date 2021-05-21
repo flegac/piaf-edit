@@ -37,6 +37,13 @@ class RoiView(pg.ImageView):
         self.op: Optional[Operator] = None
         ImageDragHandler().patch(self)
 
+    def view_name(self):
+        name = 'undefined'
+        if self.overview.source is not None:
+            name = self.overview.source.infos().name
+        op_name = '' if self.op is None else self.op.__name__
+        return f'{name} {op_name}'
+
     def set_histogram(self, status: bool):
         if status:
             self.ui.histogram.show()

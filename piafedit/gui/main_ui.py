@@ -2,10 +2,7 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QCloseEvent
-from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QTabWidget
 
 from piafedit.editor_api import P
 from piafedit.gui.action_mapper import ActionMapper
@@ -17,8 +14,7 @@ from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.rio_data_source import RIODataSource
 from piafedit.model.work_model import WorkModel
 from piafedit.ui_utils import load_ui
-from qtwidgets.browser.browser_config import BrowserConfig, Item, Page
-from qtwidgets.console.console_widget import ConsoleWidget
+from qtwidgets.browser.browser_config import BrowserConfig, Page
 from qtwidgets.worker.worker_manager_widget import WorkerManagerWidget
 
 
@@ -28,25 +24,15 @@ class MainUi(QMainWindow):
     def __init__(self, model: WorkModel):
         super().__init__()
         load_ui('main', self)
-        self.setCentralWidget(None)
+        # self.setCentralWidget(None)
         self.setDockOptions(QMainWindow.GroupedDragging | QMainWindow.AllowTabbedDocks | QMainWindow.AllowNestedDocks)
-        self.setTabPosition(Qt.AllDockWidgetAreas, QtWidgets.QTabWidget.North)
-
-        self.show()
 
         self.model = model
         self.current_view: Overview = None
         self.setup_file_browser()
 
-        console: ConsoleWidget = self.console
-        console.set_loggers([logging.getLogger()])
-
         processes: WorkerManagerWidget = self.worker
         processes.set_model(self.model.workers)
-        processes.set_config(BrowserConfig(
-            item=Item(width=250),
-            page=Page(size=2)
-        ))
 
         # browser
         images: SourceBrowser = self.images
@@ -56,23 +42,19 @@ class MainUi(QMainWindow):
         ))
 
         self.actions = ActionMapper(self)
-
-        self.managers = []
-
         if self.current_view:
             self.set_source(self.current_view.source)
 
-    def setup_docks(self):
-        def dock_on_close(ev: QCloseEvent):
-            ev.ignore()
-            self.consoleDock.hide()
+        tabs: QTabWidget = self.image
 
-        self.workerDock.closeEvent = dock_on_close
-        self.consoleDock.closeEvent = dock_on_close
-        self.treeviewDock.closeEvent = dock_on_close
-        self.overviewDock.closeEvent = dock_on_close
-        self.imagesDock.closeEvent = dock_on_close
-        self.overviewDock.closeEvent = dock_on_close
+        def close_tab(index):
+            print(index)
+            tabs.removeTab(index)
+
+        tabs.tabCloseRequested.connect(close_tab)
+
+        self.actions.load_gui() or self.actions.restore_default_gui()
+        self.show()
 
     def setup_file_browser(self):
         model = self.model.tree_model
@@ -90,9 +72,13 @@ class MainUi(QMainWindow):
 
     def show_view(self, op: Operator):
         view = self.current_view.image.get_view(op)
-        self.tabifyDockWidget(self.imageDock, view)
-        view.show()
-        view.raise_()
+        tabs: QTabWidget = self.image
+        index = tabs.addTab(view, view.view_name())
+        tabs.setCurrentIndex(index)
+
+        # self.tabifyDockWidget(self.image, view)
+        # view.show()
+        # view.raise_()
 
     def set_source(self, source: DataSource):
         overview = FullOverview()

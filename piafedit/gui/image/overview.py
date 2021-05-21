@@ -47,17 +47,15 @@ class Overview(pg.ImageView):
 
     def get_view(self, op: Operator = None):
         from piafedit.gui.image.roi_view import RoiView
-        name = 'undefined'
-        if self.source:
-            name = self.source.infos().name
-        op_name = '' if op is None else op.__name__
-        dock = DockWidget(f'{name} {op_name}')
         view = RoiView(self)
         view.set_histogram(self.histogram_status)
         view.set_operator(op)
-        dock.setWidget(view)
-        self.views.append(dock)
-        return dock
+
+        # dock = DockWidget(view.view_name())
+        # dock.setWidget(view)
+        # view = dock
+        self.views.append(view)
+        return view
 
     def set_histogram(self, status: bool):
         self.histogram_status = status

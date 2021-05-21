@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1107</width>
-    <height>752</height>
+    <width>1071</width>
+    <height>810</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,15 +15,15 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_3">
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -39,6 +39,31 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
+    <item>
+     <widget class="QTabWidget" name="image">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
+      <property name="tabBarAutoHide">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -46,8 +71,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1107</width>
-     <height>22</height>
+     <width>1071</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -118,11 +143,9 @@
     <string>Worker</string>
    </property>
    <attribute name="dockWidgetArea">
-    <number>1</number>
+    <number>8</number>
    </attribute>
-   <widget class="WorkerManagerWidget" name="worker">
-    <layout class="QVBoxLayout" name="verticalLayout"/>
-   </widget>
+   <widget class="WorkerManagerWidget" name="worker"/>
   </widget>
   <widget class="DockWidget" name="consoleDock">
    <property name="windowTitle">
@@ -138,7 +161,7 @@
     <string>TreeView</string>
    </property>
    <attribute name="dockWidgetArea">
-    <number>1</number>
+    <number>2</number>
    </attribute>
    <widget class="QWidget" name="treeViewWidget">
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -164,6 +187,9 @@
    </widget>
   </widget>
   <widget class="DockWidget" name="overviewDock">
+   <property name="floating">
+    <bool>false</bool>
+   </property>
    <property name="features">
     <set>QDockWidget::AllDockWidgetFeatures</set>
    </property>
@@ -250,40 +276,6 @@
    <addaction name="actionTreeview"/>
    <addaction name="actionWorkers"/>
    <addaction name="actionImages"/>
-  </widget>
-  <widget class="DockWidget" name="imageDock">
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>64</width>
-     <height>64</height>
-    </size>
-   </property>
-   <property name="features">
-    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::AllDockWidgetAreas</set>
-   </property>
-   <property name="windowTitle">
-    <string>ImageView</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>4</number>
-   </attribute>
-   <widget class="QWidget" name="image">
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-   </widget>
   </widget>
   <action name="actionOpen">
    <property name="text">

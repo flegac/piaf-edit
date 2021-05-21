@@ -2,6 +2,8 @@
 
 ## BUSINESS FEATURES
 
+- allow to edit operator to apply on DataSource
+
 - display statistics: (min,max,avg) + (mean, std) + bands
 
 - allow to define a filter to apply to the zoomed region
@@ -13,17 +15,13 @@
   - view single band
 
 ## TECHNICAL FEATURES
-
-- refact docking system
-
-- reactive stream (RX) ?
 - Bigger images (QuadTree, Tiling)
 
 ## DONE
 
+- reactive stream (RX) ?
+- refacto docking system
 - auto-resizable grid of widgets
-  
 - display logs in interface
-
 - background tasks (Threads / Processes)
 - drag & drop
