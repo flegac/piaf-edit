@@ -2,6 +2,9 @@
 
 ## BUSINESS FEATURES
 
+- use jupyter Qt console
+  https://qtconsole.readthedocs.io/en/stable/index.html
+
 - allow to edit operator to apply on DataSource
 
 - display statistics: (min,max,avg) + (mean, std) + bands
