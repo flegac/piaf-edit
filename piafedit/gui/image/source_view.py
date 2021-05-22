@@ -6,9 +6,10 @@ import pyqtgraph as pg
 from PyQt5.QtWidgets import QSizePolicy
 
 from piafedit.gui.image.source_view_drag_handler import SourceViewDragHandler
-from piafedit.model.geometry.size import SizeAbs, Size
+from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.libs.operator import Operator
 from piafedit.model.source.data_source import DataSource
+from piafedit.model.source.window import Window
 
 log = logging.getLogger(__name__)
 
@@ -45,14 +46,10 @@ class SourceView(pg.ImageView):
     def update_view(self, size: SizeAbs = None):
         if size is None or self.width() < size.width:
             size = SizeAbs(self.width(), self.height())
+        window = Window(
+            window=self.overview.rect.limit(self.source.infos().size)
+        )
+        window.set_max_size(max(size.width, size.height))
 
-        source = self.source
-        window = self.overview.rect.limit(source.infos().size)
-        aspect = window.size.aspect_ratio
-
-        s = max(size.width, size.height)
-        abs_size = SizeAbs(s, s)
-        size = Size.from_aspect(aspect).abs(abs_size)
-
-        buffer = source.read(window, output_size=size)
+        buffer = self.source.read(window)
         self.set_buffer(buffer)

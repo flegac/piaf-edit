@@ -4,15 +4,16 @@ from pathlib import Path
 
 import numpy as np
 import rasterio
+import rasterio.windows
 from rasterio.enums import Resampling
 from rasterio.profiles import DefaultGTiffProfile
-from rasterio.windows import Window
 
 from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.libs.operator import Buffer
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.source_infos import SourceInfos
+from piafedit.model.source.window import Window
 
 warnings.filterwarnings("ignore", category=rasterio.errors.NotGeoreferencedWarning)
 
@@ -36,6 +37,41 @@ class RIODataSource(DataSource):
                     shape=(h, w, b),
                     dtype=src.dtypes[0]
                 )
+
+    def infos(self) -> SourceInfos:
+        if not self._infos:
+            with rasterio.open(self.path) as src:
+                w = src.width
+                h = src.height
+                b = src.count
+                self._infos = SourceInfos(
+                    name=self.path.stem,
+                    shape=(h, w, b),
+                    dtype=src.dtypes[0]
+                )
+        return self._infos
+
+    def read(self, window: Window = None) -> Buffer:
+        with rasterio.open(self.path) as src:
+            # resampling https://rasterio.readthedocs.io/en/latest/topics/resampling.html
+            target = None if window.size is None else (src.count, window.size.height, window.size.width)
+            data = src.read(
+                window=rio_window(window),
+                out_shape=target,
+                resampling=self.resampling
+            )
+            data = np.moveaxis(data, 0, 2)
+            return data
+
+    def write(self, buffer: Buffer, window: Window = None):
+        infos = self.infos()
+        width, height = infos.size.raw()
+        shape = buffer.shape
+        bands = 1 if len(shape) <= 2 else shape[2]
+        with rasterio.open(self.path, 'w', driver='GTiff',
+                           width=width, height=height, count=bands,
+                           dtype=buffer.dtype) as dst:
+            dst.write(buffer, window=rio_window(window), indexes=1)
 
     def create(self, buffer: Buffer):
         h, w = buffer.shape[:2]
@@ -69,57 +105,8 @@ class RIODataSource(DataSource):
                     dst.update_tags(ns='rio_overview', resampling='average')
                     break
 
-    def infos(self) -> SourceInfos:
-        if not self._infos:
-            with rasterio.open(self.path) as src:
-                w = src.width
-                h = src.height
-                b = src.count
-                self._infos = SourceInfos(
-                    name=self.path.stem,
-                    shape=(h, w, b),
-                    dtype=src.dtypes[0]
-                )
-        return self._infos
 
-    def write(self, buffer: Buffer, window: RectAbs = None):
-        window = None
-        infos = self.infos()
-        if window:
-            if isinstance(window, Rect):
-                window = window.abs(infos.size)
-            window = window_from_rect(window)
-
-        width, height = infos.size.raw()
-        shape = buffer.shape
-        bands = 1 if len(shape) <= 2 else shape[2]
-        with rasterio.open(self.path, 'w', driver='GTiff',
-                           width=width, height=height, count=bands,
-                           dtype=buffer.dtype) as dst:
-            dst.write(buffer, window=window, indexes=1)
-
-    def read(self, window: RectAbs = None, output_size: SizeAbs = None) -> Buffer:
-        # log.debug(f'reading: {window} -> {output_size}')
-        if window:
-            if isinstance(window, Rect):
-                window = window.abs(self.infos().size)
-            window = window_from_rect(window)
-
-        with rasterio.open(self.path) as src:
-            target = None
-            # resampling https://rasterio.readthedocs.io/en/latest/topics/resampling.html
-            if output_size:
-                target = (src.count, output_size.height, output_size.width)
-            data = src.read(
-                window=window,
-                out_shape=target,
-                resampling=self.resampling
-            )
-            data = np.moveaxis(data, 0, 2)
-            return data
-
-
-def window_from_rect(area: RectAbs = None):
-    if not area:
+def rio_window(window: Window):
+    if window is None or window.window is None:
         return None
-    return Window(*area.pos.raw(), *area.size.raw())
+    return rasterio.windows.Window(*window.window.pos.raw(), *window.window.size.raw())

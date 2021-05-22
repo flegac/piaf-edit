@@ -8,6 +8,7 @@ from piafedit.editor_api import P
 from piafedit.gui.main_ui import MainUi
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.source.rio_data_source import RIODataSource
+from piafedit.model.source.window import Window
 from piafedit.model.work_model import WorkModel
 from piafedit.ui_utils import resources_path
 
@@ -24,7 +25,7 @@ def gen_big_image():
     size = SizeAbs(IMAGE_SIZE, IMAGE_SIZE / source.infos().aspect)
     log.debug(f'resize from {source.infos().size} to {size}')
     if not dest.path.exists():
-        buffer = source.read(output_size=size)
+        buffer = source.read(Window.from_size(size))
         dest.create(buffer)
     return dest
 

@@ -8,7 +8,7 @@ from piafedit.model.geometry.size import SizeAbs
 class SourceInfos:
     name: str
     dtype: str
-    shape: Tuple[int, int, int]
+    shape: Tuple[int, ...]
 
     @property
     def size(self):

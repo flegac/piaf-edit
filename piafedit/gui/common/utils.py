@@ -34,7 +34,7 @@ def image_button(buffer: Buffer):
 
 
 def source_button(source: DataSource, size: int = 256):
-    overview = source.overview(size=size)
+    overview = source.overview(max_size=size)
     button = image_button(overview)
 
     def handler():

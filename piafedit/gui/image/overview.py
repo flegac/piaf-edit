@@ -34,7 +34,7 @@ class Overview(SourceView):
     def set_source(self, source: DataSource):
         self.source = source
         self.rect = Rect().abs(self.source.infos().size)
-        buffer = self.source.overview(size=self.size)
+        buffer = self.source.overview(max_size=self.size)
         self.setImage(buffer)
         self.view.autoRange(padding=0.01)
         self.update_roi()

@@ -21,7 +21,7 @@ class SourceBrowser(BrowserWidget):
         ImageDragHandler().patch(self)
 
     def builder(self, source: DataSource):
-        buffer = source.overview(size=256)
+        buffer = source.overview(max_size=256)
         button = ImageButton(buffer, name=source.infos().name)
         button.clicked.connect(lambda: P.show_source(source))
         return button

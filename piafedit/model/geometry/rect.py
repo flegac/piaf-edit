@@ -25,6 +25,10 @@ class RectAbs:
         return RectAbs(Point.from_raw(data[0]), Size.from_raw(data[1]))
 
     @property
+    def aspect_ratio(self):
+        return self.size.aspect_ratio
+
+    @property
     def center(self):
         return PointAbs(
             int(self.pos.x + self.size.width / 2),
