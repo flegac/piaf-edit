@@ -19,8 +19,8 @@ FULL_REDRAW_LATENCY = .2 + 2 * MEDIUM_REDRAW_LATENCY
 
 
 class RoiView(SourceView):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.overview: Optional[Overview] = None
         self.last_update = 0
 

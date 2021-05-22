@@ -1,7 +1,8 @@
 from pathlib import Path
 from typing import Any
 
-from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QTabWidget
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QTabWidget, QSplitter
 
 from piafedit.editor_api import P
 from piafedit.gui.action_mapper import ActionMapper
@@ -47,13 +48,52 @@ class MainUi(QMainWindow):
         tabs: QTabWidget = self.image
 
         def close_tab(index):
-            print(index)
             tabs.removeTab(index)
 
         tabs.tabCloseRequested.connect(close_tab)
 
         self.actions.load_gui() or self.actions.restore_default_gui()
         self.show()
+
+    def change_layout(self, layout: str):
+        if layout is 'tabs':
+            self.tabs_layout()
+        elif layout is 'mosaic':
+            self.mosaic_layout()
+
+    def mosaic_layout(self):
+
+        old_size = self.centralWidget().size()
+
+        widget = QSplitter()
+        widget.setOrientation(Qt.Horizontal)
+
+        overview: FullOverview = self.current_view
+        for view in overview.image.views.views:
+            widget.addWidget(view)
+            view.show()
+
+        widget.show()
+        widget.resize(old_size)
+        self.setCentralWidget(widget)
+
+    def tabs_layout(self):
+        old_size = self.centralWidget().size()
+        widget = QTabWidget()
+        widget.resize(old_size)
+
+        def close_tab(index):
+            widget.removeTab(index)
+
+        widget.tabCloseRequested.connect(close_tab)
+
+        index = None
+        overview: FullOverview = self.current_view
+        for view in overview.image.views.views:
+            index = widget.addTab(view, view.view_name())
+        widget.setCurrentIndex(index)
+
+        self.setCentralWidget(widget)
 
     def setup_file_browser(self):
         model = self.model.tree_model
@@ -69,15 +109,9 @@ class MainUi(QMainWindow):
         layout.addWidget(widget)
         placeholder.setLayout(layout)
 
-    def show_view(self, op: Operator):
+    def show_view(self, op: Operator = None):
         view = self.current_view.image.create_view(op)
-        tabs: QTabWidget = self.image
-        index = tabs.addTab(view, view.view_name())
-        tabs.setCurrentIndex(index)
-
-        # self.tabifyDockWidget(self.image, view)
-        # view.show()
-        # view.raise_()
+        self.change_layout(self.current_view.current_layout)
 
     def set_source(self, source: DataSource):
         overview = FullOverview()

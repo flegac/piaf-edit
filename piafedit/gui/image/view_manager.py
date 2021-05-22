@@ -31,4 +31,4 @@ class ViewManager:
     def set_histogram(self, status: bool):
         self.histogram_status = status
         for view in self.views:
-            view.widget().set_histogram(status)
+            view.set_histogram(status)
