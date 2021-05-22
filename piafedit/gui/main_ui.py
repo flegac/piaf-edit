@@ -1,4 +1,3 @@
-import logging
 from pathlib import Path
 from typing import Any
 
@@ -71,7 +70,7 @@ class MainUi(QMainWindow):
         placeholder.setLayout(layout)
 
     def show_view(self, op: Operator):
-        view = self.current_view.image.get_view(op)
+        view = self.current_view.image.create_view(op)
         tabs: QTabWidget = self.image
         index = tabs.addTab(view, view.view_name())
         tabs.setCurrentIndex(index)
@@ -100,15 +99,9 @@ class MainUi(QMainWindow):
             Path(self.model.tree_model.filePath(idx))
             for idx in ev.indexes()
         )
-        source = None
-        for path in paths:
-            try:
-                source = RIODataSource(path)
-                P.open_source(source)
-            except Exception as e:
-                logging.warning(f'Fail reading image: {path}')
-        if source:
-            self.set_source(source)
+        sources = list(map(RIODataSource, paths))
+        P.open_sources(sources)
+        self.set_source(P.model().sources[-1])
 
     def on_click(self, ev):
         print(f'clicked: {ev}')

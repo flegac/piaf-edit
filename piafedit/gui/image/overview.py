@@ -1,36 +1,35 @@
+import logging
 import time
-from typing import List, Optional
 
 import pyqtgraph as pg
 from PyQt5.QtGui import QCloseEvent
 from rx.subject import Subject
 
+from piafedit.gui.image.source_view import SourceView
+from piafedit.gui.image.view_manager import ViewManager
 from piafedit.gui.utils import setup_roi
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import Rect, RectAbs
-from piafedit.model.geometry.size import SizeAbs, Size
+from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.libs.operator import Operator
 from piafedit.model.source.data_source import DataSource
-from qtwidgets.dock_widget import DockWidget
+
+log = logging.getLogger(__name__)
 
 
-class Overview(pg.ImageView):
+class Overview(SourceView):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.histogram_status = False
-        self.roi_update = Subject()
-        self.source: Optional[DataSource] = None
-        self.rect: RectAbs = None
+        self.ui.histogram.hide()
+        self.size = 256
 
-        self.views: List[DockWidget] = []
+        self.roi_update = Subject()
+        self.rect: RectAbs = None
         self.the_roi = pg.RectROI(PointAbs(0, 0).raw(), SizeAbs(0, 0).raw())
         self.the_roi.sigRegionChanged.connect(self.update_rect)
-
-        self.ui.histogram.hide()
-        self.ui.roiBtn.hide()
-        self.ui.menuBtn.hide()
         self.addItem(self.the_roi)
-        self.size = 256
+
+        self.views = ViewManager()
 
     def set_source(self, source: DataSource):
         self.source = source
@@ -40,43 +39,14 @@ class Overview(pg.ImageView):
         self.view.autoRange(padding=0.01)
         self.update_roi()
 
-    def closeEvent(self, ev: QCloseEvent):
-        for view in self.views:
-            view.close()
-        super().closeEvent(ev)
-
-    def get_view(self, op: Operator = None):
-        from piafedit.gui.image.roi_view import RoiView
-        view = RoiView(self)
-        view.set_histogram(self.histogram_status)
-        view.set_operator(op)
-
-        # dock = DockWidget(view.view_name())
-        # dock.setWidget(view)
-        # view = dock
-        self.views.append(view)
+    def create_view(self, op: Operator = None):
+        view = self.views.create_view(op)
+        view.subscribe(self)
         return view
 
-    def set_histogram(self, status: bool):
-        self.histogram_status = status
-        for view in self.views:
-            view.widget().set_histogram(status)
-
-    def switch_histogram(self):
-        self.histogram_status = not self.histogram_status
-        self.set_histogram(self.histogram_status)
-
-    def get_buffer(self, size: SizeAbs):
-        source = self.source
-        window = self.rect.limit(source.infos().size)
-        aspect = window.size.aspect_ratio
-
-        s = max(size.width, size.height)
-        abs_size = SizeAbs(s, s)
-        size = Size.from_aspect(aspect).abs(abs_size)
-
-        buffer = source.read(window, output_size=size)
-        return buffer
+    def closeEvent(self, ev: QCloseEvent):
+        self.views.clear()
+        super().closeEvent(ev)
 
     def synchronize_rect(self):
         rx, ry = self.compute_roi_rect_ratio()
@@ -102,7 +72,7 @@ class Overview(pg.ImageView):
         return rx, ry
 
     def request_update(self):
-        event = time.time(), self
+        event = time.time()
         self.roi_update.on_next(event)
 
     def setup_action(self, pos: PointAbs):

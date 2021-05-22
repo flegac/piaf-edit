@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+from typing import Iterator
 
 import numpy as np
 from PyQt5.QtWidgets import QMainWindow
@@ -32,9 +33,9 @@ class P:
 
     @staticmethod
     def open_files():
-        files = select_files()
-        for file in files:
-            P.open_source(RIODataSource(Path(file)))
+        paths = select_files()
+        sources = map(RIODataSource, paths)
+        P.open_sources(sources)
 
     @staticmethod
     def new_source():
@@ -46,8 +47,12 @@ class P:
     @staticmethod
     def open_source(source: DataSource):
         P.log.debug(f'open source: {source}')
-        model = P.model()
-        model.sources += [source]
+        P.model().sources.append(source)
+
+    @staticmethod
+    def open_sources(sources: Iterator[DataSource]):
+        P.log.debug(f'open sources: {sources}')
+        P.model().sources.extend(sources)
 
     @staticmethod
     def show_source(source: DataSource):

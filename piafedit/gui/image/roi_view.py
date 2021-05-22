@@ -1,18 +1,14 @@
 import logging
 from typing import Optional
 
-import numpy as np
-import pyqtgraph as pg
 import rx.operators as ops
 from PyQt5.QtGui import QCloseEvent
-from PyQt5.QtWidgets import QSizePolicy
 
-from piafedit.gui.browser.image_drag_handler import ImageDragHandler
 from piafedit.gui.image.overview import Overview
 from piafedit.gui.image.roi_keyboard import RoiKeyboardHandler
 from piafedit.gui.image.roi_mouse import RoiMouseHandler
+from piafedit.gui.image.source_view import SourceView
 from piafedit.model.geometry.size import SizeAbs
-from piafedit.model.libs.operator import Operator
 
 log = logging.getLogger(__name__)
 
@@ -22,43 +18,31 @@ MEDIUM_REDRAW_LATENCY = 2 * SMALL_REDRAW_LATENCY
 FULL_REDRAW_LATENCY = .2 + 2 * MEDIUM_REDRAW_LATENCY
 
 
-class RoiView(pg.ImageView):
-    def __init__(self, overview: Overview):
+class RoiView(SourceView):
+    def __init__(self):
         super().__init__()
-        self.overview = overview
+        self.overview: Optional[Overview] = None
         self.last_update = 0
-        self.subscribe(overview)
-
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.ui.roiBtn.hide()
-        self.ui.menuBtn.hide()
-        self.ui.graphicsView.setBackground(None)
-
-        self.op: Optional[Operator] = None
-        ImageDragHandler().patch(self)
 
     def view_name(self):
         name = 'undefined'
-        if self.overview.source is not None:
-            name = self.overview.source.infos().name
+        if self.source is not None:
+            name = self.source.infos().name
         op_name = '' if self.op is None else self.op.__name__
         return f'{name} {op_name}'
 
-    def set_histogram(self, status: bool):
-        if status:
-            self.ui.histogram.show()
-        else:
-            self.ui.histogram.hide()
-
-    def switch_histogram(self):
-        self.set_histogram(self.ui.histogram.isHidden())
-
     def closeEvent(self, ev: QCloseEvent):
-        self.overview.views.remove(self)
+        self.detach()
         super().closeEvent(ev)
 
+    def detach(self):
+        if self.overview:
+            self.overview.views.detach(self)
+
     def subscribe(self, overview: Overview):
+        self.detach()
         self.overview = overview
+        self.source = overview.source
         overview.roi_update.pipe(
             ops.throttle_first(1. / MAX_REDRAW_PER_SEC),
         ).subscribe(on_next=self.view_updater(SizeAbs(64, 64)))
@@ -78,37 +62,16 @@ class RoiView(pg.ImageView):
         super().resizeEvent(ev)
         self.overview.request_update()
 
-    def size(self):
-        view = self.view
-        w = view.width()
-        h = view.height()
-        return SizeAbs(w, h)
-
-    def set_buffer(self, buffer: np.ndarray):
-        if self.op:
-            buffer = self.op(buffer)
-        self.setImage(buffer)
-        self.view.autoRange(padding=0.0)
-
-    def set_operator(self, op: Operator):
-        self.op = op
-
     def view_updater(self, size: SizeAbs = None):
         view = self
 
         def updater(ev):
-            update_time, overview = ev
             try:
+                update_time = ev
                 if update_time < view.last_update:
                     return
                 view.last_update = update_time
-
-                view_size = size or view.size()
-                if view.size().width < view_size.width:
-                    view_size = view.size()
-                buffer = overview.get_buffer(view_size)
-                view.set_buffer(buffer)
-
+                view.update_view(size)
             except Exception as e:
                 log.warning(e)
 
