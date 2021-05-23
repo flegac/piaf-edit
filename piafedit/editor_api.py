@@ -63,10 +63,3 @@ class P:
         if P.main_window:
             status = P.main_window.statusBar()
             status.showMessage(text)
-
-    @staticmethod
-    def change_layout(layout: str):
-        if layout is 'tabs':
-            P.main_window.tabs_layout()
-        elif layout is 'mosaic':
-            P.main_window.mosaic_layout()

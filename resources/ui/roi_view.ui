@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Overview</class>
- <widget class="QWidget" name="Overview">
+ <class>RoiView</class>
+ <widget class="QWidget" name="RoiView">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>519</width>
-    <height>480</height>
+    <width>552</width>
+    <height>416</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Overview</string>
+   <string>RoiView</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -34,17 +34,9 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="Overview" name="view" native="true">
+     <widget class="RoiView" name="view" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-     <widget class="InfoPanel" name="infos" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -80,24 +72,47 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QPushButton" name="newButton">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="infos">
          <property name="text">
-          <string>New</string>
+          <string>infos</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="clearButton">
-         <property name="text">
-          <string>Clear</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="histogramButton">
-         <property name="text">
-          <string>Histogram</string>
-         </property>
+        <widget class="QComboBox" name="operatorCombo">
+         <item>
+          <property name="text">
+           <string>Identity</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Edge</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Erode</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Dilate</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item>
@@ -118,23 +133,12 @@
     </widget>
    </item>
   </layout>
-  <action name="actionErode">
-   <property name="text">
-    <string>Erode</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>InfoPanel</class>
+   <class>RoiView</class>
    <extends>QWidget</extends>
-   <header>piafedit.gui.image.info_panel</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Overview</class>
-   <extends>QWidget</extends>
-   <header>piafedit.gui.image.overview</header>
+   <header>piafedit.gui.image.roi_view</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

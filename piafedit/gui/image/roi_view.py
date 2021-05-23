@@ -42,7 +42,7 @@ class RoiView(SourceView):
     def subscribe(self, overview: Overview):
         self.detach()
         self.overview = overview
-        self.source = overview.source
+        self.set_source(overview.source)
         overview.roi_update.pipe(
             ops.throttle_first(1. / MAX_REDRAW_PER_SEC),
         ).subscribe(on_next=self.view_updater(SizeAbs(64, 64)))
@@ -57,10 +57,12 @@ class RoiView(SourceView):
 
         RoiKeyboardHandler(overview).patch(self)
         RoiMouseHandler(overview).patch(self)
+        overview.request_update()
 
     def resizeEvent(self, ev):
         super().resizeEvent(ev)
-        self.overview.request_update()
+        if self.overview is not None:
+            self.overview.request_update()
 
     def view_updater(self, size: SizeAbs = None):
         view = self

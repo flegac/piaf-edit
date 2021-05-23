@@ -32,7 +32,8 @@ class Overview(SourceView):
         self.views = ViewManager()
 
     def set_source(self, source: DataSource):
-        self.source = source
+        super().set_source(source)
+
         self.rect = Rect().abs(self.source.infos().size)
         buffer = self.source.overview(max_size=self.size)
         self.setImage(buffer)

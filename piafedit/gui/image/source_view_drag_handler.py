@@ -27,5 +27,5 @@ class SourceViewDragHandler(DragHandler):
             log.warning(f'Only one source per View is allowed ({len(paths)} files selected)')
             return
         sources = open_sources(paths)
-        self.view.source = sources[0]
+        self.view.set_source(sources[0])
         self.view.update_view()

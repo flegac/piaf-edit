@@ -2,18 +2,19 @@ from typing import List
 
 from piafedit.gui.image.source_view import SourceView
 from piafedit.model.libs.operator import Operator
+from qtwidgets.observablelist import observablelist
 
 
 class ViewManager:
     def __init__(self):
         self.histogram_status = False
-        self.views: List[SourceView] = []
+        self.views: List[SourceView] = observablelist()
 
     def create_view(self, op: Operator = None):
-        from piafedit.gui.image.roi_view import RoiView
-        view = RoiView()
-        view.set_histogram(self.histogram_status)
-        view.set_operator(op)
+        from piafedit.gui.image.full_roi_view import FullRoiView
+        view = FullRoiView()
+        view.view.set_histogram(self.histogram_status)
+        view.view.set_operator(op)
         self.views.append(view)
         return view
 
