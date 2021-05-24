@@ -9,7 +9,7 @@ log = logging.getLogger()
 
 class SourceViewDragHandler(DragHandler):
     def __init__(self, view: 'SourceView'):
-        from piafedit.gui.image.source_view import SourceView
+        from piafedit.gui.image.bases.source_view import SourceView
         self.acceptDrops = True
         self.view: SourceView = view
 

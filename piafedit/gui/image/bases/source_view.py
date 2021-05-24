@@ -3,8 +3,8 @@ from typing import Optional
 
 from rx.subject import Subject
 
-from piafedit.gui.image.buffer_view import BufferView
-from piafedit.gui.image.source_view_drag_handler import SourceViewDragHandler
+from piafedit.gui.image.bases.buffer_view import BufferView
+from piafedit.gui.image.bases.source_view_drag_handler import SourceViewDragHandler
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
 from piafedit.model.geometry.size import SizeAbs
@@ -46,7 +46,7 @@ class SourceView(BufferView):
 
         win_size = self.source.infos().size
         if hasattr(self, 'overview') and self.overview is not None:
-            print('***** fixme: overview in source_view *************************************')
+            # FIXME: remove overview dependency
             win = self.overview.window.roi.limit(win_size)
         else:
             win = RectAbs(PointAbs(0, 0), win_size)

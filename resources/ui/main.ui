@@ -93,11 +93,12 @@
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionConsole"/>
     <addaction name="actionOverview"/>
-    <addaction name="actionTreeview"/>
+    <addaction name="actionConsole"/>
     <addaction name="actionWorkers"/>
-    <addaction name="actionImages"/>
+    <addaction name="actionFileBrowser"/>
+    <addaction name="actionSourceBrowser"/>
+    <addaction name="actionNotebook"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -124,14 +125,14 @@
    </attribute>
    <widget class="ConsoleWidget" name="console"/>
   </widget>
-  <widget class="DockWidget" name="treeviewDock">
+  <widget class="DockWidget" name="fileBrowserDock">
    <property name="windowTitle">
-    <string>TreeView</string>
+    <string>Files</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="treeViewWidget">
+   <widget class="QWidget" name="fileBrowserWidget">
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <property name="spacing">
       <number>0</number>
@@ -149,7 +150,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QTreeView" name="treeView"/>
+      <widget class="QTreeView" name="fileBrowser"/>
      </item>
     </layout>
    </widget>
@@ -224,11 +225,12 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionConsole"/>
    <addaction name="actionOverview"/>
-   <addaction name="actionTreeview"/>
+   <addaction name="actionConsole"/>
    <addaction name="actionWorkers"/>
-   <addaction name="actionImages"/>
+   <addaction name="actionFileBrowser"/>
+   <addaction name="actionSourceBrowser"/>
+   <addaction name="actionNotebook"/>
   </widget>
   <action name="actionOpen">
    <property name="text">
@@ -317,9 +319,9 @@
     <string>Overview</string>
    </property>
   </action>
-  <action name="actionTreeview">
+  <action name="actionFileBrowser">
    <property name="text">
-    <string>Treeview</string>
+    <string>FileBrowser</string>
    </property>
   </action>
   <action name="actionWorkers">
@@ -327,14 +329,22 @@
     <string>Workers</string>
    </property>
   </action>
-  <action name="actionImages">
+  <action name="actionSourceBrowser">
    <property name="text">
-    <string>Images</string>
+    <string>SourceBrowser</string>
+   </property>
+   <property name="toolTip">
+    <string>Sources</string>
    </property>
   </action>
   <action name="actionHistogram">
    <property name="text">
     <string>Histogram</string>
+   </property>
+  </action>
+  <action name="actionNotebook">
+   <property name="text">
+    <string>Notebook</string>
    </property>
   </action>
  </widget>

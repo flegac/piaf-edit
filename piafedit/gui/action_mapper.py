@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QMainWindow, QDockWidget
 
 from piafedit.editor_api import P
 from piafedit.gui.image.overview import Overview
+from piafedit.gui.my_notebook import MyNotebook
 from piafedit.ui_utils import resources_path
 
 LAYOUT_BACKUP_PATH = Path('layout.gui')
@@ -32,9 +33,12 @@ class ActionMapper:
 
         self.win.actionConsole.triggered.connect(switcher(self.win.consoleDock))
         self.win.actionOverview.triggered.connect(switcher(self.win.overviewDock))
-        self.win.actionTreeview.triggered.connect(switcher(self.win.treeviewDock))
-        self.win.actionImages.triggered.connect(switcher(self.win.sourceBrowserDock))
+        self.win.actionFileBrowser.triggered.connect(switcher(self.win.fileBrowserDock))
         self.win.actionWorkers.triggered.connect(switcher(self.win.workerDock))
+        self.win.actionNotebook.triggered.connect(lambda: self.win.open_dock('Notebook', MyNotebook))
+
+        self.win.actionSourceBrowser.triggered.connect(switcher(self.win.sourceBrowserDock))
+        # self.win.actionSourceBrowser.triggered.connect(lambda: self.win.open_dock('SourceBrowser', SourceBrowser))
 
     def setup_view(self):
         self.win.action100.triggered.connect(print)

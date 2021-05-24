@@ -1,8 +1,9 @@
 import logging
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
-from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QTreeView
 
 from piafedit.editor_api import P
 from piafedit.gui.action_mapper import ActionMapper
@@ -15,6 +16,7 @@ from piafedit.model.work_model import WorkModel
 from piafedit.ui_utils import load_ui
 from qtwidgets.browser.browser_config import BrowserConfig, Page
 from qtwidgets.browser.browser_widget import BrowserWidget
+from qtwidgets.dock_widget import DockWidget
 from qtwidgets.worker.worker_manager_widget import WorkerManagerWidget
 
 log = logging.getLogger()
@@ -47,12 +49,25 @@ class MainUi(QMainWindow):
         self.actions.load_gui() or self.actions.restore_default_gui()
         self.show()
 
+    def open_dock(self, title: str, factory: Callable[[], QWidget]):
+        widget = factory()
+        dock = DockWidget(title)
+        dock.setWidget(widget)
+        self.addDockWidget(Qt.BottomDockWidgetArea, dock)
+        self.tabifyDockWidget(self.consoleDock, dock)
+        dock.show()
+        dock.raise_()
+
     def setup_file_browser(self):
         model = self.model.tree_model
-        self.treeView.setModel(model)
-        self.treeView.selectionModel().selectionChanged.connect(self.on_select)
-        self.treeView.doubleClicked.connect(self.on_click)
-        self.treeView.setRootIndex(model.index(model.rootPath()))
+        self.file_browser.setModel(model)
+        self.file_browser.selectionModel().selectionChanged.connect(self.on_select)
+        self.file_browser.doubleClicked.connect(self.on_click)
+        self.file_browser.setRootIndex(model.index(model.rootPath()))
+
+    @property
+    def file_browser(self) -> QTreeView:
+        return self.fileBrowser
 
     def setup(self, placeholder: QWidget, widget: Any):
         layout = QVBoxLayout()

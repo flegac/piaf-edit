@@ -4,8 +4,9 @@ import pyqtgraph as pg
 from PyQt5.QtGui import QCloseEvent
 from rx.subject import Subject
 
-from piafedit.gui.image.source_view import SourceView
+from piafedit.gui.image.bases.source_view import SourceView
 from piafedit.gui.image.view_manager import ViewManager
+from piafedit.gui.utils import roi_to_rect
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import SizeAbs
@@ -20,21 +21,42 @@ class RoiController:
         self.roi: RectAbs = None
         self.subject = Subject()
 
+    def move(self, roi: RectAbs):
+        self.roi = roi
+        self.request_update()
+
     def request_update(self):
         self.subject.on_next(self.roi.copy())
 
+    def pg_roi(self):
+        roi = pg.RectROI(PointAbs(0, 0).raw(), SizeAbs(0, 0).raw())
+        roi.sigRegionChanged.connect(self.update_rect)
+
+    def update_rect(self):
+        if self.source is None:
+            return
+        rx, ry = self.compute_roi_rect_ratio()
+        rect = roi_to_rect(self.the_roi).scale(rx, ry)
+        self.window.move(rect)
+
+    def compute_roi_rect_ratio(self):
+        over = self.source.overview_size(self.overview_size)
+        full = self.source.infos().size
+        rx = full.width / over.width
+        ry = full.height / over.height
+        return rx, ry
 
 class Overview(SourceView):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.window = RoiController()
         self.overview_size = 256
+        self.views = ViewManager()
 
         self.the_roi = pg.RectROI(PointAbs(0, 0).raw(), SizeAbs(0, 0).raw())
         self.the_roi.sigRegionChanged.connect(self.update_rect)
         self.addItem(self.the_roi)
 
-        self.views = ViewManager()
 
     def set_source(self, source: DataSource):
         super().set_source(source)
@@ -72,16 +94,9 @@ class Overview(SourceView):
     def update_rect(self):
         if self.source is None:
             return
-
         rx, ry = self.compute_roi_rect_ratio()
-        rect = self.window.roi
-        roi = self.the_roi
-        rect.pos.x = round(roi.pos().x() * rx)
-        rect.pos.y = round(roi.pos().y() * ry)
-        rect.size.width = round(roi.size().x() * rx)
-        rect.size.height = round(roi.size().y() * ry)
-
-        self.window.request_update()
+        rect = roi_to_rect(self.the_roi).scale(rx, ry)
+        self.window.move(rect)
 
     def update_roi(self):
         rx, ry = self.compute_roi_rect_ratio()

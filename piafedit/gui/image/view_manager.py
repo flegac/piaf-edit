@@ -1,6 +1,6 @@
 from typing import List
 
-from piafedit.gui.image.source_view import SourceView
+from piafedit.gui.image.bases.source_view import SourceView
 from piafedit.model.libs.operator import Operator
 from qtwidgets.observablelist import observablelist
 
