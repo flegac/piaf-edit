@@ -19,7 +19,7 @@ class RoiKeyboardHandler(KeyboardHandler):
 
     def keyPressEvent(self, ev):
         overview = self.overview
-        rect = overview.rect
+        rect = overview.window.roi
         size = overview.source.infos().size
         end = PointAbs(size.width - rect.size.width, size.height - rect.size.height)
 
@@ -38,7 +38,7 @@ class RoiKeyboardHandler(KeyboardHandler):
 
         def action():
             full_size = overview.source.infos().size
-            rect = overview.rect
+            rect = overview.window.roi
 
             w = rect.size.width
             h = rect.size.height

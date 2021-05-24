@@ -37,6 +37,7 @@ class SourceViewDragHandler(DragHandler):
         sources = open_sources(paths)
         try:
             self.view.set_source(sources[0])
+            # TODO: remove this line ?
             self.view.update_view()
         except:
             log.warning(f'could not load source: {paths}')

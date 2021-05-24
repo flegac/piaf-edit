@@ -63,7 +63,7 @@ class RoiView(SourceView):
 
         RoiKeyboardHandler(overview).patch(self)
         RoiMouseHandler(overview).patch(self)
-        overview.roi_subject.subscribe(self.request_update)
+        overview.window.subject.subscribe(self.request_update)
         self.request_update()
 
     def request_update(self, ev=None):

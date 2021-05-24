@@ -1,3 +1,4 @@
+from copy import deepcopy
 from dataclasses import dataclass
 
 from piafedit.model.geometry.rect import RectAbs
@@ -8,6 +9,9 @@ from piafedit.model.geometry.size import SizeAbs, Size
 class Window:
     window: RectAbs = None
     size: SizeAbs = None
+
+    def copy(self):
+        return deepcopy(self)
 
     def set_max_size(self, max_size: int):
         aspect = Size.from_aspect(self.aspect_ratio)

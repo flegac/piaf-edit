@@ -15,7 +15,7 @@ class RoiMouseHandler(MouseHandler):
         self.zoom_speed: float = 1.1
 
         self.cursor_origin = None
-        self.rect_origin: RectAbs = None
+        self.roi_origin: RectAbs = None
 
         self.view: RoiView = None
 
@@ -25,14 +25,14 @@ class RoiMouseHandler(MouseHandler):
 
     def mousePressEvent(self, ev):
         self.cursor_origin = ev.pos()
-        self.rect_origin = deepcopy(self.overview.rect)
+        self.roi_origin = deepcopy(self.overview.window.roi)
 
     def mouseReleaseEvent(self, ev):
         self.cursor_origin = None
-        self.rect_origin = None
+        self.roi_origin = None
 
     def wheelEvent(self, ev):
-        rect: RectAbs = self.overview.rect
+        rect: RectAbs = self.overview.window.roi
 
         old_size = deepcopy(rect.size)
 
@@ -52,7 +52,7 @@ class RoiMouseHandler(MouseHandler):
     def mouseMoveEvent(self, ev):
         cursor = ev.pos()
         x, y = cursor.x(), cursor.y()
-        rect: RectAbs = self.overview.rect
+        roi: RectAbs = self.overview.window.roi
 
         dx, dy = (0, 0)
         if self.cursor_origin:
@@ -64,9 +64,9 @@ class RoiMouseHandler(MouseHandler):
             w = self.view.view.width()
             h = self.view.view.height()
 
-            dx = (dx * rect.size.width / w)
-            dy = (dy * rect.size.height / h)
+            dx = (dx * roi.size.width / w)
+            dy = (dy * roi.size.height / h)
 
-            rect.pos.x = self.rect_origin.pos.x + dx
-            rect.pos.y = self.rect_origin.pos.y + dy
+            roi.pos.x = self.roi_origin.pos.x + dx
+            roi.pos.y = self.roi_origin.pos.y + dy
             self.overview.update_roi()

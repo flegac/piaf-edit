@@ -1,11 +1,9 @@
 import logging
 from typing import Optional
 
-import numpy as np
-import pyqtgraph as pg
-from PyQt5.QtWidgets import QSizePolicy
 from rx.subject import Subject
 
+from piafedit.gui.image.buffer_view import BufferView
 from piafedit.gui.image.source_view_drag_handler import SourceViewDragHandler
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
@@ -17,18 +15,15 @@ from piafedit.model.source.window import Window
 log = logging.getLogger(__name__)
 
 
-class SourceView(pg.ImageView):
+class SourceView(BufferView):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.source_change = Subject()
-
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.ui.roiBtn.hide()
-        self.ui.menuBtn.hide()
-        self.ui.graphicsView.setBackground(None)
         self._source: Optional[DataSource] = None
         self.op: Optional[Operator] = None
         SourceViewDragHandler(self).patch(self)
+
+        self.changed_subject = Subject()
+        self.changed_subject.subscribe(lambda _: self.update_view())
 
     @property
     def source(self):
@@ -36,26 +31,11 @@ class SourceView(pg.ImageView):
 
     def set_source(self, source: DataSource):
         self._source = source
-        self.source_change.on_next(self)
-
-    def set_histogram(self, status: bool):
-        if status:
-            self.ui.histogram.show()
-        else:
-            self.ui.histogram.hide()
-
-    def switch_histogram(self):
-        self.set_histogram(self.ui.histogram.isHidden())
-
-    def set_buffer(self, buffer: np.ndarray):
-        if self.op:
-            buffer = self.op(buffer)
-        self.setImage(buffer)
-        self.view.autoRange(padding=0.0)
+        self.changed_subject.on_next(self)
 
     def set_operator(self, op: Operator):
         self.op = op
-        self.update_view()
+        self.changed_subject.on_next(self)
 
     def update_view(self, size: SizeAbs = None):
         if self.source is None:
@@ -66,7 +46,8 @@ class SourceView(pg.ImageView):
 
         win_size = self.source.infos().size
         if hasattr(self, 'overview') and self.overview is not None:
-            win = self.overview.rect.limit(win_size)
+            print('***** fixme: overview in source_view *************************************')
+            win = self.overview.window.roi.limit(win_size)
         else:
             win = RectAbs(PointAbs(0, 0), win_size)
         window = Window(
@@ -75,4 +56,6 @@ class SourceView(pg.ImageView):
         window.set_max_size(max(size.width, size.height))
 
         buffer = self.source.read(window)
+        if self.op:
+            buffer = self.op(buffer)
         self.set_buffer(buffer)

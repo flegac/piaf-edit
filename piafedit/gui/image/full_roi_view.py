@@ -10,7 +10,7 @@ class FullRoiView(QWidget):
         super().__init__()
         load_ui('roi_view', self)
 
-        self.view.source_change.subscribe(on_next=lambda view: self.infos.setText(view.view_name()))
+        self.view.changed_subject.subscribe(on_next=lambda view: self.infos.setText(view.view_name()))
         self.operatorCombo.currentTextChanged.connect(self.on_op_change)
 
     def subscribe(self, overview: Overview):

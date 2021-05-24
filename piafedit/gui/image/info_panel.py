@@ -30,7 +30,7 @@ class InfoPanel(QWidget):
         dtype = buffer.dtype
         self.overview_infos.setText(f'overview: {w}x{h}:{b} {dtype}')
 
-        area = overview.rect
+        area = overview.window.roi
         x, y = area.pos.raw()
         w, h = area.size.raw()
 
