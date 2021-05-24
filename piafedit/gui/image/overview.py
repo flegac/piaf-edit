@@ -25,26 +25,20 @@ class RoiController:
         self.roi = roi
         self.request_update()
 
+    def set_aspect(self, aspect: float):
+        old = self.roi.center
+        if aspect < self.roi.aspect_ratio:
+            self.roi.size.height = self.roi.size.width / aspect
+        else:
+            self.roi.size.width = self.roi.size.height * aspect
+        dx = self.roi.center.x - old.x
+        dy = self.roi.center.y - old.y
+
+        self.roi.move(-dx, -dy)
+
     def request_update(self):
         self.subject.on_next(self.roi.copy())
 
-    def pg_roi(self):
-        roi = pg.RectROI(PointAbs(0, 0).raw(), SizeAbs(0, 0).raw())
-        roi.sigRegionChanged.connect(self.update_rect)
-
-    def update_rect(self):
-        if self.source is None:
-            return
-        rx, ry = self.compute_roi_rect_ratio()
-        rect = roi_to_rect(self.the_roi).scale(rx, ry)
-        self.window.move(rect)
-
-    def compute_roi_rect_ratio(self):
-        over = self.source.overview_size(self.overview_size)
-        full = self.source.infos().size
-        rx = full.width / over.width
-        ry = full.height / over.height
-        return rx, ry
 
 class Overview(SourceView):
     def __init__(self, parent=None):
@@ -57,6 +51,15 @@ class Overview(SourceView):
         self.the_roi.sigRegionChanged.connect(self.update_rect)
         self.addItem(self.the_roi)
 
+    def optimize_aspect(self):
+        from piafedit.editor_api import P
+        win = P.main_window.main_view
+        a1 = win.width() / win.height()
+        print(win.width(), win.height(), a1)
+
+        aspect = a1
+        self.window.set_aspect(aspect)
+        self.update_roi()
 
     def set_source(self, source: DataSource):
         super().set_source(source)

@@ -50,7 +50,7 @@ class TileSource(DataSource):
                 b = tile.crop(buffer)
                 if b.shape == tile_buffer.shape:
                     b[...] = tile_buffer
-        return buffer[:window.size.height, :window.size.width, ...]
+        return buffer[:window.item_per_page.height, :window.item_per_page.width, ...]
 
     def write(self, buffer: Buffer, window: RectAbs = None):
         self.source.write(buffer, window)

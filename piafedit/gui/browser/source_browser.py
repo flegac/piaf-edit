@@ -1,7 +1,7 @@
 from piafedit.editor_api import P
 from piafedit.gui.browser.image_drag_handler import ImageDragHandler
 from piafedit.model.source.data_source import DataSource
-from qtwidgets.browser.browser_config import BrowserConfig, Item, Page
+from qtwidgets.browser.browser_config import BrowserConfig
 from qtwidgets.browser.browser_widget import BrowserWidget
 from qtwidgets.gallery.image_button import ImageButton
 
@@ -11,12 +11,8 @@ class SourceBrowser(BrowserWidget):
         super().__init__(
             builder=self.builder,
             config=BrowserConfig(
-                item=Item(
-                    width=150
-                ),
-                page=Page(
-                    size=20
-                )
+                item_per_line=4,
+                item_per_page=20
             ))
         ImageDragHandler().patch(self)
 

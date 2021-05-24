@@ -1,5 +1,5 @@
 # piaf-edit
 
-Piaf Is Another Fabulous Editor ...
+Piaf Is Another Formidable Editor ...
 
 ![](docs/img/piaf.jpg)

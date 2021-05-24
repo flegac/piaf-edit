@@ -20,7 +20,7 @@ class MyModel(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
         x, y = batch
-        x = x.view(x.size(0), -1)
+        x = x.view(x.item_per_page(0), -1)
         y_hat = self(x)
         loss = F.mse_loss(y_hat, y)
         return loss

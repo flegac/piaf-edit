@@ -13,6 +13,12 @@ class FullRoiView(QWidget):
         self.view.changed_subject.subscribe(on_next=lambda view: self.infos.setText(view.view_name()))
         self.operatorCombo.currentTextChanged.connect(self.on_op_change)
 
+    def set_config(self, status: bool):
+        if status:
+            self.operators.show()
+        else:
+            self.operators.hide()
+
     def subscribe(self, overview: Overview):
         self.view.subscribe(overview)
 

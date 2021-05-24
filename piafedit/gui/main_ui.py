@@ -14,7 +14,7 @@ from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.rio_data_source import RIODataSource
 from piafedit.model.work_model import WorkModel
 from piafedit.ui_utils import load_ui
-from qtwidgets.browser.browser_config import BrowserConfig, Page
+from qtwidgets.browser.browser_config import BrowserConfig
 from qtwidgets.browser.browser_widget import BrowserWidget
 from qtwidgets.dock_widget import DockWidget
 from qtwidgets.worker.worker_manager_widget import WorkerManagerWidget
@@ -36,10 +36,13 @@ class MainUi(QMainWindow):
         processes: WorkerManagerWidget = self.worker
         processes.set_model(self.model.workers)
 
+        self.main_view.toolBar.hide()
+
         # source browser
         self.source_browser.set_model(self.model.sources)
         self.source_browser.set_config(BrowserConfig(
-            page=Page(size=20)
+            item_per_line=4,
+            item_per_page=20
         ))
 
         self.actions = ActionMapper(self)

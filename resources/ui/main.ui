@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1011</width>
-    <height>687</height>
+    <width>1106</width>
+    <height>716</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,7 +49,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1011</width>
+     <width>1106</width>
      <height>22</height>
     </rect>
    </property>
@@ -82,12 +82,10 @@
     <property name="title">
      <string>View</string>
     </property>
-    <addaction name="action100"/>
-    <addaction name="actionRestore_layout"/>
     <addaction name="actionSave_layout"/>
     <addaction name="actionLoad_layout"/>
+    <addaction name="actionRestore_layout"/>
     <addaction name="separator"/>
-    <addaction name="actionHistogram"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -212,8 +210,6 @@
    <addaction name="actionRestore_layout"/>
    <addaction name="actionSave_layout"/>
    <addaction name="actionLoad_layout"/>
-   <addaction name="action100"/>
-   <addaction name="actionHistogram"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
@@ -223,14 +219,14 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
+   <addaction name="actionNotebook"/>
    <addaction name="actionOverview"/>
+   <addaction name="actionSourceBrowser"/>
+   <addaction name="actionFileBrowser"/>
    <addaction name="actionConsole"/>
    <addaction name="actionWorkers"/>
-   <addaction name="actionFileBrowser"/>
-   <addaction name="actionSourceBrowser"/>
-   <addaction name="actionNotebook"/>
   </widget>
   <action name="actionOpen">
    <property name="text">
@@ -277,11 +273,6 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
-   </property>
-  </action>
-  <action name="action100">
-   <property name="text">
-    <string>100%</string>
    </property>
   </action>
   <action name="actionRestore_layout">
@@ -335,11 +326,6 @@
    </property>
    <property name="toolTip">
     <string>Sources</string>
-   </property>
-  </action>
-  <action name="actionHistogram">
-   <property name="text">
-    <string>Histogram</string>
    </property>
   </action>
   <action name="actionNotebook">

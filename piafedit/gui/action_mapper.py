@@ -41,11 +41,9 @@ class ActionMapper:
         # self.win.actionSourceBrowser.triggered.connect(lambda: self.win.open_dock('SourceBrowser', SourceBrowser))
 
     def setup_view(self):
-        self.win.action100.triggered.connect(print)
         self.win.actionRestore_layout.triggered.connect(self.restore_default_gui)
         self.win.actionSave_layout.triggered.connect(self.save_gui)
         self.win.actionLoad_layout.triggered.connect(self.load_gui)
-        self.win.actionHistogram.triggered.connect(self.switch_histogram)
         self.win.actionLoad_layout.setDisabled(not LAYOUT_BACKUP_PATH.exists())
 
     def setup_files(self):
