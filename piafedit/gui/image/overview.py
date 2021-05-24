@@ -1,8 +1,9 @@
 import logging
-import time
 
 import pyqtgraph as pg
+import rx
 from PyQt5.QtGui import QCloseEvent
+from rx import operators
 from rx.subject import Subject
 
 from piafedit.gui.image.source_view import SourceView
@@ -23,13 +24,22 @@ class Overview(SourceView):
         self.ui.histogram.hide()
         self.size = 256
 
-        self.roi_update = Subject()
+        self.roi_subject = Subject()
+
         self.rect: RectAbs = None
         self.the_roi = pg.RectROI(PointAbs(0, 0).raw(), SizeAbs(0, 0).raw())
         self.the_roi.sigRegionChanged.connect(self.update_rect)
         self.addItem(self.the_roi)
 
         self.views = ViewManager()
+
+    def subscribe(self):
+        def mapper(x):
+            return rx.from_([x, x * 2, x * 4])
+
+        self.roi_subject.pipe(
+            operators.flat_map_latest(mapper)
+        ).subscribe(print)
 
     def set_source(self, source: DataSource):
         super().set_source(source)
@@ -73,8 +83,7 @@ class Overview(SourceView):
         return rx, ry
 
     def request_update(self):
-        event = time.time()
-        self.roi_update.on_next(event)
+        self.roi_subject.on_next(None)
 
     def setup_action(self, pos: PointAbs):
         overview = self

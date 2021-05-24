@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from typing import Any
 
@@ -15,6 +16,8 @@ from piafedit.ui_utils import load_ui
 from qtwidgets.browser.browser_config import BrowserConfig, Page
 from qtwidgets.browser.browser_widget import BrowserWidget
 from qtwidgets.worker.worker_manager_widget import WorkerManagerWidget
+
+log = logging.getLogger()
 
 
 class MainUi(QMainWindow):
@@ -80,7 +83,12 @@ class MainUi(QMainWindow):
             Path(self.model.tree_model.filePath(idx))
             for idx in ev.indexes()
         )
-        sources = list(map(RIODataSource, paths))
+        sources = []
+        for path in paths:
+            try:
+                sources.append(RIODataSource(path))
+            except:
+                log.warning(f'could not open source: {path}')
         P.open_sources(sources)
         self.set_source(P.model().sources[-1])
 

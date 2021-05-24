@@ -63,3 +63,11 @@ class P:
         if P.main_window:
             status = P.main_window.statusBar()
             status.showMessage(text)
+
+    @staticmethod
+    def load_style(path: Path):
+        if path is None:
+            P.main_window.setStyleSheet('')
+        else:
+            with path.open() as ss:
+                P.main_window.setStyleSheet(ss.read())

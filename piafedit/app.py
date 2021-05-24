@@ -34,6 +34,7 @@ def main():
     model = WorkModel(resources_path())
     pg.setConfigOptions(imageAxisOrder='row-major')
     app = QApplication([])
+
     P.main_window = MainUi(model)
     sys.exit(app.exec_())
 

@@ -26,6 +26,17 @@ class SourceViewDragHandler(DragHandler):
         if len(paths) != 1:
             log.warning(f'Only one source per View is allowed ({len(paths)} files selected)')
             return
+
+        path = paths[0]
+        from piafedit.editor_api import P
+        if path.suffix == '.stylesheet':
+            P.load_style(path)
+        else:
+            P.load_style(None)
+
         sources = open_sources(paths)
-        self.view.set_source(sources[0])
-        self.view.update_view()
+        try:
+            self.view.set_source(sources[0])
+            self.view.update_view()
+        except:
+            log.warning(f'could not load source: {paths}')

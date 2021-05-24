@@ -29,7 +29,7 @@ class RawDataSource(DataSource):
 
     def read(self, window: Window = None) -> Buffer:
         import cv2
-        data = self.update_window(window).crop(self.data)
+        data = self.update_window(window).window.crop(self.data)
         if window.size:
             data = cv2.resize(data, dsize=window.size.raw(), interpolation=cv2.INTER_CUBIC)
         return data

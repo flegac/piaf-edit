@@ -46,7 +46,7 @@ class ActionMapper:
 
     def setup_files(self):
         self.win.actionNew.triggered.connect(P.new_source)
-        self.win.actionOpen.triggered.connect(P.open_source)
+        self.win.actionOpen.triggered.connect(P.open_sources)
         self.win.actionSave.triggered.connect(print)
         self.win.actionSave_as.triggered.connect(print)
         self.win.actionClose.triggered.connect(print)
