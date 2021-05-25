@@ -39,11 +39,11 @@ class MainUi(QMainWindow):
         self.main_view.toolBar.hide()
 
         # source browser
-        self.source_browser.set_model(self.model.sources)
-        self.source_browser.set_config(BrowserConfig(
-            item_per_line=4,
+        self.source_browser.config = BrowserConfig(
+            item_per_line=5,
             item_per_page=20
-        ))
+        )
+        self.source_browser.set_model(self.model.sources)
 
         self.actions = ActionMapper(self)
         if self.current_view:
@@ -108,10 +108,9 @@ class MainUi(QMainWindow):
             except:
                 log.warning(f'could not open source: {path}')
         P.open_sources(sources)
-        self.set_source(P.model().sources[-1])
 
     def on_click(self, ev):
-        print(f'clicked: {ev}')
+        pass
 
     @property
     def source_browser(self) -> SourceBrowser:

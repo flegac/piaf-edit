@@ -1,6 +1,8 @@
 from copy import deepcopy
 from dataclasses import dataclass
 
+from rasterio.enums import Resampling
+
 from piafedit.model.geometry.rect import RectAbs
 from piafedit.model.geometry.size import SizeAbs, Size
 
@@ -9,6 +11,7 @@ from piafedit.model.geometry.size import SizeAbs, Size
 class Window:
     window: RectAbs = None
     size: SizeAbs = None
+    resampling: Resampling = Resampling.cubic
 
     def copy(self):
         return deepcopy(self)

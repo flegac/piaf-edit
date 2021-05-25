@@ -7,8 +7,8 @@ from piafedit.model.libs.operator import Buffer
 def edge_detection(buffer: Buffer) -> Buffer:
     import cv2
 
-    # data = cv2.cvtColor(data, cv2.COLOR_BGR2GRAY)
-    # data = cv2.bilateralFilter(data, 11, 17, 17)
+    # buffer = cv2.cvtColor(buffer, cv2.COLOR_BGR2GRAY)
+    # buffer = cv2.bilateralFilter(buffer, 11, 17, 17)
     edged = cv2.Canny(buffer, 0, 255)
     return np.dstack((edged, edged, edged))
 

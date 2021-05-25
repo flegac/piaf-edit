@@ -8,7 +8,6 @@ import rasterio.windows
 from rasterio.enums import Resampling
 from rasterio.profiles import DefaultGTiffProfile
 
-from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.libs.operator import Buffer
 from piafedit.model.source.data_source import DataSource
@@ -24,7 +23,6 @@ logging.getLogger('rasterio').setLevel(logging.WARNING)
 class RIODataSource(DataSource):
     def __init__(self, path: Path):
         self.path = path
-        self.resampling: Resampling = Resampling.cubic
 
         self._infos = None
         if path.exists():
@@ -51,19 +49,19 @@ class RIODataSource(DataSource):
                 )
         return self._infos
 
-    def read(self, window: Window = None) -> Buffer:
+    def read_at(self, window: Window = None) -> Buffer:
         with rasterio.open(self.path) as src:
             # resampling https://rasterio.readthedocs.io/en/latest/topics/resampling.html
             target = None if window.size is None else (src.count, window.size.height, window.size.width)
             data = src.read(
                 window=rio_window(window),
                 out_shape=target,
-                resampling=self.resampling
+                resampling=window.resampling or Resampling.cubic
             )
             data = np.moveaxis(data, 0, 2)
             return data
 
-    def write(self, buffer: Buffer, window: Window = None):
+    def write_at(self, buffer: Buffer, window: Window = None):
         infos = self.infos()
         width, height = infos.size.raw()
         shape = buffer.shape
@@ -71,7 +69,11 @@ class RIODataSource(DataSource):
         with rasterio.open(self.path, 'w', driver='GTiff',
                            width=width, height=height, count=bands,
                            dtype=buffer.dtype) as dst:
-            dst.write(buffer, window=rio_window(window), indexes=1)
+            dst.write(
+                buffer,
+                window=rio_window(window),
+                indexes=1
+            )
 
     def create(self, buffer: Buffer):
         h, w = buffer.shape[:2]
@@ -90,7 +92,7 @@ class RIODataSource(DataSource):
                            )) as dst:
             for i in range(count):
                 data = buffer[..., i]
-                dst.write(data, i + 1)
+                dst.write_at(data, i + 1)
 
         self.create_overview()
 

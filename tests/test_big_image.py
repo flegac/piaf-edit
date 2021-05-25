@@ -36,7 +36,7 @@ trajectory = Trajectory([
 @timeit
 def eval(source: DataSource):
     for window in (trajectory.iter(20)):
-        data = source.read(window)
+        data = source.read_at(window)
         print(data.shape)
 
 

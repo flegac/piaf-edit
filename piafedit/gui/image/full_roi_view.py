@@ -11,13 +11,14 @@ class FullRoiView(QWidget):
         load_ui('roi_view', self)
 
         self.view.changed_subject.subscribe(on_next=lambda view: self.infos.setText(view.view_name()))
-        self.operatorCombo.currentTextChanged.connect(self.on_op_change)
+        self.operator.currentTextChanged.connect(self.on_op_change)
+        self.resampling.currentTextChanged.connect(self.on_resampling_change)
 
-    def set_config(self, status: bool):
+    def set_toolbar(self, status: bool):
         if status:
-            self.operators.show()
+            self.toolBar.show()
         else:
-            self.operators.hide()
+            self.toolBar.hide()
 
     def subscribe(self, overview: Overview):
         self.view.subscribe(overview)
@@ -34,3 +35,13 @@ class FullRoiView(QWidget):
             op = dilate
 
         self.view.set_operator(op)
+
+    def on_resampling_change(self, name: str):
+        from rasterio.enums import Resampling
+        cases = {
+            'nearest': Resampling.nearest,
+            'bilinear': Resampling.bilinear,
+            'cubic': Resampling.cubic
+        }
+
+        self.view.set_resampling(cases[name])

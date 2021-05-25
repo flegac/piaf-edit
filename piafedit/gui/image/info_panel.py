@@ -1,20 +1,14 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
+from PyQt5.QtWidgets import QWidget
 
 from piafedit.gui.image.overview import Overview
+from piafedit.model.source.window import Window
+from piafedit.ui_utils import load_ui
 
 
 class InfoPanel(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.view_infos = QLabel()
-        self.overview_infos = QLabel()
-        self.area_infos = QLabel()
-
-        l = QVBoxLayout()
-        l.addWidget(self.view_infos)
-        l.addWidget(self.overview_infos)
-        l.addWidget(self.area_infos)
-        self.setLayout(l)
+        load_ui('infos', self)
 
     def update_overview(self, overview: Overview):
         source = overview.source
@@ -23,15 +17,17 @@ class InfoPanel(QWidget):
         infos = source.infos()
         h, w, b = infos.shape
         dtype = infos.dtype
-        self.view_infos.setText(f'view: {infos.name} {w}x{h}:{b} {dtype}')
-
-        buffer = overview.image
-        h, w, b = buffer.shape
-        dtype = buffer.dtype
-        self.overview_infos.setText(f'overview: {w}x{h}:{b} {dtype}')
+        self.sourceLabel.setText(f'{infos.name} {w}x{h}:{b} {dtype}')
 
         area = overview.window.roi
         x, y = area.pos.raw()
         w, h = area.size.raw()
 
-        self.area_infos.setText(f'area: {x},{y} {w}x{h}')
+        buffer = source.read_at(Window(window=area))
+        import numpy as np
+        self.distributionLabel.setText(
+            f'min: {buffer.min()} max: {buffer.max()}\n'
+            f'mean: {np.mean(buffer):.2f} std: {np.std(buffer):.2f}'
+        )
+
+        self.windowLabel.setText(f'window: {x},{y} {w}x{h}')

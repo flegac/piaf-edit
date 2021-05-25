@@ -1,6 +1,7 @@
 import logging
 from typing import Optional
 
+from rasterio.enums import Resampling
 from rx.subject import Subject
 
 from piafedit.gui.image.bases.buffer_view import BufferView
@@ -20,6 +21,7 @@ class SourceView(BufferView):
         super().__init__(parent)
         self._source: Optional[DataSource] = None
         self.op: Optional[Operator] = None
+        self.resampling: Optional[Resampling] = None
         SourceViewDragHandler(self).patch(self)
 
         self.changed_subject = Subject()
@@ -37,6 +39,10 @@ class SourceView(BufferView):
         self.op = op
         self.changed_subject.on_next(self)
 
+    def set_resampling(self, resampling: Resampling):
+        self.resampling = resampling
+        self.changed_subject.on_next(self)
+
     def update_view(self, size: SizeAbs = None):
         if self.source is None:
             return
@@ -51,11 +57,12 @@ class SourceView(BufferView):
         else:
             win = RectAbs(PointAbs(0, 0), win_size)
         window = Window(
-            window=win
+            window=win,
+            resampling=self.resampling
         )
         window.set_max_size(max(size.width, size.height))
 
-        buffer = self.source.read(window)
+        buffer = self.source.read_at(window)
         if self.op:
             buffer = self.op(buffer)
         self.set_buffer(buffer)

@@ -3,26 +3,22 @@ from abc import ABC, abstractmethod
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
 from piafedit.model.geometry.size import SizeAbs
-from piafedit.model.libs.operator import Operator, Buffer
+from piafedit.model.libs.operator import Buffer
 from piafedit.model.source.source_infos import SourceInfos
 from piafedit.model.source.window import Window
 
 
 class DataSource(ABC):
-    def map(self, operator: Operator) -> 'DataSource':
-        from piafedit.model.source.map_data_source import MapDataSource
-        return MapDataSource(self, operator)
-
     @abstractmethod
     def infos(self) -> SourceInfos:
         ...
 
     @abstractmethod
-    def read(self, window: Window = None) -> Buffer:
+    def read_at(self, window: Window = None) -> Buffer:
         ...
 
     @abstractmethod
-    def write(self, buffer: Buffer, window: Window = None):
+    def write_at(self, buffer: Buffer, window: Window = None):
         ...
 
     def update_window(self, window: Window):
@@ -40,4 +36,10 @@ class DataSource(ABC):
 
     def overview(self, max_size: int):
         window = Window.from_size(self.overview_size(max_size))
-        return self.read(window)
+        return self.read_at(window)
+
+
+class WindowSource(DataSource):
+    def __init__(self, source: DataSource):
+        self.source = source
+        self.window: Window = Window()

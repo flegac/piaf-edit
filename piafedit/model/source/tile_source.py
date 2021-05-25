@@ -32,7 +32,7 @@ class TileSource(DataSource):
     def infos(self):
         return self.source.infos()
 
-    def read(self, window: RectAbs = None, output_size: SizeAbs = None) -> Buffer:
+    def read_at(self, window: RectAbs = None, output_size: SizeAbs = None) -> Buffer:
         window = self.update_window(window)
         tiles = self._tiles(window)
         lines = []
@@ -52,8 +52,8 @@ class TileSource(DataSource):
                     b[...] = tile_buffer
         return buffer[:window.item_per_page.height, :window.item_per_page.width, ...]
 
-    def write(self, buffer: Buffer, window: RectAbs = None):
-        self.source.write(buffer, window)
+    def write_at(self, buffer: Buffer, window: RectAbs = None):
+        self.source.write_at(buffer, window)
 
     def _tiles(self, rect: RectAbs):
         start = self.point_to_tile(rect.pos)
@@ -69,7 +69,7 @@ class TileSource(DataSource):
 
     @lru_cache()
     def _read_tile(self, tile: RawRect):
-        return self.source.read(RectAbs.from_raw(tile))
+        return self.source.read_at(RectAbs.from_raw(tile))
 
     def point_to_tile(self, pos: PointAbs):
         dx = pos.x % self.config.width

@@ -23,11 +23,11 @@ class RawDataSource(DataSource):
     def infos(self) -> SourceInfos:
         return self._infos
 
-    def write(self, buffer: Buffer, window: Window = None):
+    def write_at(self, buffer: Buffer, window: Window = None):
         data = self.update_window(window).crop(self.data)
         data[...] = buffer
 
-    def read(self, window: Window = None) -> Buffer:
+    def read_at(self, window: Window = None) -> Buffer:
         import cv2
         data = self.update_window(window).window.crop(self.data)
         if window.size:

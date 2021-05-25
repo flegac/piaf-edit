@@ -5,8 +5,13 @@
 - [rx operators](https://rxpy.readthedocs.io/en/latest/operators.html)
 
 
-
 # TODO LIST
+
+## FIXES
+- clean up events (subject/observables)
+- ViewManager should be closely related to the corresponding BrowserWidget
+- in general : rethink how data/buttons/actions are coordinated
+
 
 ## BUSINESS FEATURES
 
@@ -15,16 +20,13 @@
 - custom resampling (bilinear, cubic, nearest, ...)
 - Custom operators
  + dilate/erode
+ - edge detection
  - more functions from opencv / sklearn
  - sobel
  - kernel (conv2d)
  - model onnx
  
 - allow to edit operator parameters
-
-- display statistics:
-  - min / max / average
-  - mean / std
 
 - bands manipulation
   - change order

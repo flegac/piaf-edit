@@ -14,7 +14,7 @@ from qtpy import QtWidgets
 from piafedit.gui.my_notebook import MyNotebook
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
+    app = QtWidgets.QApplication([])
     window = MyNotebook()
     window.show()
     sys.exit(app.exec_())

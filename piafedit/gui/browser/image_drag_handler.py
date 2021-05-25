@@ -24,6 +24,3 @@ class ImageDragHandler(DragHandler):
         paths = map(Path, local_files)
         sources = open_sources(paths)
         P.open_sources(sources)
-
-        if len(sources) > 0:
-            P.show_source(sources[-1])

@@ -52,8 +52,7 @@ class RoiView(SourceView):
         name = 'undefined'
         if self.source is not None:
             name = self.source.infos().name
-        op_name = '' if self.op is None else self.op.__name__
-        return f'{name} {op_name}'
+        return f'{name}'
 
     def subscribe(self, overview: Overview):
         self.detach()
