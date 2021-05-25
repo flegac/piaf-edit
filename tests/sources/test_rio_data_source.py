@@ -50,5 +50,5 @@ class TestRIODataSource(TestCase):
         # source.write(data, area)
 
     def test_read(self):
-        data = source.read_at(area)
+        data = source.read(area)
         print('read data:', data.shape)

@@ -14,11 +14,11 @@ class MapDataSource(DataSource):
     def infos(self) -> SourceInfos:
         return self.source.infos()
 
-    def read_at(self, window: Window = None) -> Buffer:
-        buffer = self.source.read_at(window)
+    def read(self, window: Window = None) -> Buffer:
+        buffer = self.source.read(window)
         buffer = self.operator(buffer)
         return buffer
 
-    def write_at(self, buffer: Buffer, window: Window = None):
+    def write(self, buffer: Buffer, window: Window = None):
         buffer = self.operator(buffer)
-        return self.source.write_at(buffer, window)
+        return self.source.write(buffer, window)

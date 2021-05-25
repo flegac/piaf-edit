@@ -47,9 +47,16 @@ class SourceView(BufferView):
         if self.source is None:
             return
 
+        window = self.final_window(size)
+
+        buffer = self.source.read(window)
+        if self.op:
+            buffer = self.op(buffer)
+        self.set_buffer(buffer)
+
+    def final_window(self, size):
         if size is None or self.width() < size.width:
             size = SizeAbs(self.width(), self.height())
-
         win_size = self.source.infos().size
         if hasattr(self, 'overview') and self.overview is not None:
             # FIXME: remove overview dependency
@@ -61,8 +68,4 @@ class SourceView(BufferView):
             resampling=self.resampling
         )
         window.set_max_size(max(size.width, size.height))
-
-        buffer = self.source.read_at(window)
-        if self.op:
-            buffer = self.op(buffer)
-        self.set_buffer(buffer)
+        return window

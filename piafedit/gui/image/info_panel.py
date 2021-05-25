@@ -23,7 +23,7 @@ class InfoPanel(QWidget):
         x, y = area.pos.raw()
         w, h = area.size.raw()
 
-        buffer = source.read_at(Window(window=area))
+        buffer = source.read(Window(window=area))
         import numpy as np
         self.distributionLabel.setText(
             f'min: {buffer.min()} max: {buffer.max()}\n'

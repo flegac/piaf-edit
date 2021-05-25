@@ -25,7 +25,7 @@ def gen_big_image():
     size = SizeAbs(IMAGE_SIZE, IMAGE_SIZE / source.infos().aspect)
     log.debug(f'resize from {source.infos().size} to {size}')
     if not dest.path.exists():
-        buffer = source.read_at(Window.from_size(size))
+        buffer = source.read(Window.from_size(size))
         dest.create(buffer)
     return dest
 

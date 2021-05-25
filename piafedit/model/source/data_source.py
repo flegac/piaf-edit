@@ -14,11 +14,11 @@ class DataSource(ABC):
         ...
 
     @abstractmethod
-    def read_at(self, window: Window = None) -> Buffer:
+    def read(self, window: Window = None) -> Buffer:
         ...
 
     @abstractmethod
-    def write_at(self, buffer: Buffer, window: Window = None):
+    def write(self, buffer: Buffer, window: Window = None):
         ...
 
     def update_window(self, window: Window):
@@ -36,10 +36,4 @@ class DataSource(ABC):
 
     def overview(self, max_size: int):
         window = Window.from_size(self.overview_size(max_size))
-        return self.read_at(window)
-
-
-class WindowSource(DataSource):
-    def __init__(self, source: DataSource):
-        self.source = source
-        self.window: Window = Window()
+        return self.read(window)

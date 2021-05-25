@@ -49,7 +49,7 @@ class RIODataSource(DataSource):
                 )
         return self._infos
 
-    def read_at(self, window: Window = None) -> Buffer:
+    def read(self, window: Window = None) -> Buffer:
         with rasterio.open(self.path) as src:
             # resampling https://rasterio.readthedocs.io/en/latest/topics/resampling.html
             target = None if window.size is None else (src.count, window.size.height, window.size.width)
@@ -61,7 +61,7 @@ class RIODataSource(DataSource):
             data = np.moveaxis(data, 0, 2)
             return data
 
-    def write_at(self, buffer: Buffer, window: Window = None):
+    def write(self, buffer: Buffer, window: Window = None):
         infos = self.infos()
         width, height = infos.size.raw()
         shape = buffer.shape
@@ -92,7 +92,7 @@ class RIODataSource(DataSource):
                            )) as dst:
             for i in range(count):
                 data = buffer[..., i]
-                dst.write_at(data, i + 1)
+                dst.write(data, i + 1)
 
         self.create_overview()
 

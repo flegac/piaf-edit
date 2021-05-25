@@ -22,9 +22,9 @@ class TestRawDataSource(TestCase):
 
     def test_write(self):
         b = np.zeros(shape)
-        source.write_at(b)
+        source.write(b)
         assert np.array_equal(buffer, b)
 
     def test_read(self):
-        x = source.read_at()
+        x = source.read()
         assert np.array_equal(x, buffer)

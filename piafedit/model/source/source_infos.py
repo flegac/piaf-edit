@@ -1,3 +1,4 @@
+from copy import deepcopy
 from dataclasses import dataclass
 from typing import Tuple
 
@@ -22,3 +23,6 @@ class SourceInfos:
     @property
     def aspect(self):
         return self.size.aspect_ratio
+
+    def copy(self):
+        return deepcopy(self)
