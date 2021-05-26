@@ -1,11 +1,15 @@
 import logging
+from pathlib import Path
 from typing import Optional
 
+from PyQt5.QtCore import QMimeData
+from PyQt5.QtWidgets import QWidget
 from rasterio.enums import Resampling
 from rx.subject import Subject
 
+from piafedit.gui.common.drop import Drop
+from piafedit.gui.common.utils import open_sources
 from piafedit.gui.image.bases.buffer_view import BufferView
-from piafedit.gui.image.bases.source_view_drag_handler import SourceViewDragHandler
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
 from piafedit.model.geometry.size import SizeAbs
@@ -16,16 +20,41 @@ from piafedit.model.source.window import Window
 log = logging.getLogger(__name__)
 
 
+def style_handler(path: Path):
+    from piafedit.editor_api import P
+    if path.suffix == '.stylesheet':
+        P.load_style(path)
+    else:
+        P.load_style(None)
+
+
 class SourceView(BufferView):
     def __init__(self, parent=None):
         super().__init__(parent)
         self._source: Optional[DataSource] = None
         self.op: Optional[Operator] = None
         self.resampling: Optional[Resampling] = None
-        SourceViewDragHandler(self).patch(self)
 
         self.changed_subject = Subject()
         self.changed_subject.subscribe(lambda _: self.update_view())
+
+        Drop.patch(self, lambda x: x.hasUrls(), SourceView.handle_drop())
+
+    @staticmethod
+    def handle_drop():
+        def handle(widget: QWidget, mime_data: QMimeData):
+            paths = Drop.read_urls(mime_data)
+            if len(paths) != 1:
+                log.warning(f'Only one source per View is allowed ({len(paths)} files selected)')
+                return
+
+            sources = open_sources(paths)
+            try:
+                widget.set_source(sources[0])
+            except:
+                log.warning(f'could not load source: {paths}')
+
+        return handle
 
     @property
     def source(self):
