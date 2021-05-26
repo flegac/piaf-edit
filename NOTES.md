@@ -7,6 +7,13 @@
 
 # TODO LIST
 
+- SourceBrowser : make sources draggable (to the OverviewPanel)
+
+- DataSource hierarchy
+    + read(Window)
+    + write(buffer,Window)
+
+
 ## FIXES
 - clean up events (subject/observables)
 - ViewManager should be closely related to the corresponding BrowserWidget
@@ -17,7 +24,6 @@
 
 - Easy plugin API
 
-- custom resampling (bilinear, cubic, nearest, ...)
 - Custom operators
  + dilate/erode
  - edge detection
@@ -49,6 +55,7 @@
 - display logs in interface
 - background tasks (Threads / Processes)
 - drag & drop
+- custom resampling (bilinear, cubic, nearest, ...)
 
 
 - use jupyter Qt console

@@ -4,9 +4,9 @@ import pyqtgraph as pg
 from PyQt5.QtGui import QCloseEvent
 from rx.subject import Subject
 
+from piafedit.gui.common.utils import roi_to_rect
 from piafedit.gui.image.bases.source_view import SourceView
 from piafedit.gui.image.view_manager import ViewManager
-from piafedit.gui.utils import roi_to_rect
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import SizeAbs
@@ -26,6 +26,8 @@ class RoiController:
         self.request_update()
 
     def set_aspect(self, aspect: float):
+        if self.roi is None:
+            return
         old = self.roi.center
         if aspect < self.roi.aspect_ratio:
             self.roi.size.height = self.roi.size.width / aspect
@@ -51,13 +53,11 @@ class Overview(SourceView):
         self.the_roi.sigRegionChanged.connect(self.update_rect)
         self.addItem(self.the_roi)
 
-    def optimize_aspect(self):
+    def optimize_aspect(self, table_aspect: float = 1.0):
         from piafedit.editor_api import P
         win = P.main_window.main_view
         a1 = win.width() / win.height()
-        print(win.width(), win.height(), a1)
-
-        aspect = a1
+        aspect = a1 / table_aspect
         self.window.set_aspect(aspect)
         self.update_roi()
 
@@ -102,11 +102,14 @@ class Overview(SourceView):
         self.window.move(rect)
 
     def update_roi(self):
+        if self.window.roi is None:
+            return
+
         rx, ry = self.compute_roi_rect_ratio()
         rect = self.window.roi
-        roi = self.the_roi
         rect2 = rect.scale(1 / rx, 1 / ry)
 
+        roi = self.the_roi
         roi.setPos(*rect2.pos.raw())
         roi.setSize(rect2.size.raw())
 

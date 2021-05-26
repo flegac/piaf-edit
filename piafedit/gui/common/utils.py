@@ -1,53 +1,51 @@
 import logging
+from pathlib import Path
+from typing import List, Iterator
 
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QPixmap, QImage, QIcon
-from PyQt5.QtWidgets import QPushButton, QSizePolicy
+import pyqtgraph as pg
+from PyQt5.QtWidgets import QFileDialog
 
-from piafedit.model.libs.filters import normalize
-from piafedit.model.libs.operator import Buffer
+from piafedit.model.geometry.point import PointAbs
+from piafedit.model.geometry.rect import RectAbs
+from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.source.data_source import DataSource
 
 log = logging.getLogger()
 
 
-def pixmap_from_numpy(buffer: Buffer) -> QPixmap:
-    buffer = (normalize(buffer) * 255).astype('uint8')
-    h, w = buffer.shape[:2]
-    img = QImage(buffer.tobytes(), w, h, QImage.Format_RGB888)
-    return QPixmap.fromImage(img)
+def rect_to_roi(rect: RectAbs):
+    return pg.RectROI(*rect.raw())
 
 
-def image_button(buffer: Buffer):
-    r, g, b = 0, 0, 0
-    h, w = buffer.shape[:2]
-    pixmap = pixmap_from_numpy(buffer)
-
-    widget = QPushButton()
-    # widget.clicked.connect(lambda: log.debug('ok'))
-    # widget.setText(text)
-    widget.setStyleSheet(f'QPushButton {{ color: rgb{r, g, b}; margin: 0px }}')
-    widget.setIcon(QIcon(pixmap))
-    widget.setIconSize(QSize(w, h))
-    widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-    return widget
+def roi_to_rect(roi: pg.RectROI):
+    point = PointAbs(roi.pos().x(), roi.pos().y())
+    size = SizeAbs(roi.size().x(), roi.size().y())
+    return RectAbs(point, size)
 
 
-def source_button(source: DataSource, size: int = 256):
-    overview = source.overview(max_size=size)
-    button = image_button(overview)
+def select_files() -> List[Path]:
+    dialog = QFileDialog()
+    dialog.setFileMode(QFileDialog.ExistingFiles)
+    dialog.setDirectory(str(Path('..').absolute()))
+    # dialog.setFilter('Image files (*.jpg *.gif)')
 
-    def handler():
-        from piafedit.editor_api import P
+    if dialog.exec():
+        filenames = dialog.selectedFiles()
+        log.debug(filenames)
+        paths = [Path(file) for file in filenames]
+        return paths
 
-        P.show_source(source)
 
-    button.clicked.connect(handler)
-    infos = source.infos()
-    width, height = infos.size.raw()
-    dtype = infos.dtype
-    bands = infos.bands
-    name = infos.name
-    button.setToolTip(f'{name} {width}x{height} {bands} {dtype}')
-
-    return button
+def open_sources(paths: Iterator[Path]) -> List[DataSource]:
+    from piafedit.model.source.rio_data_source import RIODataSource
+    sources = []
+    for path in paths:
+        if path.is_dir():
+            sources.append(open_sources(list(path.iterdir())))
+        else:
+            try:
+                source = RIODataSource(path)
+                sources.append(source)
+            except:
+                log.warning(f'Could not open {path}')
+    return sources

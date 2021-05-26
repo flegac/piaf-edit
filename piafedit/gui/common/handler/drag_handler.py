@@ -29,8 +29,8 @@ def dropEvent(e):
 
 def default_handler(self, ev):
     from piafedit.editor_api import P
-    P.log.debug(str(ev))
-
+    # P.log.debug(str(ev))
+    pass
 
 @dataclass
 class DragHandler:

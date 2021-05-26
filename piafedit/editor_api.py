@@ -5,7 +5,7 @@ from typing import Iterator
 import numpy as np
 from PyQt5.QtWidgets import QMainWindow
 
-from piafedit.gui.utils import select_files
+from piafedit.gui.common.utils import select_files
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.raw_data_source import RawDataSource
 from piafedit.model.source.rio_data_source import RIODataSource

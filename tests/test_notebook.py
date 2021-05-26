@@ -11,10 +11,10 @@ import sys
 
 from qtpy import QtWidgets
 
-from piafedit.gui.my_notebook import MyNotebook
+from piafedit.gui.notebook import Notebook
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
-    window = MyNotebook()
+    window = Notebook()
     window.show()
     sys.exit(app.exec_())

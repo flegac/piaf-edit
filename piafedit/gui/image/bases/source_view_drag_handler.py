@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 
 from piafedit.gui.common.handler.drag_handler import DragHandler
-from piafedit.gui.utils import open_sources
+from piafedit.gui.common.utils import open_sources
 
 log = logging.getLogger()
 

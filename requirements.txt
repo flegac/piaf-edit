@@ -9,6 +9,9 @@ pyqt5-tools
 qimage2ndarray
 qtconsole
 
+pyqttango
+
+
 scikit-image
 opencv-python
 imutils

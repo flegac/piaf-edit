@@ -2,7 +2,10 @@ import logging
 import sys
 
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QApplication
+import pyqttango
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QPushButton
 
 from piafedit.editor_api import P
 from piafedit.gui.main_ui import MainUi
@@ -31,10 +34,11 @@ def gen_big_image():
 
 
 def main():
+    pyqttango.init_resources()
     model = WorkModel(resources_path())
     pg.setConfigOptions(imageAxisOrder='row-major')
     app = QApplication([])
-
+    QIcon.setThemeName('tango')
     P.main_window = MainUi(model)
     sys.exit(app.exec_())
 

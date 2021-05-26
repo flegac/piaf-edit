@@ -2,7 +2,7 @@ from qtconsole.manager import QtKernelManager
 from qtconsole.rich_jupyter_widget import RichJupyterWidget
 
 
-class MyNotebook(RichJupyterWidget):
+class Notebook(RichJupyterWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         kernel_manager = QtKernelManager(kernel_name='python3')
