@@ -82,14 +82,6 @@
            </sizepolicy>
           </property>
          </widget>
-         <widget class="InfoPanel" name="infos" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
          <widget class="QWidget" name="toolBar" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -100,7 +92,7 @@
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>200</height>
+            <height>500</height>
            </size>
           </property>
           <layout class="QGridLayout" name="gridLayout">
@@ -122,85 +114,175 @@
            <property name="verticalSpacing">
             <number>0</number>
            </property>
-           <item row="0" column="0">
-            <widget class="QPushButton" name="bestAspectButton">
+           <item row="8" column="0">
+            <widget class="QGroupBox" name="sourceGroup">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="text">
-              <string>Fit</string>
+             <property name="title">
+              <string>source</string>
              </property>
-             <property name="iconSize">
-              <size>
-               <width>16</width>
-               <height>16</height>
-              </size>
-             </property>
+             <layout class="QGridLayout" name="gridLayout_3">
+              <item row="1" column="1">
+               <widget class="QLabel" name="sourceLabel">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>&lt;width&gt;x&lt;height&gt;:&lt;bands&gt; &lt;dtype&gt;</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QGroupBox" name="areaGroup">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="title">
+                 <string>area</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_2">
+                 <item row="2" column="1">
+                  <widget class="QPushButton" name="bestAspectButton">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Fit</string>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>16</width>
+                     <height>16</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="windowLabel">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>windowLabel</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0" colspan="2">
+                  <widget class="QLabel" name="distributionLabel">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>&lt;min&gt;/&lt;avg&gt;/&lt;max&gt; | mean: &lt;mean&gt; std_dev: &lt;std&gt;</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
-           <item row="0" column="4">
-            <widget class="QPushButton" name="clearButton">
-             <property name="text">
-              <string>Clear</string>
+           <item row="9" column="0">
+            <widget class="QGroupBox" name="viewGroup">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QCheckBox" name="autofitControl">
-             <property name="text">
-              <string>autofit</string>
+             <property name="title">
+              <string>views</string>
              </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QCheckBox" name="toolBarControl">
-             <property name="text">
-              <string>Toolbar</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QComboBox" name="layoutCombo">
-             <item>
-              <property name="text">
-               <string>1x1</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>2x1</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>2x2</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>3x2</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="0" column="5">
-            <widget class="QPushButton" name="newButton">
-             <property name="text">
-              <string>New</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="4">
-            <widget class="QCheckBox" name="histogramControl">
-             <property name="text">
-              <string>Histogram</string>
-             </property>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="newButton">
+                <property name="text">
+                 <string>New</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QPushButton" name="clearButton">
+                <property name="text">
+                 <string>Clear</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" colspan="2">
+               <widget class="QComboBox" name="layoutCombo">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>1x1</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>2x1</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>2x2</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>3x2</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="2" column="0" colspan="2">
+               <widget class="QCheckBox" name="autofitControl">
+                <property name="text">
+                 <string>autofit</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0" colspan="2">
+               <widget class="QCheckBox" name="toolBarControl">
+                <property name="text">
+                 <string>toolbar</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0" colspan="2">
+               <widget class="QCheckBox" name="histogramControl">
+                <property name="text">
+                 <string>histogram</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>
@@ -227,12 +309,6 @@
   </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>InfoPanel</class>
-   <extends>QWidget</extends>
-   <header>piafedit.gui.image.info_panel</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>Overview</class>
    <extends>QWidget</extends>

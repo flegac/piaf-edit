@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 MAX_FPS = 24
 SMALL_LATENCY = 1. / MAX_FPS
 NORMAL_LATENCY = 2 * SMALL_LATENCY
-FULL_LATENCY = .2 + 2 * NORMAL_LATENCY
+FULL_LATENCY = 2 * NORMAL_LATENCY
 
 SmallSize = SizeAbs(64, 64)
 NormalSize = SizeAbs(256, 256)

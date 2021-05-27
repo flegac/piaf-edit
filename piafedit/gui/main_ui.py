@@ -63,8 +63,7 @@ class MainUi(QMainWindow):
         main_view = self.main_view
         overview = main_view.overview
         overview.set_source(source)
-        main_view.infos.update_overview(overview)
-        views= overview.views
+        views = overview.views
 
         while len(views.views) < 6:
             main_view.create_view()

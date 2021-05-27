@@ -12,7 +12,7 @@ class RoiMouseHandler(MouseHandler):
         from piafedit.gui.image.overview import Overview
         from piafedit.gui.image.roi_view import RoiView
         self.overview: Overview = overview
-        self.zoom_speed: float = 1.1
+        self.zoom_speed: float = 1.2
 
         self.cursor_origin = None
         self.roi_origin: RectAbs = None

@@ -12,6 +12,9 @@ class BufferView(pg.ImageView):
         self.ui.histogram.hide()
         self.ui.graphicsView.setBackground(None)
 
+        self.view.setMouseEnabled(False, False)
+        self.view.setMenuEnabled(False)
+
     def set_histogram(self, status: bool):
         if status:
             self.ui.histogram.show()

@@ -3,9 +3,8 @@ import sys
 
 import pyqtgraph as pg
 import pyqttango
-from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QPushButton
+from PyQt5.QtWidgets import QApplication
 
 from piafedit.editor_api import P
 from piafedit.gui.main_ui import MainUi
