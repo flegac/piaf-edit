@@ -1,7 +1,8 @@
-import sys
 import uuid
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
+from PyQt5.QtWidgets import QMainWindow, QPushButton
+
+from piafedit.ui_utils import gui_app
 
 
 class MainWindow(QMainWindow):
@@ -19,11 +20,6 @@ class MainWindow(QMainWindow):
         MainWindow.singleton = MainWindow()
 
 
-def main():
-    app = QApplication([])
-    MainWindow.restart()
-    sys.exit(app.exec_())
-
-
 if __name__ == '__main__':
-    main()
+    with gui_app():
+        MainWindow.restart()

@@ -4,6 +4,8 @@
 
 ## Focus
 
+- Pipeline should have a Dataclass with list of operators enums
+  - reload current pipeline in ViewConfigPanel
 
 - ViewManager should be closely related to the corresponding BrowserWidget
 

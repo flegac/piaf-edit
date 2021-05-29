@@ -1,6 +1,6 @@
-import sys
+from PyQt5.QtWidgets import QComboBox, QWidget, QFormLayout, QLabel, QLineEdit
 
-from PyQt5.QtWidgets import QComboBox, QWidget, QFormLayout, QLabel, QLineEdit, QApplication
+from piafedit.ui_utils import gui_app
 
 
 class combo(QComboBox):
@@ -54,12 +54,7 @@ class Example(QWidget):
         self.setWindowTitle('Simple drag & drop')
 
 
-def main():
-    app = QApplication(sys.argv)
-    ex = Example()
-    ex.show()
-    app.exec_()
-
-
 if __name__ == '__main__':
-    main()
+    with gui_app():
+        ex = Example()
+        ex.show()

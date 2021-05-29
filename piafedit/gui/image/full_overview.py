@@ -1,7 +1,7 @@
 import rx.operators as ops
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QWidget, QCheckBox, QStyle, QSpinBox
+from PyQt5.QtWidgets import QWidget, QCheckBox, QStyle
 
 from piafedit.gui.browser.source_browser import SourceBrowser
 from piafedit.gui.image.overview import Overview

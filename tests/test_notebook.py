@@ -12,9 +12,9 @@ import sys
 from qtpy import QtWidgets
 
 from piafedit.gui.notebook import Notebook
+from piafedit.ui_utils import gui_app
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication([])
-    window = Notebook()
-    window.show()
-    sys.exit(app.exec_())
+    with gui_app():
+        window = Notebook()
+        window.show()

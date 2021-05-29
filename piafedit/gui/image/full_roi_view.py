@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget
 
 from piafedit.gui.image.overview import Overview
 from piafedit.gui.image.roi_view import RoiView
-from piafedit.gui.image.view_config_panel import ViewConfigPanel
+from piafedit.gui.tools.view_config_panel import ViewConfigPanel
 from piafedit.ui_utils import load_ui
 
 

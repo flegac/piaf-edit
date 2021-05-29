@@ -10,9 +10,10 @@ from rx.subject import Subject
 from piafedit.gui.common.drop import Drop
 from piafedit.gui.common.utils import open_sources
 from piafedit.gui.image.bases.buffer_view import BufferView
+from piafedit.model.transform import Transform
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
-from piafedit.model.geometry.size import SizeAbs, Size
+from piafedit.model.geometry.size import SizeAbs
 from piafedit.model.libs.operator import Operator
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.window import Window
@@ -26,12 +27,6 @@ def style_handler(path: Path):
         P.load_style(path)
     else:
         P.load_style(None)
-
-
-class Transform:
-    def __init__(self):
-        self.offset = PointAbs(0, 0)
-        self.zoom = Size()
 
 
 class SourceView(BufferView):

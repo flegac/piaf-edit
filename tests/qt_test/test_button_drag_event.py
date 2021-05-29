@@ -1,10 +1,11 @@
 import uuid
 
 from PyQt5.QtCore import QMimeData, QUrl
-from PyQt5.QtWidgets import QPushButton, QApplication, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QPushButton, QWidget, QVBoxLayout
 
 from piafedit.gui.common.draggable import Draggable
 from piafedit.gui.common.drop import Drop
+from piafedit.ui_utils import gui_app
 
 
 class DragButton(QPushButton):
@@ -35,15 +36,13 @@ class DragButton(QPushButton):
 
 
 if __name__ == "__main__":
-    app = QApplication([])
-    w = QWidget()
-    layout = QVBoxLayout()
-    w.setLayout(layout)
-    w.resize(800, 600)
-    w.show()
+    with gui_app():
+        w = QWidget()
+        layout = QVBoxLayout()
+        w.setLayout(layout)
+        w.resize(800, 600)
+        w.show()
 
-    layout.addWidget(DragButton())
-    layout.addWidget(DragButton())
-    layout.addWidget(DragButton())
-
-    app.exec_()
+        layout.addWidget(DragButton())
+        layout.addWidget(DragButton())
+        layout.addWidget(DragButton())

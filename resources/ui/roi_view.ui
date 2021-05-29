@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>RoiView</class>
- <widget class="QWidget" name="RoiView">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>552</width>
-    <height>416</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>RoiView</string>
+    <class>SourceView</class>
+    <widget class="QWidget" name="SourceView">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>327</width>
+                <height>221</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>sourceView</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">

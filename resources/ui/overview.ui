@@ -4,10 +4,10 @@
  <widget class="QWidget" name="Overview">
   <property name="geometry">
    <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>928</width>
-    <height>598</height>
+       <x>0</x>
+       <y>0</y>
+       <width>486</width>
+       <height>279</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -204,7 +204,7 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>&lt;min&gt;/&lt;avg&gt;/&lt;max&gt; | mean: &lt;mean&gt; std_dev: &lt;std&gt;</string>
+                       <string>&lt;min&gt;/&lt;max&gt; | mean: &lt;mean&gt; std_dev: &lt;std&gt;</string>
                    </property>
                   </widget>
                  </item>

@@ -1,7 +1,8 @@
 # importing libraries
-import sys
 
 from PyQt5.QtWidgets import *
+
+from piafedit.ui_utils import gui_app
 
 
 class Window(QMainWindow):
@@ -33,13 +34,7 @@ class Window(QMainWindow):
         self.spin.setValue(33)
 
 
-# create pyqt5 app
-App = QApplication(sys.argv)
-
-# create the instance of our Window
-window = Window()
-
-window.show()
-
-# start the app
-sys.exit(App.exec())
+if __name__ == '__main__':
+    with gui_app():
+        window = Window()
+        window.show()

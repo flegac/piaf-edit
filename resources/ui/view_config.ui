@@ -1,220 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>ViewConfig</class>
- <widget class="QDialog" name="ViewConfig">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>284</width>
-    <height>213</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>ViewConfig</string>
-  </property>
-  <layout class="QFormLayout" name="formLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="operatorLabel">
-     <property name="text">
-      <string>Operator</string>
+ <widget class="QWidget" name="ViewConfig">
+     <property name="geometry">
+         <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>284</width>
+             <height>219</height>
+         </rect>
      </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QComboBox" name="operator">
-     <item>
-      <property name="text">
-       <string>Identity</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Edge</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Erode</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Dilate</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="resamplingLabel">
-     <property name="text">
-      <string>Resampling</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QComboBox" name="resampling">
-     <item>
-      <property name="text">
-       <string>cubic</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>bilinear</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>nearest</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="QGroupBox" name="transformGroupBox">
-     <property name="title">
-      <string>Transform</string>
+     <property name="windowTitle">
+         <string>ViewConfig</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="xLabel">
-        <property name="text">
-         <string>offset</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QSpinBox" name="xSpinBox">
-        <property name="prefix">
-         <string>x=</string>
-        </property>
-        <property name="minimum">
-         <number>-1000</number>
-        </property>
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="wLabel">
-        <property name="text">
-         <string>zoom</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="wSpinBox">
-        <property name="prefix">
-         <string>x=</string>
-        </property>
-        <property name="suffix">
-         <string>%</string>
-        </property>
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="minimum">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>200.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>10.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>100.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QSpinBox" name="ySpinBox">
-        <property name="prefix">
-         <string>y=</string>
-        </property>
-        <property name="minimum">
-         <number>-1000</number>
-        </property>
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QDoubleSpinBox" name="hSpinBox">
-        <property name="prefix">
-         <string>y=</string>
-        </property>
-        <property name="suffix">
-         <string>%</string>
-        </property>
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="minimum">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>200.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>10.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>100.000000000000000</double>
-        </property>
-       </widget>
-      </item>
+         <property name="leftMargin">
+             <number>9</number>
+         </property>
+         <property name="topMargin">
+             <number>9</number>
+         </property>
+         <property name="rightMargin">
+             <number>9</number>
+         </property>
+         <property name="bottomMargin">
+             <number>9</number>
+         </property>
+         <property name="spacing">
+             <number>2</number>
+         </property>
+         <item row="2" column="0">
+             <widget class="QDialogButtonBox" name="buttonBox">
+                 <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="standardButtons">
+                     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+                 </property>
+             </widget>
+         </item>
+         <item row="0" column="0">
+             <widget class="QGroupBox" name="pipelineGroupBox">
+                 <property name="title">
+                     <string>Pipeline</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout">
+                     <property name="spacing">
+                         <number>0</number>
+                     </property>
+                     <property name="leftMargin">
+                         <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                         <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                         <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                         <number>0</number>
+                     </property>
+                     <item>
+                         <widget class="PipelinePanel" name="pipelinePanel" native="true"/>
+                     </item>
+                 </layout>
+             </widget>
+         </item>
+         <item row="1" column="0">
+             <widget class="QGroupBox" name="transformGroupBox">
+                 <property name="title">
+                     <string>Transform</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_2">
+                     <property name="spacing">
+                         <number>0</number>
+                     </property>
+                     <property name="leftMargin">
+                         <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                         <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                         <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                         <number>0</number>
+                     </property>
+                     <item>
+                         <widget class="TransformPanel" name="transformPanel" native="true"/>
+                     </item>
+                 </layout>
+             </widget>
+         </item>
      </layout>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-  </layout>
  </widget>
- <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>ViewConfig</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>ViewConfig</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+    <customwidgets>
+        <customwidget>
+            <class>TransformPanel</class>
+            <extends>QWidget</extends>
+            <header>piafedit.gui.tools.transform_panel</header>
+            <container>1</container>
+        </customwidget>
+        <customwidget>
+            <class>PipelinePanel</class>
+            <extends>QWidget</extends>
+            <header>piafedit.gui.tools.pipeline_panel</header>
+            <container>1</container>
+        </customwidget>
+    </customwidgets>
+    <resources/>
+    <connections/>
 </ui>

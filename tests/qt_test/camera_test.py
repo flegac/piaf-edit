@@ -1,4 +1,3 @@
-import sys
 import time
 from pathlib import Path
 from typing import Optional
@@ -6,6 +5,8 @@ from typing import Optional
 from PyQt5.QtMultimedia import *
 from PyQt5.QtMultimediaWidgets import *
 from PyQt5.QtWidgets import *
+
+from piafedit.ui_utils import gui_app
 
 
 class CameraManager:
@@ -72,7 +73,6 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == "__main__":
-    App = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(App.exec())
+    with gui_app():
+        window = MainWindow()
+        window.show()
