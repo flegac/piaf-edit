@@ -1,15 +1,13 @@
-from PyQt5.QtWidgets import QWidget
-
+from piafedit.gui.common.template_widget import TemplateWidget
 from piafedit.gui.image.overview import Overview
 from piafedit.gui.image.roi_view import RoiView
 from piafedit.gui.tools.view_config_panel import ViewConfigPanel
-from piafedit.ui_utils import load_ui
 
 
-class FullRoiView(QWidget):
-    def __init__(self):
-        super().__init__()
-        load_ui('roi_view', self)
+class FullRoiView(TemplateWidget):
+    def __init__(self, parent=None):
+        super().__init__('roi_view', parent)
+
         self.view.changed_subject.subscribe(on_next=self.on_change)
         self.configureButton.clicked.connect(self.show_config)
 
@@ -19,7 +17,8 @@ class FullRoiView(QWidget):
         self.nameLabel.setText(view.view_name())
 
     def show_config(self):
-        self.panel = ViewConfigPanel(self.view)
+        self.panel = ViewConfigPanel()
+        self.panel.set_view(self.view)
         self.panel.show()
 
     def set_toolbar(self, status: bool):

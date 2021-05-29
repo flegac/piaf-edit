@@ -18,6 +18,7 @@ class PipelinePanel(TemplateWidget):
         self.operator_combo.addItems(operators.keys())
         self.insertButton.clicked.connect(self.insert_operator)
         self.removeButton.clicked.connect(self.remove_selected)
+        self.clearButton.clicked.connect(self.clear_pipeline)
         self.show()
 
     def pipeline(self):
@@ -33,6 +34,11 @@ class PipelinePanel(TemplateWidget):
             return buffer
 
         return pipe
+
+    def clear_pipeline(self):
+        while self.pipeline_list.count() > 0:
+            self.pipeline_list.takeItem(0)
+        self.request_update()
 
     def insert_operator(self):
         op = self.operator_combo.currentData()
