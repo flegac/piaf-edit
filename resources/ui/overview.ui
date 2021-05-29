@@ -84,7 +84,7 @@
          </widget>
          <widget class="QWidget" name="toolBar" native="true">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -92,26 +92,23 @@
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>500</height>
+            <height>275</height>
            </size>
           </property>
           <layout class="QGridLayout" name="gridLayout">
            <property name="leftMargin">
-            <number>0</number>
+            <number>2</number>
            </property>
            <property name="topMargin">
             <number>0</number>
            </property>
            <property name="rightMargin">
-            <number>0</number>
+            <number>2</number>
            </property>
            <property name="bottomMargin">
             <number>0</number>
            </property>
-           <property name="horizontalSpacing">
-            <number>2</number>
-           </property>
-           <property name="verticalSpacing">
+           <property name="spacing">
             <number>0</number>
            </property>
            <item row="8" column="0">
@@ -126,6 +123,21 @@
               <string>source</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_3">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <property name="spacing">
+               <number>0</number>
+              </property>
               <item row="1" column="1">
                <widget class="QLabel" name="sourceLabel">
                 <property name="sizePolicy">
@@ -214,6 +226,21 @@
               <string>views</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_4">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <property name="spacing">
+               <number>0</number>
+              </property>
               <item row="0" column="0">
                <widget class="QPushButton" name="newButton">
                 <property name="text">

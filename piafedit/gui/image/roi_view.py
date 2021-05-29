@@ -6,10 +6,10 @@ import rx.operators as ops
 from PyQt5.QtGui import QCloseEvent
 from rx.subject import Subject
 
+from piafedit.gui.image.bases.source_view import SourceView
 from piafedit.gui.image.overview import Overview
 from piafedit.gui.image.roi_keyboard_handler import RoiKeyboardHandler
 from piafedit.gui.image.roi_mouse_handler import RoiMouseHandler
-from piafedit.gui.image.bases.source_view import SourceView
 from piafedit.model.geometry.size import SizeAbs
 
 log = logging.getLogger(__name__)
@@ -66,6 +66,8 @@ class RoiView(SourceView):
         self.request_update()
 
     def request_update(self, ev=None):
+        # FIXME: this slow down a lot
+        # super().request_update()
         event = time.time()
         self.update_subject.on_next(event)
 

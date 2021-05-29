@@ -12,6 +12,14 @@ class SourceInfos:
     shape: Tuple[int, ...]
 
     @property
+    def width(self):
+        return self.size.width
+
+    @property
+    def height(self):
+        return self.size.height
+
+    @property
     def size(self):
         h, w = self.shape[:2]
         return SizeAbs(w, h)

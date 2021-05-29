@@ -12,7 +12,7 @@ from piafedit.gui.common.utils import open_sources
 from piafedit.gui.image.bases.buffer_view import BufferView
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
-from piafedit.model.geometry.size import SizeAbs
+from piafedit.model.geometry.size import SizeAbs, Size
 from piafedit.model.libs.operator import Operator
 from piafedit.model.source.data_source import DataSource
 from piafedit.model.source.window import Window
@@ -28,11 +28,18 @@ def style_handler(path: Path):
         P.load_style(None)
 
 
+class Transform:
+    def __init__(self):
+        self.offset = PointAbs(0, 0)
+        self.zoom = Size()
+
+
 class SourceView(BufferView):
     def __init__(self, parent=None):
         super().__init__(parent)
         self._source: Optional[DataSource] = None
-        self.op: Optional[Operator] = None
+        self.operator: Optional[Operator] = None
+        self.transform: Transform = Transform()
         self.resampling: Optional[Resampling] = None
 
         self.changed_subject = Subject()
@@ -60,27 +67,30 @@ class SourceView(BufferView):
     def source(self):
         return self._source
 
-    def set_source(self, source: DataSource):
-        self._source = source
+    def request_update(self):
         self.changed_subject.on_next(self)
 
+    def set_source(self, source: DataSource):
+        self._source = source
+        self.request_update()
+
     def set_operator(self, op: Operator):
-        self.op = op
-        self.changed_subject.on_next(self)
+        self.operator = op
+        self.request_update()
 
     def set_resampling(self, resampling: Resampling):
         self.resampling = resampling
-        self.changed_subject.on_next(self)
+        self.request_update()
 
     def update_view(self, size: SizeAbs = None):
         if self.source is None:
             return
 
-        window = self.final_window(size)
+        window: Window = self.final_window(size)
 
         buffer = self.source.read(window)
-        if self.op:
-            buffer = self.op(buffer)
+        if self.operator:
+            buffer = self.operator(buffer)
         self.set_buffer(buffer)
 
     def final_window(self, size):
@@ -96,5 +106,10 @@ class SourceView(BufferView):
             window=win,
             resampling=self.resampling
         )
+        window.window.move(*self.transform.offset.raw())
+
+        window.window.size.width = int(window.window.size.width * self.transform.zoom.width)
+        window.window.size.height = int(window.window.size.height * self.transform.zoom.height)
         window.set_max_size(max(size.width, size.height))
+
         return window

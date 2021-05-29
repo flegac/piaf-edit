@@ -85,53 +85,17 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="infos">
+        <widget class="QLabel" name="nameLabel">
          <property name="text">
           <string>&lt;name&gt;</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="operator">
-         <item>
-          <property name="text">
-           <string>Identity</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Edge</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Erode</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Dilate</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="resampling">
-         <item>
-          <property name="text">
-           <string>cubic</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>bilinear</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>nearest</string>
-          </property>
-         </item>
+        <widget class="QPushButton" name="configureButton">
+         <property name="text">
+          <string>configure</string>
+         </property>
         </widget>
        </item>
        <item>
