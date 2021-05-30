@@ -1,16 +1,13 @@
 import logging
 
 import pyqtgraph as pg
-from PyQt5.QtGui import QCloseEvent
 from rx.subject import Subject
 
 from piafedit.gui.common.utils import roi_to_rect
 from piafedit.gui.image.bases.source_view import SourceView
-from piafedit.gui.image.view_manager import ViewManager
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import SizeAbs
-from piafedit.model.libs.operator import Operator
 from piafedit.model.source.data_source import DataSource
 
 log = logging.getLogger(__name__)
@@ -47,7 +44,6 @@ class Overview(SourceView):
         super().__init__(parent)
         self.window = RoiController()
         self.overview_size = 256
-        self.views = ViewManager()
 
         self.the_roi = pg.RectROI(PointAbs(0, 0).raw(), SizeAbs(0, 0).raw())
         self.the_roi.sigRegionChanged.connect(self.update_rect)
@@ -67,15 +63,6 @@ class Overview(SourceView):
         buffer = source.overview(max_size=self.overview_size)
         self.set_buffer(buffer)
         self.update_roi()
-
-    def create_view(self, op: Operator = None):
-        view = self.views.create_view(op)
-        view.subscribe(self)
-        return view
-
-    def closeEvent(self, ev: QCloseEvent):
-        self.views.clear()
-        super().closeEvent(ev)
 
     def setup_action(self, pos: PointAbs):
         overview = self

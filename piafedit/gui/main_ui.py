@@ -60,10 +60,10 @@ class MainUi(QMainWindow):
         placeholder.setLayout(layout)
 
     def set_source(self, source: DataSource):
-        main_view = self.main_view
+        main_view: FullOverview = self.main_view
         overview = main_view.overview
         overview.set_source(source)
-        views = overview.views
+        views = main_view.views
 
         while len(views.views) < 6:
             main_view.create_view()

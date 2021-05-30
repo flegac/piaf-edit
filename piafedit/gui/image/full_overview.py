@@ -1,21 +1,24 @@
 import rx.operators as ops
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QWidget, QCheckBox, QStyle
+from PyQt5.QtWidgets import QCheckBox, QStyle
 
 from piafedit.gui.browser.source_browser import SourceBrowser
+from piafedit.gui.common.template_widget import TemplateWidget
 from piafedit.gui.image.overview import Overview
+from piafedit.gui.image.view_manager import ViewManager
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
+from piafedit.model.libs.operator import Operator
 from piafedit.model.source.window import Window
-from piafedit.ui_utils import load_ui
 from qtwidgets.browser.browser_config import BrowserConfig
 
 
-class FullOverview(QWidget):
+class FullOverview(TemplateWidget):
     def __init__(self, parent=None):
-        super().__init__(parent)
-        load_ui('overview', self)
+        super().__init__('overview', parent)
+        self.views = ViewManager()
+
         self.bestAspectButton.setIconSize(QSize(32, 32))
 
         buttons = {
@@ -30,8 +33,8 @@ class FullOverview(QWidget):
 
         # connect buttons
         self.bestAspectButton.clicked.connect(self.fit_full_source)
-        self.clearButton.clicked.connect(lambda: self.overview.views.clear())
-        self.newButton.clicked.connect(lambda: self.overview.create_view())
+        self.clearButton.clicked.connect(lambda: self.views.clear())
+        self.newButton.clicked.connect(lambda: self.create_view())
 
         # hide buttons
         self.newButton.hide()
@@ -40,7 +43,7 @@ class FullOverview(QWidget):
 
         self.autofitControl.stateChanged.connect(self.set_autofit)
 
-        self.histogramControl.stateChanged.connect(lambda status: self.overview.views.set_histogram(status))
+        self.histogramControl.stateChanged.connect(lambda status: self.views.set_histogram(status))
         self.toolBarControl.stateChanged.connect(self.set_toolbar)
         self.layoutCombo.currentTextChanged.connect(self.on_layout_change)
 
@@ -105,7 +108,7 @@ class FullOverview(QWidget):
             self.optimize_aspect()
 
     def set_toolbar(self, status: bool):
-        self.overview.views.set_toolbar(status)
+        self.views.set_toolbar(status)
         browser = self.source_browser
         browser.config.tool_bar = status
         browser.request_update()
@@ -115,11 +118,13 @@ class FullOverview(QWidget):
         autofit: QCheckBox = self.autofitControl
         return autofit.isChecked()
 
-    def create_view(self):
-        return self.overview.create_view()
+    def create_view(self, op: Operator = None):
+        view = self.views.create_view(op)
+        view.subscribe(self.overview)
+        return view
 
     def closeEvent(self, ev) -> None:
-        self.overview.close()
+        self.views.clear()
         self.infos.close()
         super().closeEvent(ev)
 
