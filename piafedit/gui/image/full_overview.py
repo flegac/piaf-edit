@@ -77,10 +77,10 @@ class FullOverview(TemplateWidget):
         )
 
         # FIXME: update QSpinBox values
-        # self.xSpinBox.setValue(x)
-        # self.ySpinBox.setValue(y)
-        # self.widthSpinBox.setValue(aw)
-        # self.heightSpinBox.setValue(ah)
+        # self.transformPanel.xSpinBox.setValue(int(x))
+        # self.transformPanel.ySpinBox.setValue(int(y))
+        # self.transformPanel.wSpinBox.setValue(aw)
+        # self.transformPanel.hSpinBox.setValue(ah)
 
         self.windowLabel.setText(f'window: {x},{y} {aw}x{ah}')
 
