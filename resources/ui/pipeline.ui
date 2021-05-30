@@ -32,7 +32,7 @@
    <item row="3" column="0">
     <widget class="QPushButton" name="clearButton">
      <property name="text">
-      <string>clear</string>
+      <string>Clear</string>
      </property>
     </widget>
    </item>
@@ -42,21 +42,21 @@
    <item row="2" column="1">
     <widget class="QPushButton" name="addBeforeButton">
      <property name="text">
-      <string>add before</string>
+      <string>Add before</string>
      </property>
     </widget>
    </item>
    <item row="3" column="1">
     <widget class="QPushButton" name="removeButton">
      <property name="text">
-      <string>remove</string>
+      <string>Remove</string>
      </property>
     </widget>
    </item>
    <item row="2" column="2">
     <widget class="QPushButton" name="addAfterButton">
      <property name="text">
-      <string>add after</string>
+      <string>Add after</string>
      </property>
     </widget>
    </item>
