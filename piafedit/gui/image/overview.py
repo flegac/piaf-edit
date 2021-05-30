@@ -4,7 +4,7 @@ import pyqtgraph as pg
 from rx.subject import Subject
 
 from piafedit.gui.common.utils import roi_to_rect
-from piafedit.gui.image.bases.source_view import SourceView
+from piafedit.gui.image.views.source_view import SourceView
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import Rect, RectAbs
 from piafedit.model.geometry.size import SizeAbs

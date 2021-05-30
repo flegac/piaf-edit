@@ -9,7 +9,7 @@ from rx.subject import Subject
 
 from piafedit.gui.common.drop import Drop
 from piafedit.gui.common.utils import open_sources
-from piafedit.gui.image.bases.buffer_view import BufferView
+from piafedit.gui.image.views.buffer_view import BufferView
 from piafedit.model.transform import Transform
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs

@@ -1,5 +1,5 @@
 from piafedit.gui.common.template_widget import TemplateWidget
-from piafedit.gui.image.bases.source_view import SourceView
+from piafedit.gui.image.views.source_view import SourceView
 from piafedit.gui.tools.pipeline_panel import PipelinePanel
 from piafedit.gui.tools.transform_panel import TransformPanel
 

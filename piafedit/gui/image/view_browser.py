@@ -1,6 +1,6 @@
 from typing import List
 
-from piafedit.gui.image.bases.source_view import SourceView
+from piafedit.gui.image.views.source_view import SourceView
 from qtwidgets.browser.browser_widget import BrowserWidget
 from qtwidgets.observablelist import observablelist
 
