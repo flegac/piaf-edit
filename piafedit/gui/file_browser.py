@@ -3,7 +3,6 @@ from pathlib import Path
 
 from PyQt5.QtWidgets import QTreeView, QFileSystemModel
 
-from piafedit.editor_api import P
 from piafedit.model.source.rio_data_source import RIODataSource
 
 log = logging.getLogger()
@@ -30,6 +29,7 @@ class FileBrowser(QTreeView):
                 sources.append(RIODataSource(path))
             except:
                 log.warning(f'could not open source: {path}')
+        from piafedit.editor_api import P
         P.open_sources(sources)
 
     def on_click(self, ev):

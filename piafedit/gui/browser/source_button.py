@@ -3,7 +3,6 @@ from PyQt5.QtGui import QIcon, QResizeEvent, QPixmap
 from PyQt5.QtWidgets import QToolButton
 from qimage2ndarray import array2qimage
 
-from piafedit.editor_api import P
 from piafedit.gui.common.draggable import Draggable
 from piafedit.model.source.rio_data_source import RIODataSource
 
@@ -11,6 +10,8 @@ from piafedit.model.source.rio_data_source import RIODataSource
 class SourceButton(QToolButton):
     def __init__(self, source: RIODataSource):
         super().__init__()
+        from piafedit.editor_api import P
+
         self.source = source
 
         # self.setAutoFillBackground(True)

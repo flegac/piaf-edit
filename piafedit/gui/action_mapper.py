@@ -2,7 +2,6 @@ from pathlib import Path
 
 from PyQt5.QtWidgets import QMainWindow, QDockWidget
 
-from piafedit.editor_api import P
 from piafedit.gui.image.overview import Overview
 from piafedit.gui.notebook import Notebook
 from piafedit.ui_utils import resources_path
@@ -51,6 +50,7 @@ class ActionMapper:
         self.win.actionLoad_layout.setDisabled(not LAYOUT_BACKUP_PATH.exists())
 
     def setup_files(self):
+        from piafedit.editor_api import P
         self.win.actionNew.triggered.connect(P.new_source)
         self.win.actionOpen.triggered.connect(P.open_sources)
         self.win.actionSave.triggered.connect(print)

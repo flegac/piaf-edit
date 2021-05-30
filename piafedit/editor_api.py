@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Iterator
 
 import numpy as np
-from PyQt5.QtWidgets import QMainWindow
 
 from piafedit.gui.common.utils import select_files
 from piafedit.model.source.data_source import DataSource
@@ -13,8 +12,10 @@ from piafedit.model.work_model import WorkModel
 
 
 class P:
+    from piafedit.gui.main_ui import MainUi
+
     log = logging.getLogger()
-    main_window: QMainWindow = None
+    main_window: MainUi = None
 
     @staticmethod
     def model() -> WorkModel:
