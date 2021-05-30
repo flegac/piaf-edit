@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 class RoiController:
     def __init__(self):
         self.roi: RectAbs = None
-        self.subject = Subject()
+        self.on_change = Subject()
 
     def move(self, roi: RectAbs):
         self.roi = roi
@@ -36,7 +36,7 @@ class RoiController:
         self.roi.move(-dx, -dy)
 
     def request_update(self):
-        self.subject.on_next(self.roi.copy())
+        self.on_change.on_next(self.roi.copy())
 
 
 class Overview(SourceView):

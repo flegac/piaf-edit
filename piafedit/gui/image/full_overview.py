@@ -54,7 +54,7 @@ class FullOverview(TemplateWidget):
         def update_infos(ev):
             full_overview.update_infos()
 
-        overview.window.subject.pipe(
+        overview.window.on_change.pipe(
             ops.debounce(.2)
         ).subscribe(
             on_next=update_infos
