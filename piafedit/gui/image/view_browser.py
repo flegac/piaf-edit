@@ -1,22 +1,24 @@
 from typing import List
 
 from piafedit.gui.image.bases.source_view import SourceView
-from piafedit.model.libs.operator import Operator
+from qtwidgets.browser.browser_widget import BrowserWidget
 from qtwidgets.observablelist import observablelist
 
 
-class ViewManager:
-    def __init__(self):
+class ViewBrowser(BrowserWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
         self.histogram_status = False
         self.toolbar_status = False
+        # FIXME: remove this field (= super().widgets)
         self.views: List[SourceView] = observablelist()
 
-    def create_view(self, op: Operator = None):
+    def create_view(self):
         from piafedit.gui.image.full_roi_view import FullRoiView
         view = FullRoiView()
         view.view.set_histogram(self.histogram_status)
         view.set_toolbar(self.toolbar_status)
-        view.view.set_operator(op)
         self.views.append(view)
         return view
 

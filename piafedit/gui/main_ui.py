@@ -32,8 +32,8 @@ class MainUi(QMainWindow):
         self.source_browser.set_model(self.model.sources)
         self.worker_browser.set_model(self.model.workers)
         self.file_browser.setup_model(self.model.tree_model)
-        self.main_view.source_browser.config.tool_bar = False
-        self.main_view.source_browser.request_update()
+        self.main_view.view_browser.config.tool_bar = False
+        self.main_view.view_browser.request_update()
 
         # actions
         self.actions = ActionMapper(self)
@@ -63,11 +63,11 @@ class MainUi(QMainWindow):
         main_view: FullOverview = self.main_view
         overview = main_view.overview
         overview.set_source(source)
-        views = main_view.views
+        browser = main_view.view_browser
 
-        while len(views.views) < 6:
+        while len(browser.views) < 6:
             main_view.create_view()
-        main_view.source_browser.set_model(views.views)
+        main_view.view_browser.set_model(browser.views)
 
     # ---- EVENTS -----------------------------------------------------
 

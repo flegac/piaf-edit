@@ -4,10 +4,10 @@
  <widget class="QWidget" name="Overview">
   <property name="geometry">
    <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>529</width>
-       <height>457</height>
+    <x>0</x>
+    <y>0</y>
+    <width>908</width>
+    <height>563</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -92,7 +92,7 @@
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-               <height>450</height>
+            <height>450</height>
            </size>
           </property>
           <layout class="QGridLayout" name="gridLayout">
@@ -129,126 +129,126 @@
               <property name="topMargin">
                <number>0</number>
               </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <item row="4" column="1">
+               <widget class="QGroupBox" name="transformGroup">
+                <property name="title">
+                 <string>Transform</string>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                 <property name="spacing">
+                  <number>3</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>5</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>5</number>
+                 </property>
                  <property name="rightMargin">
-                     <number>0</number>
+                  <number>5</number>
                  </property>
                  <property name="bottomMargin">
-                     <number>0</number>
+                  <number>5</number>
                  </property>
-                 <property name="spacing">
-                     <number>0</number>
-                 </property>
-                 <item row="4" column="1">
-                     <widget class="QGroupBox" name="transformGroup">
-                         <property name="title">
-                             <string>Transform</string>
-                         </property>
-                         <layout class="QHBoxLayout" name="horizontalLayout">
-                             <property name="spacing">
-                                 <number>3</number>
-                             </property>
-                             <property name="leftMargin">
-                                 <number>5</number>
-                             </property>
-                             <property name="topMargin">
-                                 <number>5</number>
-                             </property>
-                             <property name="rightMargin">
-                                 <number>5</number>
-                             </property>
-                             <property name="bottomMargin">
-                                 <number>5</number>
-                             </property>
-                             <item>
-                                 <widget class="TransformPanel" name="transformPanel" native="true"/>
-                             </item>
-                         </layout>
-                     </widget>
+                 <item>
+                  <widget class="TransformPanel" name="transformPanel" native="true"/>
                  </item>
-                 <item row="2" column="1">
-                     <widget class="QLabel" name="distributionLabel">
-                         <property name="sizePolicy">
-                             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                             </sizepolicy>
-                         </property>
-                         <property name="text">
-                             <string>&lt;min&gt;/&lt;max&gt; | mean: &lt;mean&gt; std_dev: &lt;std&gt;</string>
-                         </property>
-                     </widget>
-                 </item>
-                 <item row="1" column="1">
-                     <widget class="QLabel" name="sourceLabel">
-                         <property name="sizePolicy">
-                             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                             </sizepolicy>
-                         </property>
-                         <property name="text">
-                             <string>&lt;width&gt;x&lt;height&gt;:&lt;bands&gt; &lt;dtype&gt;</string>
+                </layout>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLabel" name="distributionLabel">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>&lt;min&gt;/&lt;max&gt; | mean: &lt;mean&gt; std_dev: &lt;std&gt;</string>
                 </property>
                </widget>
               </item>
-                 <item row="3" column="1">
-                     <widget class="QGroupBox" name="areaGroup">
-                         <property name="sizePolicy">
-                             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                             </sizepolicy>
-                         </property>
-                         <property name="title">
-                             <string>area</string>
-                         </property>
-                         <layout class="QGridLayout" name="gridLayout_2">
-                             <property name="leftMargin">
-                                 <number>5</number>
-                             </property>
-                             <property name="topMargin">
-                                 <number>5</number>
-                             </property>
-                             <property name="rightMargin">
-                                 <number>5</number>
-                             </property>
-                             <property name="bottomMargin">
-                                 <number>5</number>
-                             </property>
-                             <property name="spacing">
-                                 <number>3</number>
-                             </property>
-                             <item row="2" column="0">
-                                 <widget class="QLabel" name="windowLabel">
-                                     <property name="sizePolicy">
-                                         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                                             <horstretch>0</horstretch>
-                                             <verstretch>0</verstretch>
-                                         </sizepolicy>
-                                     </property>
-                                     <property name="text">
-                                         <string>windowLabel</string>
-                                     </property>
-                                 </widget>
-                             </item>
-                             <item row="2" column="1">
-                                 <widget class="QPushButton" name="bestAspectButton">
-                                     <property name="sizePolicy">
-                                         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                                             <horstretch>0</horstretch>
-                                             <verstretch>0</verstretch>
-                                         </sizepolicy>
-                                     </property>
-                                     <property name="text">
-                                         <string>Fit</string>
-                                     </property>
-                                     <property name="iconSize">
-                                         <size>
-                                             <width>16</width>
-                                             <height>16</height>
-                                         </size>
-                                     </property>
-                                 </widget>
+              <item row="1" column="1">
+               <widget class="QLabel" name="sourceLabel">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>&lt;width&gt;x&lt;height&gt;:&lt;bands&gt; &lt;dtype&gt;</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QGroupBox" name="areaGroup">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="title">
+                 <string>area</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_2">
+                 <property name="leftMargin">
+                  <number>5</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>5</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>5</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>5</number>
+                 </property>
+                 <property name="spacing">
+                  <number>3</number>
+                 </property>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="windowLabel">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>windowLabel</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QPushButton" name="bestAspectButton">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Fit</string>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>16</width>
+                     <height>16</height>
+                    </size>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </widget>
@@ -360,7 +360,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="BrowserWidget" name="browser" native="true">
+     <widget class="ViewBrowser" name="viewBrowser" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
         <horstretch>0</horstretch>
@@ -378,24 +378,24 @@
   </action>
  </widget>
  <customwidgets>
-     <customwidget>
-         <class>Overview</class>
-         <extends>QWidget</extends>
-         <header>piafedit.gui.image.overview</header>
-         <container>1</container>
-     </customwidget>
-     <customwidget>
-         <class>BrowserWidget</class>
-         <extends>QWidget</extends>
-         <header>qtwidgets.browser.browser_widget</header>
-         <container>1</container>
-     </customwidget>
-     <customwidget>
-         <class>TransformPanel</class>
-         <extends>QWidget</extends>
-         <header>piafedit.gui.tools.transform_panel</header>
-         <container>1</container>
-     </customwidget>
+  <customwidget>
+   <class>Overview</class>
+   <extends>QWidget</extends>
+   <header>piafedit.gui.image.overview</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TransformPanel</class>
+   <extends>QWidget</extends>
+   <header>piafedit.gui.tools.transform_panel</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ViewBrowser</class>
+   <extends>QWidget</extends>
+   <header>piafedit.gui.image.view_browser</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections/>
