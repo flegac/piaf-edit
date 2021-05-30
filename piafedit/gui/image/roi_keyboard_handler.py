@@ -8,9 +8,9 @@ from piafedit.model.geometry.point import PointAbs
 class RoiKeyboardHandler(KeyboardHandler):
 
     def __init__(self, overview: 'Overview'):
-        from piafedit.gui.image.overview import Overview
+        from piafedit.gui.image.views.overview import Overview
         self.overview: Overview = overview
-        from piafedit.gui.image.roi_view import RoiView
+        from piafedit.gui.image.views.roi_view import RoiView
         self.view: RoiView = None
 
     def patch(self, view: QWidget):

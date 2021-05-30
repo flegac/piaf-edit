@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>SourceView</class>
-    <widget class="QWidget" name="SourceView">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>327</width>
-                <height>221</height>
-            </rect>
-        </property>
-        <property name="windowTitle">
-            <string>sourceView</string>
+ <class>SourceView</class>
+ <widget class="QWidget" name="SourceView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>327</width>
+    <height>221</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>sourceView</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -121,7 +121,7 @@
   <customwidget>
    <class>RoiView</class>
    <extends>QWidget</extends>
-   <header>piafedit.gui.image.roi_view</header>
+   <header>piafedit.gui.image.views.roi_view</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -381,7 +381,7 @@
   <customwidget>
    <class>Overview</class>
    <extends>QWidget</extends>
-   <header>piafedit.gui.image.overview</header>
+   <header>piafedit.gui.image.views.overview</header>
    <container>1</container>
   </customwidget>
   <customwidget>

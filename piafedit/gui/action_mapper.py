@@ -2,7 +2,7 @@ from pathlib import Path
 
 from PyQt5.QtWidgets import QMainWindow, QDockWidget
 
-from piafedit.gui.image.overview import Overview
+from piafedit.gui.image.views.overview import Overview
 from piafedit.gui.notebook import Notebook
 from piafedit.ui_utils import resources_path
 

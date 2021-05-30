@@ -9,8 +9,8 @@ from piafedit.model.geometry.rect import RectAbs
 
 class RoiMouseHandler(MouseHandler):
     def __init__(self, overview: 'Overview'):
-        from piafedit.gui.image.overview import Overview
-        from piafedit.gui.image.roi_view import RoiView
+        from piafedit.gui.image.views.overview import Overview
+        from piafedit.gui.image.views.roi_view import RoiView
         self.overview: Overview = overview
         self.zoom_speed: float = 1.2
 

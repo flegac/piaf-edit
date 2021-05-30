@@ -4,7 +4,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QCheckBox, QStyle
 
 from piafedit.gui.common.template_widget import TemplateWidget
-from piafedit.gui.image.overview import Overview
+from piafedit.gui.image.views.overview import Overview
 from piafedit.gui.image.view_browser import ViewBrowser
 from piafedit.model.geometry.point import PointAbs
 from piafedit.model.geometry.rect import RectAbs
