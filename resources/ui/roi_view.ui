@@ -85,13 +85,6 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="nameLabel">
-         <property name="text">
-          <string>&lt;name&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="configureButton">
          <property name="text">
           <string>configure</string>

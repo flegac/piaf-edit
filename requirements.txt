@@ -3,14 +3,12 @@ rasterio
 tqdm
 rx
 qt-widgets
-pyqtgraph>=0.12.1
+pyqtgraph
 pyqt5
 pyqt5-tools
-qimage2ndarray
 qtconsole
 
 pyqttango
-
 
 scikit-image
 opencv-python

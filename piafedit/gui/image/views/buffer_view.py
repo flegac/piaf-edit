@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QSizePolicy
 
 class BufferView(pg.ImageView):
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super(BufferView, self).__init__(parent)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.ui.roiBtn.hide()
         self.ui.menuBtn.hide()

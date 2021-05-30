@@ -16,7 +16,8 @@ class PipelinePanel(TemplateWidget):
     def __init__(self, parent=None):
         super().__init__('pipeline', parent)
         self.operator_combo.addItems(operators.keys())
-        self.insertButton.clicked.connect(self.insert_operator)
+        self.addBeforeButton.clicked.connect(self.add_before)
+        self.addAfterButton.clicked.connect(self.add_after)
         self.removeButton.clicked.connect(self.remove_selected)
         self.clearButton.clicked.connect(self.clear_pipeline)
         self.show()
@@ -40,12 +41,20 @@ class PipelinePanel(TemplateWidget):
             self.pipeline_list.takeItem(0)
         self.request_update()
 
-    def insert_operator(self):
-        op = self.operator_combo.currentData()
+    def add_before(self):
         text = self.operator_combo.currentText()
         index = 0
         for item in self.pipeline_list.selectedItems():
             index = self.pipeline_list.row(item)
+        self.pipeline_list.insertItem(index, text)
+        self.request_update()
+
+    def add_after(self):
+        text = self.operator_combo.currentText()
+        index = self.pipeline_list.count()
+        for item in self.pipeline_list.selectedItems():
+            index = self.pipeline_list.row(item)
+        index = min(index+1, self.pipeline_list.count())
         self.pipeline_list.insertItem(index, text)
         self.request_update()
 

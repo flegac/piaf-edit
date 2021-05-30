@@ -31,7 +31,7 @@ def style_handler(path: Path):
 
 class SourceView(BufferView):
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super(SourceView, self).__init__(parent)
         self._source: Optional[DataSource] = None
         self.operator: Optional[Operator] = None
         self.transform: Transform = Transform()
